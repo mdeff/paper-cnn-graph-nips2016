@@ -12,6 +12,10 @@ keywords:
 - deep learning
 abstract: Disrupting Deep Learning.
 date: \today
+header-includes:
+  \DeclareMathOperator*{\diag}{diag}
+  \renewcommand{\L}{\mathcal{L}}
+  \newcommand{\R}{\mathbb{R}}
 ---
 
 # Introduction
@@ -51,6 +55,32 @@ Comparison with first generation graph CNN [@henaff_deep_2015].
 # Method
 
 ## Spectral graph theory
+
+A graph $G = (V, E, W)$ is defined by a set $V$ of $|V| = M$ nodes, a set of
+edges $E$ with their associated weight matrix $W \in \R^{M \times M}$. Two
+nodes $v_i$ and $v_j$ are connected if $W_{ij} > 0$.
+
+The non-normalized graph Laplacian is given by
+$$\L = D - W$$
+where $D$ is the diagonal degree matrix defined as $D_{ii} = \sum_j W_{ij}$.
+The normalized graph Laplacian is then given by
+$$\L = I - D^{-1/2} W D^{-1/2}$$
+where $I$ is the $M \times M$ identity matrix.
+
+In analogy to the real line Fourier transform, a Fourier basis $U =
+\{u_\ell\}_{\ell=0}^{\ell=M-1}$ is given by the eigenvectors of the Laplacian
+$$\L u_\ell = \lambda_\ell u_\ell$$
+with their associated eigenvalues $\lambda_\ell$ [@shuman_emerging_2013;
+@hammond_wavelets_2011]. Assuming the graph is connected, we may order the
+eigenvalues such that
+$$0 = \lambda_0 < \lambda_1 \leq \lambda_2 \leq \dots \leq \lambda_{M-1}.$$
+We just diagonalized the Laplacian as
+$$\L = U \diag(\lambda) U^T$$
+where $\diag(\lambda)$ denotes a diagonal matrix of eigenvalues.
+
+For any signal $x \in \R^{M}$ defined on the vertices of $G$, its graph Fourier transform $\hat{x}$ is defined by
+$$\hat{x}(\ell) = \langle u_\ell , x \rangle
+= \sum_{m=0}^{M-1} u_\ell(m) x(m).$$
 
 ## Convolution of graph signals
 
