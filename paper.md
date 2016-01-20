@@ -17,6 +17,8 @@ header-includes:
   \DeclareMathOperator*{\argmin}{arg\,min}
   \renewcommand{\L}{\mathcal{L}}
   \newcommand{\R}{\mathbb{R}}
+  \newcommand{\Xh}{\hat{X}}
+  \newcommand{\Yh}{\hat{Y}}
 ---
 
 # Introduction
@@ -61,12 +63,12 @@ A graph $G = (V, E, W)$ is defined by a set $V$ of $|V| = M$ nodes, a set of
 edges $E$ with their associated weight matrix $W \in \R^{M \times M}$. Two
 nodes $v_i$ and $v_j$ are connected if $W_{ij} > 0$.
 
-The non-normalized graph Laplacian is given by
+The combinatorial graph Laplacian is given by
 $$\L = D - W$$
 where $D$ is the diagonal degree matrix defined as $D_{ii} = \sum_j W_{ij}$.
 The normalized graph Laplacian is then given by
-$$\L = I - D^{-1/2} W D^{-1/2}$$
-where $I$ is the $M \times M$ identity matrix.
+$$\L = I_M - D^{-1/2} W D^{-1/2}$$
+where $I_M$ is the $M \times M$ identity matrix.
 
 In analogy to the real line Fourier transform, a Fourier basis $U =
 \{u_\ell\}_{\ell=0}^{\ell=M-1}$ is given by the eigenvectors of the Laplacian
@@ -75,13 +77,17 @@ with their associated eigenvalues $\lambda_\ell$ [@shuman_emerging_2013;
 @hammond_wavelets_2011]. Assuming the graph is connected, we may order the
 eigenvalues such that
 $$0 = \lambda_0 < \lambda_1 \leq \lambda_2 \leq \dots \leq \lambda_{M-1}.$$
-We just diagonalized the Laplacian as
+The Laplacian is indeed diagonalized by the Fourier basis such that
 $$\L = U \diag(\lambda) U^T$$
 where $\diag(\lambda)$ denotes a diagonal matrix of eigenvalues.
 
 For any signal $x \in \R^{M}$ defined on the vertices of $G$, its graph Fourier transform $\hat{x}$ is defined by
 $$\hat{x}(\ell) = \langle u_\ell , x \rangle
 = \sum_{m=0}^{M-1} u_\ell(m) x(m).$$
+
+The filtering operation of a signal $x$ by $g$ is defined as
+$$ y = g(\L) x = U \diag \left( g(\lambda) \right) U^T x = U \diag(c) U^T x $$
+where $c$ is a vector of filter coefficients.
 
 ## Graph filter learning
 
@@ -99,30 +105,37 @@ Note that the non-parametrization of the coefficients $c$ w.r.t. $\lambda$ does
 omit all information about frequencies, while we know that the lower
 frequencies are more important for clustering [ref NCut].
 
-Rewriting [@eq:loss] in the spectral domain (in a matrix form) gives
-$$L = \frac{1}{N} \| \diag(c) U^T X - U^T Y \|_F^2 =
-\frac{1}{N} \sum_{i=0}^{M-1} \|c_i(U^TX)_{i,\cdot} - (U^TY)_{i,\cdot} \|_2^2$$
-where the right hand side has been decomposed w.r.t. the scalar coefficients
-$c_i$. The gradient for each coefficient is then given by
-$$\nabla_{c_i} L = \frac{2}{N}
-( c_i (U^T X)_{i,\cdot} - (U^T Y)_{i,\cdot} ) (X^T U)_{\cdot,i}$$
+Rewriting [@eq:loss] in the spectral domain while decomposing it w.r.t. the
+scalar coefficients $c_i$ gives
+$$ L =
+\frac{1}{N} \| \diag(c) U^T X - U^T Y \|_F^2 =
+\frac{1}{N} \sum_{i=0}^{M-1} \|c_i\Xh_{i,\cdot} - \Yh_{i,\cdot} \|_2^2 $$
+where $\Xh=U^TX$ and $\Yh=U^TY$ are the spectral representations of the signals
+$X$ and $Y$. The gradient for each coefficient is then given by
+$$ \nabla_{c_i} L =
+\frac{2}{N} ( c_i \Xh_{i,\cdot} - \Yh_{i,\cdot} ) \Xh^T_{\cdot,i} $$
 and can be rewritten in a vector form as
-$$\nabla_{c} L = \frac{2}{N}
-\left( U^T X \circ ( c \circ U^T X - U^T Y ) \right) 1_N$$ {#eq:gradient}
-where $1_N$ denotes a unit vector of length $N$.
+$$ \nabla_{c} L =
+\frac{2}{N} \diag \left( (\diag(c) \Xh - \Yh) \Xh^T \right) =
+\frac{2}{N} \left( \Xh \odot ( c1_N^T \odot \Xh - \Yh ) \right) 1_N
+$$ {#eq:gradient}
+where $1_N$ denotes a unit vector of length $N$ and $\odot$ the element-wise
+Hadamard product. The second form avoids the computation of the useless
+off-diagonal elements.
 
 A direct solution is given by the optimality condition $\nabla_{c}L=0$ such that
-$$c^o = \argmin_c L = (U^T X \circ U^T Y) 1_N \circ
-\left( (U^T X \circ U^T X) 1_N \right)^{-1}.$$
-Note that this method is impractical for large $M$ and $N$ (sufficiently
-large for $X$ and $Y$ to not fit in memory). A Stochastic Gradient Descent
-based on [@eq:gradient] will do the trick.
+$$ c^o = \argmin_c L =
+(\Xh \odot \Yh) 1_N \oslash (\Xh \odot \Xh) 1_N $$
+where $\oslash$ denotes an element-wise division. Note that this method is
+impractical for large $M$ and $N$ (sufficiently large for $X$ and $Y$ to not
+fit in memory). A Stochastic Gradient Descent based on [@eq:gradient] will do
+the trick.
 
 There is however two major computational drawbacks to this optimization
-process: (1) the Fourier transform $U^TX$ of a set of signals costs $O(M^2N)$
-operations and (2) the eigenvalue decomposition $\L=U\diag(\lambda)U^T$ costs
-$O(M^3)$. The total cost of filtering is thus $O(M^2 \max(M,N))$, a problem
-stated in [@henaff_deep_2015].
+process: (1) the Fourier transform $\Xh=U^TX$ of a set of signals costs
+$O(M^2N)$ operations and (2) the eigenvalue decomposition
+$\L=U\diag(\lambda)U^T$ costs $O(M^3)$. The total cost of filtering is thus
+$O(M^2 \max(M,N))$, a problem already stated in [@henaff_deep_2015].
 
 ### Fast algorithm
 
@@ -137,7 +150,7 @@ dy / \sqrt{1-y^2})$, the Hilbert space of square integrable functions with
 respect to a measure.
 
 Our filter coefficients can thus be approximated by the expansion
-$$ c = \sum_{k=0}^{K-1} c^c_k T_k(\tilde{\lambda}), $$
+$$ c \approx \sum_{k=0}^{K-1} c^c_k T_k(\tilde{\lambda}), $$
 where $c^c$ denotes a vector of Chebyshev coefficients, $K-1$ is the polynomial
 order and $\tilde{\lambda} = 2\lambda/\lambda_{N-1}-1$ is a vector of scaled
 eigenvalues. This approximation reduces the number of coefficients to learn
@@ -146,32 +159,32 @@ from $M$ to $K$.
 The trick to avoid the Fourier basis is to express the polynomials $T_k$ as
 functions of the scaled Laplacian $\tilde{\L} = 2\L/\lambda_{N-1}-I$. Note that
 the spectrum of the normalized Laplacian is bounded by $2$, such that the
-scaling can simply be $\hat{\L} = L - I$, tolerating some imprecision in the
+scaling can simply be $\tilde{\L} = L - I$, tolerating some imprecision in the
 approximation. The approximate filtering function is thus given by
-$$ U\diag(c)U^T =
+$$ g(\L) = U\diag(c)U^T \approx
 \sum_{k=0}^{K-1} U c^c_k T_k(\tilde{\lambda}) U^T =
 \sum_{k=0}^{K-1} c^c_k T_k(\tilde{\L}). $$ {#eq:approximation}
 
 Inserting [@eq:approximation] into [@eq:loss] we obtain
 $$ L =
-\frac{1}{N} \sum_{k=0}^{K-1} \| c^c_k T_k X - Y \|_F^2 =
-\frac{1}{N} \| \bar{Y} c^c - \bar{y} \|_2^2 $$
+\frac{1}{N} \| \sum_{k=0}^{K-1} c^c_k T_k X - Y \|_F^2 =
+\frac{1}{N} \| \bar{X} c^c - \bar{y} \|_2^2 $$
 where $\bar{y} \in \R^{MN}$ is the vectorized matrix $Y$ and the $k^\text{th}$
-column of $\bar{Y} \in \R^{MN \times K}$ is the vectorized matrix $\hat{Y}_k =
-T_k X$. The gradient is then given by
-$$ \nabla_{c^c} L = \frac{2}{N} \bar{Y}^T (\bar{Y} c^c - \bar{y}). $$
-The optimality condition $\bar{Y} c^c = \bar{y}$ is largely over-determined as
+column of $\bar{X} \in \R^{MN \times K}$ is the vectorized matrix $\tilde{X}_k
+= T_k X$. The gradient is then given by
+$$ \nabla_{c^c} L = \frac{2}{N} \bar{X}^T (\bar{X} c^c - \bar{y}). $$
+The optimality condition $\bar{X} c^c = \bar{y}$ is largely over-determined as
 $K << MN$ but the least-square approximate solution is optimal.
 
 Using the recurrence
-$$ \hat{Y}_k = 2\tilde{\L} \hat{Y}_{k-1} - \hat{Y}_{k-2} $$
-with $\hat{Y}_0 = X$ and $\hat{Y}_1 = \tilde{\L} X$, the computation of
-$\bar{Y}$ from $X$ costs $O(K|E|N) = O(KMN)$ operations if the number of edges
+$$ \tilde{X}_k = 2\tilde{\L} \tilde{X}_{k-1} - \tilde{X}_{k-2} $$
+with $\tilde{X}_0 = X$ and $\tilde{X}_1 = \tilde{\L} X$, the computation of
+$\bar{X}$ given $X$ costs $O(K|E|N) = O(KMN)$ operations if the number of edges
 $|E|$ is proportional to the number of nodes $M$, e.g. for kNN graphs. As the
-cost of the product $\bar{Y}c^c$ is similar, the entire filtering operation has
+cost of the product $\bar{X}c^c$ is similar, the entire filtering operation has
 a computational cost of $O(KMN)$ whereas the straightforward implementation
 using the Fourier basis had a cost of $O(M^2\max(M,N)$. To further save
-computations, at the expense of memory, one may store $\bar{Y}$ while applying
+computations, at the expense of memory, one may store $\bar{X}$ while applying
 different filters, e.g. in the case of learning through SGD.
 
 ## Convolution of graph signals
