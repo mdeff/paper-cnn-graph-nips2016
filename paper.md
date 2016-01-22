@@ -19,6 +19,7 @@ header-includes:
   \newcommand{\R}{\mathbb{R}}
   \newcommand{\Xh}{\hat{X}}
   \newcommand{\Yh}{\hat{Y}}
+  \newcommand{\st}{\ \text{s.t.} \,}
 ---
 
 # Introduction
@@ -59,45 +60,59 @@ Comparison with first generation graph CNN [@henaff_deep_2015].
 
 ## Spectral graph theory
 
-A graph $G = (V, E, W)$ is defined by a set $V$ of $|V| = M$ nodes, a set of
-edges $E$ with their associated weight matrix $W \in \R^{M \times M}$. Two
-nodes $v_i$ and $v_j$ are connected if $W_{ij} > 0$.
+A graph $G = (V, E, W)$ is defined by a set $V$ of $|V| = M$ nodes and a set
+$E$ of weighted edges. The connectivity of the graph is captured by the
+adjacency matrix $W \in \R^{M \times M}$ which entry $W_{i,j}$ denotes the
+weight of the edge $(u_i, v_i) \in E$ which connects the vertex $v_i \in V$ to
+$v_j \in V$. The weight $W_{i,j} = 0$ if the vertices are not connected, i.e.
+$(u_i, v_i) \notin E$. Assuming an undirected graph, $W$ is a symmetric matrix.
+A graph signal is any signal $x \in \R^M$ defined on the vertices of $G$.
 
 The combinatorial graph Laplacian is given by
-$$\L = D - W$$
-where $D$ is the diagonal degree matrix defined as $D_{ii} = \sum_j W_{ij}$.
-The normalized graph Laplacian is then given by
-$$\L = I_M - D^{-1/2} W D^{-1/2}$$
-where $I_M$ is the $M \times M$ identity matrix.
+$$ \L = D - W \in \R^{M \times M} $$
+where $D \in \R^{M \times M}$ is the diagonal degree matrix defined as $D_{i,i}
+= \sum_j W_{i,j}$. Note that it is a difference operator such that
+$$ (\L x)_i = \sum_j W_{i,j} (x_i - x_j). $$
+The normalized graph Laplacian is given by
+$$ \L = I_M - D^{-1/2} W D^{-1/2} \in \R^{M \times M} $$
+where $I_M \in \R^{M \times M}$ is the identity matrix.
 
-In analogy to the real line Fourier transform, a Fourier basis $U =
-\{u_\ell\}_{\ell=0}^{\ell=M-1}$ is given by the eigenvectors of the Laplacian
-$$\L u_\ell = \lambda_\ell u_\ell$$
-with their associated eigenvalues $\lambda_\ell$ [@shuman_emerging_2013;
+In analogy to the real line Fourier Transform, a Fourier basis is given by the
+eigenvectors of the Laplacian
+$$ \L u_i = \lambda_i u_i \st \|u_i\|_2=1, \ i = 0, \ldots, M-1, $$
+with their associated eigenvalues $\lambda_i$ [@shuman_emerging_2013;
 @hammond_wavelets_2011]. Assuming the graph is connected, we may order the
-eigenvalues such that
-$$0 = \lambda_0 < \lambda_1 \leq \lambda_2 \leq \dots \leq \lambda_{M-1}.$$
-The Laplacian is indeed diagonalized by the Fourier basis such that
+vector $\lambda = [\lambda_0, \ldots, \lambda_{M-1}]^T \in \R^M$ of eigenvalues
+such that
+$$ 0 = \lambda_0 < \lambda_1 \leq \ldots \leq \lambda_{M-1} = \lambda_{max}. $$
+As the Laplacian is a real symmetric matrix, the eigenvalues are real and the
+eigenvectors orthonormal. The Laplacian is indeed diagonalized by the Fourier
+basis $U = [u_0, \ldots, u_{M-1}] \in \R^{M \times M}$ such that
 $$\L = U \diag(\lambda) U^T$$
 where $\diag(\lambda)$ denotes a diagonal matrix of eigenvalues.
 
-For any signal $x \in \R^{M}$ defined on the vertices of $G$, its graph Fourier transform $\hat{x}$ is defined by
-$$\hat{x}(\ell) = \langle u_\ell , x \rangle
-= \sum_{m=0}^{M-1} u_\ell(m) x(m).$$
+The Graph Fourier Transform $\hat{x} \in \R^M$ of any graph signal $x$ is
+defined as
+$$ \hat{x} = U^T x =
+[\langle u_0, x \rangle, \ldots, \langle u_{M-1}, x \rangle]^T $$
+while its inverse is given by
+$$ x = U \hat{x}. $$
 
-The filtering operation of a signal $x$ by $g$ is defined as
-$$ y = g(\L) x = U \diag \left( g(\lambda) \right) U^T x = U \diag(c) U^T x $$
-where $c$ is a vector of filter coefficients.
+It follows that any signal $x$ can be filtered by an operator $g(\L) \in \R^{M
+\times M}$ such that
+$$ y = g(\L) x = U \diag(c) U^T x $$
+where $c = g(\lambda) \in \R^M$ is a vector of filter coefficients.
 
 ## Graph filter learning
 
-Given a graph $G$, a set $X = \{x_i\}_{i=0}^{N-1}$ of $N$ source graph signals
-and their associated set $Y = \{y_i\}_{i=0}^{N-1}$ of target signals, we want
-to learn the coefficients $c$ of a graph filter such as to minimize the
-convex reconstruction error
-$$L = \frac{1}{N} \sum_{i=0}^{N-1}
-\| U \diag(c) U^T x_i - y_i \|_2^2 = \frac{1}{N}
-\| U \diag(c) U^T X - Y \|_F^2$$ {#eq:loss}
+Given a graph $G$, a set $X = [x_0, \ldots, x_{N-1}] \in \R^{M \times N}$ of
+$N$ source graph signals of dimensionality $M$ and their associated set $Y =
+[y_0, \ldots, y_{N-1}] \in \R^{M \times N}$ of target signals, we want to learn
+the coefficients of a graph filter $g$ such as to minimize the convex
+reconstruction error
+$$ L =
+\frac{1}{N} \sum_{i=0}^{N-1} \| g(\L) x_i - y_i \|_2^2 =
+\frac{1}{N} \| U \diag(c) U^T X - Y \|_F^2 $$ {#eq:loss}
 where $\|\cdot\|_2^2$ denotes the squared $\ell_2$ norm and $\|\cdot\|_F^2$ the
 squared Frobenius norm.
 
@@ -110,11 +125,12 @@ scalar coefficients $c_i$ gives
 $$ L =
 \frac{1}{N} \| \diag(c) U^T X - U^T Y \|_F^2 =
 \frac{1}{N} \sum_{i=0}^{M-1} \|c_i\Xh_{i,\cdot} - \Yh_{i,\cdot} \|_2^2 $$
-where $\Xh=U^TX$ and $\Yh=U^TY$ are the spectral representations of the signals
-$X$ and $Y$. The gradient for each coefficient is then given by
+where $\Xh = U^TX \in \R^{M \times N}$ and $\Yh = U^TY \in \R^{M \times N}$ are
+the spectral representations of the signals $X$ and $Y$. The gradient for each
+coefficient is then given by
 $$ \nabla_{c_i} L =
 \frac{2}{N} ( c_i \Xh_{i,\cdot} - \Yh_{i,\cdot} ) \Xh^T_{\cdot,i} $$
-and can be rewritten in a vector form as
+and can be rewritten in a vectorized form as
 $$ \nabla_{c} L =
 \frac{2}{N} \diag \left( (\diag(c) \Xh - \Yh) \Xh^T \right) =
 \frac{2}{N} \left( \Xh \odot ( c1_N^T \odot \Xh - \Yh ) \right) 1_N
@@ -149,32 +165,36 @@ the stable recurrence relation $T_k(x) = 2x T_{k-1}(x) - T_{k-2}(x)$ with $T_0
 dy / \sqrt{1-y^2})$, the Hilbert space of square integrable functions with
 respect to a measure.
 
-Our filter coefficients can thus be approximated by the expansion
-$$ c \approx \sum_{k=0}^{K-1} c^c_k T_k(\tilde{\lambda}), $$
-where $c^c$ denotes a vector of Chebyshev coefficients, $K-1$ is the polynomial
-order and $\tilde{\lambda} = 2\lambda/\lambda_{N-1}-1$ is a vector of scaled
-eigenvalues. This approximation reduces the number of coefficients to learn
-from $M$ to $K$.
+The graph filter coefficients can thus be approximated by the expansion
+$$ c = g(\lambda) \approx \sum_{k=0}^{K-1} c^c_k T_k(\tilde{\lambda}) $$
+of polynomial order $K-1$, where $c^c \in \R^K$ denotes a vector of Chebyshev
+coefficients and $T_k(\tilde{\lambda}) \in \R^M$ is the Chebyshev polynomial of
+order $k$ evaluated at $\tilde{\lambda} = 2\lambda/\lambda_{max}-1 \in \R^M$,
+a vector of scaled eigenvalues. This approximation reduces the number of
+learned coefficients from $M$ to $K$.
 
-The trick to avoid the Fourier basis is to express the polynomials $T_k$ as
-functions of the scaled Laplacian $\tilde{\L} = 2\L/\lambda_{N-1}-I$. Note that
-the spectrum of the normalized Laplacian is bounded by $2$, such that the
-scaling can simply be $\tilde{\L} = L - I$, tolerating some imprecision in the
-approximation. The approximate filtering function is thus given by
+The trick to avoid the Fourier basis is to express the polynomials as functions
+of the Laplacian, such that an approximation of the filtering operator is given
+by
 $$ g(\L) = U\diag(c)U^T \approx
-\sum_{k=0}^{K-1} U c^c_k T_k(\tilde{\lambda}) U^T =
-\sum_{k=0}^{K-1} c^c_k T_k(\tilde{\L}). $$ {#eq:approximation}
+\sum_{k=0}^{K-1} U \diag \left( c^c_k T_k(\tilde{\lambda}) \right) U^T =
+\sum_{k=0}^{K-1} c^c_k T_k(\tilde{\L}) $$ {#eq:approximation}
+where $T_k(\tilde{\L}) \in \R^{M \times M}$ is the Chebyshev polynomial of
+order $k$ evaluated at the scaled Laplacian $\tilde{\L} = 2\L/\lambda_{max}-I$.
+Note that the spectrum of the normalized Laplacian is bounded by $2$, such that
+the scaling can simply be $\tilde{\L} = \L - I$, tolerating some imprecision in
+the approximation.
 
 Inserting [@eq:approximation] into [@eq:loss] we obtain
 $$ L =
-\frac{1}{N} \| \sum_{k=0}^{K-1} c^c_k T_k X - Y \|_F^2 =
+\frac{1}{N} \| \sum_{k=0}^{K-1} c^c_k T_k(\tilde{\L}) X - Y \|_F^2 =
 \frac{1}{N} \| \bar{X} c^c - \bar{y} \|_2^2 $$
 where $\bar{y} \in \R^{MN}$ is the vectorized matrix $Y$ and the $k^\text{th}$
 column of $\bar{X} \in \R^{MN \times K}$ is the vectorized matrix $\tilde{X}_k
-= T_k X$. The gradient is then given by
+= T_k(\tilde{\L}) X \in \R^{M \times N}$. The gradient is then given by
 $$ \nabla_{c^c} L = \frac{2}{N} \bar{X}^T (\bar{X} c^c - \bar{y}). $$
 The optimality condition $\bar{X} c^c = \bar{y}$ is largely over-determined as
-$K << MN$ but the least-square approximate solution is optimal.
+$K << MN$ but a least-square solver can find an approximate solution.
 
 Using the recurrence
 $$ \tilde{X}_k = 2\tilde{\L} \tilde{X}_{k-1} - \tilde{X}_{k-2} $$
