@@ -13,6 +13,7 @@ keywords:
 abstract: Disrupting Deep Learning.
 date: \today
 header-includes:
+  '
   \DeclareMathOperator*{\diag}{diag}
   \DeclareMathOperator*{\argmin}{arg\,min}
   \renewcommand{\L}{\mathcal{L}}
@@ -20,6 +21,8 @@ header-includes:
   \newcommand{\Xh}{\hat{X}}
   \newcommand{\Yh}{\hat{Y}}
   \newcommand{\st}{\ \text{s.t.} \,}
+  \newcommand{\norm}[1]{\left\| #1 \right\|}
+  '
 ---
 
 # Introduction
@@ -79,7 +82,7 @@ where $I_M \in \R^{M \times M}$ is the identity matrix.
 
 In analogy to the real line Fourier Transform, a Fourier basis is given by the
 eigenvectors of the Laplacian
-$$ \L u_i = \lambda_i u_i \st \|u_i\|_2=1, \ i = 0, \ldots, M-1, $$
+$$ \L u_i = \lambda_i u_i \st \norm{u_i}_2=1, \ i = 0, \ldots, M-1, $$
 with their associated eigenvalues $\lambda_i$ [@shuman_emerging_2013;
 @hammond_wavelets_2011]. Assuming the graph is connected, we may order the
 vector $\lambda = [\lambda_0, \ldots, \lambda_{M-1}]^T \in \R^M$ of eigenvalues
@@ -117,10 +120,10 @@ learn the parameters $\theta \in \R^M$ of a graph filter
 $\hat{g}_\theta(\lambda) = \diag(\theta)$ such as to minimize the convex
 $\ell_2$ reconstruction error
 $$ L =
-\frac{1}{N} \sum_{i=0}^{N-1} \| g_\theta(\L) x_i - y_i \|_2^2 =
-\frac{1}{N} \| U \diag(\theta) U^T X - Y \|_F^2 $$ {#eq:loss}
-where $\|\cdot\|_2^2$ denotes the squared $\ell_2$ norm and $\|\cdot\|_F^2$ the
-squared Frobenius norm.
+\frac{1}{N} \sum_{i=0}^{N-1} \norm{ g_\theta(\L) x_i - y_i }_2^2 =
+\frac{1}{N} \norm{ U \diag(\theta) U^T X - Y }_F^2 $$ {#eq:loss}
+where $\norm{\cdot}_2^2$ denotes the squared $\ell_2$ norm and
+$\norm{\cdot}_F^2$ the squared Frobenius norm.
 
 Note that the independence of the Fourier coefficients, the parameters
 $\theta$, from $\lambda$ does omit all information about frequencies; while we
@@ -129,8 +132,8 @@ know that the lower frequencies are more important for clustering [ref NCut].
 Rewriting [@eq:loss] in the spectral domain while decomposing it w.r.t. the
 scalar coefficients $\theta_i$ gives
 $$ L =
-\frac{1}{N} \| \diag(\theta) U^T X - U^T Y \|_F^2 =
-\frac{1}{N} \sum_{i=0}^{M-1} \|\theta_i\Xh_{i,\cdot} - \Yh_{i,\cdot} \|_2^2 $$
+\frac{1}{N} \norm{ \diag(\theta) U^T X - U^T Y }_F^2 =
+\frac{1}{N} \sum_{i=0}^{M-1} \norm{\theta_i\Xh_{i,\cdot} - \Yh_{i,\cdot}}_2^2 $$
 where $\Xh = U^TX \in \R^{M \times N}$ and $\Yh = U^TY \in \R^{M \times N}$ are
 the spectral representations of the signals $X$ and $Y$. The gradient for each
 coefficient is then given by
@@ -196,8 +199,8 @@ the approximation.
 
 Inserting [@eq:approximation] into [@eq:loss] we obtain
 $$ L =
-\frac{1}{N} \| \sum_{k=0}^{K-1} \theta_k T_k(\tilde{\L}) X - Y \|_F^2 =
-\frac{1}{N} \| \bar{X} \theta - \bar{y} \|_2^2 $$
+\frac{1}{N} \norm{ \sum_{k=0}^{K-1} \theta_k T_k(\tilde{\L}) X - Y }_F^2 =
+\frac{1}{N} \norm{ \bar{X} \theta - \bar{y} }_2^2 $$
 where $\bar{y} \in \R^{MN}$ is the vectorized matrix $Y$ and the $k^\text{th}$
 column of $\bar{X} \in \R^{MN \times K}$ is the vectorized matrix $\tilde{X}_k
 = T_k(\tilde{\L}) X \in \R^{M \times N}$. The gradient is then given by
@@ -239,7 +242,7 @@ where $c_\ell = g(\lambda_\ell)$ is the evaluated filter.
 generated) graph signals and a filter $g(\lambda)$ for
 some $t$, we want to learn the filter coefficients $C$, a diagonal matrix, such
 that
-$$\min_C \sum_{i=1}^N \| U^T C U x_i - y_i \|_2^2$$
+$$\min_C \sum_{i=1}^N \norm{ U^T C U x_i - y_i }_2^2$$
 where $U$ are the eigenvectors of the graph Laplacian $L$ and $y_i = x_i * g +
 \varepsilon, \varepsilon \sim \mathcal{N}(0,\epsilon)$ is the target signal (the
 filtered signal $x_i$ with additive Gaussian noise).
