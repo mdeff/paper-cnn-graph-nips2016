@@ -88,59 +88,66 @@ $$ 0 = \lambda_0 < \lambda_1 \leq \ldots \leq \lambda_{M-1} = \lambda_{max}. $$
 As the Laplacian is a real symmetric matrix, the eigenvalues are real and the
 eigenvectors orthonormal. The Laplacian is indeed diagonalized by the Fourier
 basis $U = [u_0, \ldots, u_{M-1}] \in \R^{M \times M}$ such that
-$$\L = U \diag(\lambda) U^T$$
+$$ \L = U \diag(\lambda) U^T $$ {#eq:lap_diag}
 where $\diag(\lambda)$ denotes a diagonal matrix of eigenvalues.
 
 The Graph Fourier Transform $\hat{x} \in \R^M$ of any graph signal $x$ is
 defined as
 $$ \hat{x} = U^T x =
 [\langle u_0, x \rangle, \ldots, \langle u_{M-1}, x \rangle]^T $$
-while its inverse is given by
+where $\langle \cdot , \cdot \rangle$ denotes an inner product. The inverse
+transform is then given by
 $$ x = U \hat{x}. $$
 
-It follows that any signal $x$ can be filtered by an operator $g(\L) \in \R^{M
-\times M}$ such that
-$$ y = g(\L) x = U \diag(c) U^T x $$
-where $c = g(\lambda) \in \R^M$ is a vector of filter coefficients.
+It follows that any signal $\hat{x}$ can be filtered in the spectral domain by
+$$ \hat{y} = \hat{g}_\theta(\lambda) \hat{x} $$
+where the operator $\hat{g}_\theta(\lambda) \in \R^{M \times M}$ is a diagonal
+matrix of $M$ Fourier coefficients parametrized by $\theta$. The filtering
+operation can equivalently take place in the spatial domain as
+$$ y = U \hat{g}_\theta(\lambda) U^T x = g_\theta(\L) x $$
+where the operator $g_\theta(\L) = U \hat{g}_\theta(\lambda) U^T \in \R^{M
+\times M}$ is akin to a convolution on the vertices.
 
 ## Graph filter learning
 
 Given a graph $G$, a set $X = [x_0, \ldots, x_{N-1}] \in \R^{M \times N}$ of
-$N$ source graph signals of dimensionality $M$ and their associated set $Y =
-[y_0, \ldots, y_{N-1}] \in \R^{M \times N}$ of target signals, we want to learn
-the coefficients of a graph filter $g$ such as to minimize the convex
-reconstruction error
+$N$ source graph signals of dimensionality $M$ and their associated set $Y
+= [y_0, \ldots, y_{N-1}] \in \R^{M \times N}$ of target signals, we want to
+learn the parameters $\theta \in \R^M$ of a graph filter
+$\hat{g}_\theta(\lambda) = \diag(\theta)$ such as to minimize the convex
+$\ell_2$ reconstruction error
 $$ L =
-\frac{1}{N} \sum_{i=0}^{N-1} \| g(\L) x_i - y_i \|_2^2 =
-\frac{1}{N} \| U \diag(c) U^T X - Y \|_F^2 $$ {#eq:loss}
+\frac{1}{N} \sum_{i=0}^{N-1} \| g_\theta(\L) x_i - y_i \|_2^2 =
+\frac{1}{N} \| U \diag(\theta) U^T X - Y \|_F^2 $$ {#eq:loss}
 where $\|\cdot\|_2^2$ denotes the squared $\ell_2$ norm and $\|\cdot\|_F^2$ the
 squared Frobenius norm.
 
-Note that the non-parametrization of the coefficients $c$ w.r.t. $\lambda$ does
-omit all information about frequencies, while we know that the lower
-frequencies are more important for clustering [ref NCut].
+Note that the independence of the Fourier coefficients, the parameters
+$\theta$, from $\lambda$ does omit all information about frequencies; while we
+know that the lower frequencies are more important for clustering [ref NCut].
 
 Rewriting [@eq:loss] in the spectral domain while decomposing it w.r.t. the
-scalar coefficients $c_i$ gives
+scalar coefficients $\theta_i$ gives
 $$ L =
-\frac{1}{N} \| \diag(c) U^T X - U^T Y \|_F^2 =
-\frac{1}{N} \sum_{i=0}^{M-1} \|c_i\Xh_{i,\cdot} - \Yh_{i,\cdot} \|_2^2 $$
+\frac{1}{N} \| \diag(\theta) U^T X - U^T Y \|_F^2 =
+\frac{1}{N} \sum_{i=0}^{M-1} \|\theta_i\Xh_{i,\cdot} - \Yh_{i,\cdot} \|_2^2 $$
 where $\Xh = U^TX \in \R^{M \times N}$ and $\Yh = U^TY \in \R^{M \times N}$ are
 the spectral representations of the signals $X$ and $Y$. The gradient for each
 coefficient is then given by
-$$ \nabla_{c_i} L =
-\frac{2}{N} ( c_i \Xh_{i,\cdot} - \Yh_{i,\cdot} ) \Xh^T_{\cdot,i} $$
+$$ \nabla_{\theta_i} L =
+\frac{2}{N} ( \theta_i \Xh_{i,\cdot} - \Yh_{i,\cdot} ) \Xh^T_{\cdot,i} $$
 and can be rewritten in a vectorized form as
-$$ \nabla_{c} L =
-\frac{2}{N} \diag \left( (\diag(c) \Xh - \Yh) \Xh^T \right) =
-\frac{2}{N} \left( \Xh \odot ( c1_N^T \odot \Xh - \Yh ) \right) 1_N
+$$ \nabla_{\theta} L =
+\frac{2}{N} \diag \left( (\diag(\theta) \Xh - \Yh) \Xh^T \right) =
+\frac{2}{N} \left( ( \theta 1_N^T \odot \Xh - \Yh ) \odot \Xh \right) 1_N
 $$ {#eq:gradient}
 where $1_N$ denotes a unit vector of length $N$ and $\odot$ the element-wise
 Hadamard product. The second form avoids the computation of the useless
 off-diagonal elements.
 
-A direct solution is given by the optimality condition $\nabla_{c}L=0$ such that
-$$ c^o = \argmin_c L =
+A direct solution is given by the optimality condition $\nabla_{\theta}L=0$
+such that
+$$ \theta^* = \argmin_\theta L =
 (\Xh \odot \Yh) 1_N \oslash (\Xh \odot \Xh) 1_N $$
 where $\oslash$ denotes an element-wise division. Note that this method is
 impractical for large $M$ and $N$ (sufficiently large for $X$ and $Y$ to not
@@ -155,7 +162,7 @@ $O(M^2 \max(M,N))$, a problem already stated in [@henaff_deep_2015].
 
 ### Fast algorithm
 
-The idea is to approximate the filter (in the spectral domain) by a truncated
+The idea is to approximate (in the spectral domain) the filter by a truncated
 Chebyshev expansion and to recursively compute the Chebyshev polynomials from
 the Laplacian, avoiding the Fourier basis altogether [@hammond_wavelets_2011]. 
 
@@ -165,20 +172,22 @@ the stable recurrence relation $T_k(x) = 2x T_{k-1}(x) - T_{k-2}(x)$ with $T_0
 dy / \sqrt{1-y^2})$, the Hilbert space of square integrable functions with
 respect to a measure.
 
-The graph filter coefficients can thus be approximated by the expansion
-$$ c = g(\lambda) \approx \sum_{k=0}^{K-1} c^c_k T_k(\tilde{\lambda}) $$
-of polynomial order $K-1$, where $c^c \in \R^K$ denotes a vector of Chebyshev
-coefficients and $T_k(\tilde{\lambda}) \in \R^M$ is the Chebyshev polynomial of
-order $k$ evaluated at $\tilde{\lambda} = 2\lambda/\lambda_{max}-1 \in \R^M$,
-a vector of scaled eigenvalues. This approximation reduces the number of
-learned coefficients from $M$ to $K$.
+The graph filter $\hat{g}_\theta(\lambda)$ can thus be constructed from the
+truncated expansion
+$$ \hat{g}_\theta(\lambda) = \sum_{k=0}^{K-1} \theta_k T_k(\tilde{\lambda}) $$
+of polynomial order $K-1$, where the parameter $\theta \in \R^K$ is a vector of
+Chebyshev coefficients and $T_k(\tilde{\lambda}) \in \R^M$ is the Chebyshev
+polynomial of order $k$ evaluated at $\tilde{\lambda}
+= 2\lambda/\lambda_{max}-1 \in \R^M$, a vector of scaled eigenvalues. This
+approximation reduces the number of parameters from $M$ to $K$.
 
-The trick to avoid the Fourier basis is to express the polynomials as functions
-of the Laplacian, such that an approximation of the filtering operator is given
+The trick to avoid the Fourier basis $U$ is to express the polynomials as
+functions of the Laplacian $\L$ instead of its eigenvalues $\lambda$ using
+[@eq:lap_diag], such that the filtering operator in the spatial domain is given
 by
-$$ g(\L) = U\diag(c)U^T \approx
-\sum_{k=0}^{K-1} U \diag \left( c^c_k T_k(\tilde{\lambda}) \right) U^T =
-\sum_{k=0}^{K-1} c^c_k T_k(\tilde{\L}) $$ {#eq:approximation}
+$$ g_\theta(\L) = U \hat{g}_\theta(\lambda) U^T =
+\sum_{k=0}^{K-1} U \diag \left( \theta_k T_k(\tilde{\lambda}) \right) U^T =
+\sum_{k=0}^{K-1} \theta_k T_k(\tilde{\L}) $$ {#eq:approximation}
 where $T_k(\tilde{\L}) \in \R^{M \times M}$ is the Chebyshev polynomial of
 order $k$ evaluated at the scaled Laplacian $\tilde{\L} = 2\L/\lambda_{max}-I$.
 Note that the spectrum of the normalized Laplacian is bounded by $2$, such that
@@ -187,22 +196,22 @@ the approximation.
 
 Inserting [@eq:approximation] into [@eq:loss] we obtain
 $$ L =
-\frac{1}{N} \| \sum_{k=0}^{K-1} c^c_k T_k(\tilde{\L}) X - Y \|_F^2 =
-\frac{1}{N} \| \bar{X} c^c - \bar{y} \|_2^2 $$
+\frac{1}{N} \| \sum_{k=0}^{K-1} \theta_k T_k(\tilde{\L}) X - Y \|_F^2 =
+\frac{1}{N} \| \bar{X} \theta - \bar{y} \|_2^2 $$
 where $\bar{y} \in \R^{MN}$ is the vectorized matrix $Y$ and the $k^\text{th}$
 column of $\bar{X} \in \R^{MN \times K}$ is the vectorized matrix $\tilde{X}_k
 = T_k(\tilde{\L}) X \in \R^{M \times N}$. The gradient is then given by
-$$ \nabla_{c^c} L = \frac{2}{N} \bar{X}^T (\bar{X} c^c - \bar{y}). $$
-The optimality condition $\bar{X} c^c = \bar{y}$ is largely over-determined as
-$K << MN$ but a least-square solver can find an approximate solution.
+$$ \nabla_{\theta} L = \frac{2}{N} \bar{X}^T (\bar{X} \theta - \bar{y}). $$
+The optimality condition $\bar{X} \theta = \bar{y}$ is largely over-determined
+as $K << MN$ but a least-square solver can find an approximate solution.
 
 Using the recurrence
 $$ \tilde{X}_k = 2\tilde{\L} \tilde{X}_{k-1} - \tilde{X}_{k-2} $$
 with $\tilde{X}_0 = X$ and $\tilde{X}_1 = \tilde{\L} X$, the computation of
 $\bar{X}$ given $X$ costs $O(K|E|N) = O(KMN)$ operations if the number of edges
 $|E|$ is proportional to the number of nodes $M$, e.g. for kNN graphs. As the
-cost of the product $\bar{X}c^c$ is similar, the entire filtering operation has
-a computational cost of $O(KMN)$ whereas the straightforward implementation
+cost of the product $\bar{X}\theta$ is similar, the entire filtering operation
+has a computational cost of $O(KMN)$ whereas the straightforward implementation
 using the Fourier basis had a cost of $O(M^2\max(M,N)$. To further save
 computations, at the expense of memory, one may store $\bar{X}$ while applying
 different filters, e.g. in the case of learning through SGD.
