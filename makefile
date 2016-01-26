@@ -4,7 +4,7 @@ PDF = $(SRC:.md=.pdf)
 all: $(PDF)
 
 %.tex: %.md
-	pandoc -o $@ $< \
+	@pandoc -o $@ $< \
 		-s \
 		-N \
 		--natbib \
@@ -17,12 +17,13 @@ all: $(PDF)
 		-V fontsize=11pt \
 		--filter pandoc-crossref
 
+# Report errors on final pass only.
 %.pdf: %.tex
-	pdflatex -interaction errorstopmode $<
-	bibtex $(*F)
-	pdflatex -interaction errorstopmode $<
-	pdflatex -interaction errorstopmode $<
-	rm -f *.aux *.log *.toc *.bbl *.blg *.out
+	@-pdflatex -interaction=batchmode $<
+	@bibtex $(*F)
+	@-pdflatex -interaction=batchmode $<
+	@pdflatex $<
+	@rm -f *.aux *.log *.toc *.bbl *.blg *.out
 
 clean:
-	rm -f *.tex *.pdf
+	@rm -f *.tex *.pdf
