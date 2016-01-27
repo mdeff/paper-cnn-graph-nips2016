@@ -66,50 +66,54 @@ Comparison with first generation graph CNN [@henaff_deep_2015].
 A graph $G = (V, E, W)$ is defined by a set $V$ of $|V| = M$ nodes and a set
 $E$ of weighted edges. The connectivity of the graph is captured by the
 adjacency matrix $W \in \R^{M \times M}$ which entry $W_{i,j}$ denotes the
-weight of the edge $(u_i, v_i) \in E$ which connects the vertex $v_i \in V$ to
-$v_j \in V$. The weight $W_{i,j} = 0$ if the vertices are not connected, i.e.
-$(u_i, v_i) \notin E$. Assuming an undirected graph, $W$ is a symmetric matrix.
+weight of the edge $(v_i, v_j) \in E$ which connects the vertex $v_i \in V$ to
+$v_j \in V$. It is set to $0$ if the vertices are not connected, i.e. $(v_i,
+v_j) \notin E$. Assuming an undirected graph, $W$ is a symmetric matrix.
 A graph signal is any signal $x \in \R^M$ defined on the vertices of $G$.
 
-The combinatorial graph Laplacian is given by
-$$ \L = D - W \in \R^{M \times M} $$
-where $D \in \R^{M \times M}$ is the diagonal degree matrix defined as $D_{i,i}
-= \sum_j W_{i,j}$. Note that it is a difference operator such that
-$$ (\L x)_i = \sum_j W_{i,j} (x_i - x_j). $$
-The normalized graph Laplacian is given by
-$$ \L = I_M - D^{-1/2} W D^{-1/2} \in \R^{M \times M} $$
-where $I_M \in \R^{M \times M}$ is the identity matrix.
+The combinatorial graph Laplacian is defined as
+$$ \L^c := D - W \in \R^{M \times M} $$
+where $D \in \R^{M \times M}$ is the diagonal degree matrix defined as
+$D_{i,i} := \sum_j W_{i,j}$. Note that it is a difference operator such that
+$$ (\L^c x)_i = \sum_j W_{i,j} (x_i - x_j). $$
+The normalized graph Laplacian is defined as
+$$ \L^n := I_M - D^{-1/2} W D^{-1/2} \in \R^{M \times M} $$
+where $I_M \in \R^{M \times M}$ is the identity matrix. Finally, the
+random-walk graph Laplacian is defined as
+$$ \L^{rw} := I_M - D^{-1} W \in \R^{M \times M}. $$
+Note that our work is independent to the chosen graph Laplacian.
 
 In analogy to the real line Fourier Transform, a Fourier basis is given by the
 eigenvectors of the Laplacian
 $$ \L u_i = \lambda_i u_i \st \norm{u_i}_2=1, \ i = 0, \ldots, M-1, $$
-with their associated eigenvalues $\lambda_i$ [@shuman_emerging_2013;
-@hammond_wavelets_2011]. Assuming the graph is connected, we may order the
-vector $\lambda = [\lambda_0, \ldots, \lambda_{M-1}]^T \in \R^M$ of eigenvalues
-such that
+with their associated eigenvalues $\lambda_i$. Assuming the graph is connected,
+we may order the vector $\lambda := [\lambda_0, \ldots, \lambda_{M-1}]^T \in
+\R^M$ of eigenvalues such that
 $$ 0 = \lambda_0 < \lambda_1 \leq \ldots \leq \lambda_{M-1} = \lambda_{max}. $$
 As the Laplacian is a real symmetric matrix, the eigenvalues are real and the
 eigenvectors orthonormal. The Laplacian is indeed diagonalized by the Fourier
-basis $U = [u_0, \ldots, u_{M-1}] \in \R^{M \times M}$ such that
-$$ \L = U \diag(\lambda) U^T $$ {#eq:lap_diag}
-where $\diag(\lambda)$ denotes a diagonal matrix of eigenvalues.
+basis $U := [u_0, \ldots, u_{M-1}] \in \R^{M \times M}$ such that
+$$ \L = U \Lambda U^T $$ {#eq:lap_diag}
+where $\Lambda := \diag(\lambda) \in \R^{M \times M}$ denotes a diagonal matrix
+of eigenvalues and $U^T$ is the matrix transpose of $U$. See
+[@chung_spectral_1997] for details on spectral graph theory.
 
 The Graph Fourier Transform $\hat{x} \in \R^M$ of any graph signal $x$ is
-defined as
+given by
 $$ \hat{x} = U^T x =
 [\langle u_0, x \rangle, \ldots, \langle u_{M-1}, x \rangle]^T $$
-where $\langle \cdot , \cdot \rangle$ denotes an inner product. The inverse
-transform is then given by
+where $\langle \cdot , \cdot \rangle$ denotes an inner product
+[@shuman_emerging_2013]. The inverse transform is then given by
 $$ x = U \hat{x}. $$
 
 It follows that any signal $\hat{x}$ can be filtered in the spectral domain by
-$$ \hat{y} = \hat{g}_\theta(\lambda) \hat{x} $$
-where the operator $\hat{g}_\theta(\lambda) \in \R^{M \times M}$ is a diagonal
+$$ \hat{y} = \hat{g}_\theta(\Lambda) \hat{x} $$
+where the operator $\hat{g}_\theta(\Lambda) \in \R^{M \times M}$ is a diagonal
 matrix of $M$ Fourier coefficients parametrized by $\theta$. The filtering
 operation can equivalently take place in the spatial domain as
-$$ y = U \hat{g}_\theta(\lambda) U^T x = g_\theta(\L) x $$
-where the operator $g_\theta(\L) = U \hat{g}_\theta(\lambda) U^T \in \R^{M
-\times M}$ is akin to a convolution on the vertices.
+$$ y = U \hat{g}_\theta(\Lambda) U^T x = g_\theta(\L) x $$
+where the matrix function $g_\theta(\L) := U \hat{g}_\theta(\Lambda) U^T \in
+\R^{M \times M}$ is akin to a convolution on the vertices.
 
 ## Graph filter learning
 
@@ -117,17 +121,20 @@ Given a graph $G$, a set $X = [x_0, \ldots, x_{N-1}] \in \R^{M \times N}$ of
 $N$ source graph signals of dimensionality $M$ and their associated set $Y
 = [y_0, \ldots, y_{N-1}] \in \R^{M \times N}$ of target signals, we want to
 learn the parameters $\theta \in \R^M$ of a graph filter
-$\hat{g}_\theta(\lambda) = \diag(\theta)$ such as to minimize the convex
-$\ell_2$ reconstruction error
+$\hat{g}_\theta(\Lambda) := \diag(\theta)$ such as to minimize the convex
+least-square reconstruction error
 $$ L =
 \frac{1}{N} \sum_{i=0}^{N-1} \norm{ g_\theta(\L) x_i - y_i }_2^2 =
 \frac{1}{N} \norm{ U \diag(\theta) U^T X - Y }_F^2 $$ {#eq:loss}
 where $\norm{\cdot}_2^2$ denotes the squared $\ell_2$ norm and
 $\norm{\cdot}_F^2$ the squared Frobenius norm.
 
-Note that the independence of the Fourier coefficients, the parameters
-$\theta$, from $\lambda$ does omit all information about frequencies; while we
-know that the lower frequencies are more important for clustering [ref NCut].
+Note that, while being the most flexible definition of
+$\hat{g}_\theta(\Lambda)$, the independence of the Fourier coefficients
+$\theta$ from the eigenvalues $\Lambda$ does omit all information about
+frequencies. As we know that the lower frequencies are more important for
+clustering [ref NCut], we could have designed a parametric filter with less
+parameters.
 
 Rewriting [@eq:loss] in the spectral domain while decomposing it w.r.t. the
 scalar coefficients $\theta_i$ gives
@@ -160,14 +167,16 @@ the trick.
 There is however two major computational drawbacks to this optimization
 process: (1) the Fourier transform $\Xh=U^TX$ of a set of signals costs
 $O(M^2N)$ operations and (2) the eigenvalue decomposition
-$\L=U\diag(\lambda)U^T$ costs $O(M^3)$. The total cost of filtering is thus
+$\L = U \Lambda U^T$ costs $O(M^3)$. The total cost of filtering is thus
 $O(M^2 \max(M,N))$, a problem already stated in [@henaff_deep_2015].
 
 ### Fast algorithm
 
 The idea is to approximate (in the spectral domain) the filter by a truncated
 Chebyshev expansion and to recursively compute the Chebyshev polynomials from
-the Laplacian, avoiding the Fourier basis altogether [@hammond_wavelets_2011]. 
+the Laplacian, avoiding the Fourier basis altogether. This approximate method
+for spectral graph filtering was first proposed in [@hammond_wavelets_2011] for
+the wavelet transform on graphs.
 
 Recall that the Chebyshev polynomial $T_k(x)$ of order $k$ may be generated by
 the stable recurrence relation $T_k(x) = 2x T_{k-1}(x) - T_{k-2}(x)$ with $T_0
@@ -175,27 +184,29 @@ the stable recurrence relation $T_k(x) = 2x T_{k-1}(x) - T_{k-2}(x)$ with $T_0
 dy / \sqrt{1-y^2})$, the Hilbert space of square integrable functions with
 respect to a measure.
 
-The graph filter $\hat{g}_\theta(\lambda)$ can thus be constructed from the
+The graph filter $\hat{g}_\theta(\Lambda)$ can thus be constructed from the
 truncated expansion
-$$ \hat{g}_\theta(\lambda) = \sum_{k=0}^{K-1} \theta_k T_k(\tilde{\lambda}) $$
+$$ \hat{g}_\theta(\Lambda) := \sum_{k=0}^{K-1} \theta_k T_k(\tilde{\Lambda}) $$
 of polynomial order $K-1$, where the parameter $\theta \in \R^K$ is a vector of
-Chebyshev coefficients and $T_k(\tilde{\lambda}) \in \R^M$ is the Chebyshev
-polynomial of order $k$ evaluated at $\tilde{\lambda}
-= 2\lambda/\lambda_{max}-1 \in \R^M$, a vector of scaled eigenvalues. This
-approximation reduces the number of parameters from $M$ to $K$.
+Chebyshev coefficients and $T_k(\tilde{\Lambda}) \in \R^{M \times M}$ is the
+Chebyshev polynomial of order $k$ evaluated at $\tilde{\Lambda} := 2 \Lambda
+/ \lambda_{max} - I_M \in \R^{M \times M}$, a diagonal matrix of scaled
+eigenvalues. While reducing the number of parameters from $M$ to $K$, this
+parametrization enforces smoothness in the spectral domain, which translates
+to localization in the spatial domain. This is often a desired property.
 
 The trick to avoid the Fourier basis $U$ is to express the polynomials as
-functions of the Laplacian $\L$ instead of its eigenvalues $\lambda$ using
+functions of the Laplacian $\L$ instead of its eigenvalues $\Lambda$ using
 [@eq:lap_diag], such that the filtering operator in the spatial domain is given
 by
-$$ g_\theta(\L) = U \hat{g}_\theta(\lambda) U^T =
-\sum_{k=0}^{K-1} U \diag \left( \theta_k T_k(\tilde{\lambda}) \right) U^T =
+$$ g_\theta(\L) = U \hat{g}_\theta(\Lambda) U^T =
+\sum_{k=0}^{K-1} U \theta_k T_k(\tilde{\Lambda}) U^T =
 \sum_{k=0}^{K-1} \theta_k T_k(\tilde{\L}) $$ {#eq:approximation}
 where $T_k(\tilde{\L}) \in \R^{M \times M}$ is the Chebyshev polynomial of
-order $k$ evaluated at the scaled Laplacian $\tilde{\L} = 2\L/\lambda_{max}-I$.
-Note that the spectrum of the normalized Laplacian is bounded by $2$, such that
-the scaling can simply be $\tilde{\L} = \L - I$, tolerating some imprecision in
-the approximation.
+order $k$ evaluated at the scaled Laplacian $\tilde{\L} := 2 \L / \lambda_{max}
+- I_M$. Note that the spectrum of the normalized Laplacian is bounded by $2$,
+such that the scaling can simply be $\tilde{\L} = \L - I_M$, tolerating some
+imprecision in the approximation.
 
 Inserting [@eq:approximation] into [@eq:loss] we obtain
 $$ L =
