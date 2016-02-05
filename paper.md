@@ -242,6 +242,85 @@ using the Fourier basis had a cost of $O(M^2\max(M,N)$. To further save
 computations, at the expense of memory, one may store $\bar{X}$ while applying
 different filters, e.g. in the case of learning through \gls{SGD}.
 
+### Lanczos approximation
+
+Another applicable approximation scheme is based on the Lanczos algorithm, an
+adaptation of power methods to find the most useful eigenvalues and
+eigenvectors of a linear system. It was first introduced for fast graph
+filtering by [@susnjara_accelerated_2015].
+
+The algorithm, described in [@gallopoulos_efficient_1992;
+@susnjara_accelerated_2015], constructs an orthonormal basis $V = [v_0, \ldots,
+v_{K-1}] \in \R^{M \times K}$ of the Krylov subspace $\mathcal{K}_K(\L,x)
+= \spn\{ x, \L x, \ldots, \L^{K-1} x \}$ and a tri-diagonal matrix $H = V^T \L
+V \in \R^{K \times K}$ with a computational cost of $O(K |E|)$[^1]. Filtering
+the signal $x$ with $g_\theta(\L)$ can then be approximated by an order $K-1$
+polynomial as
+$$ y = g_\theta(\L) x \approx
+V g_\theta(H) V^T x = V Q g_\theta(\Sigma) Q^T V^T x $$ {#eq:lanczos}
+where $Q \Sigma Q^T = H$ is the eigendecomposition[^fast] of $H$. As for the
+Chebyshev approximation, this construction enforces smoothness in the spectral
+domain.
+
+[^1]: Note that for larger $K$ the original iterative algorithm may loose the
+basis orthogonality such that an orthogonalization step is necessary [].
+
+[^fast]: There exist fast methods for the eigendecomposition of symmetric
+tri-diagonal matrices [].
+
+Inserting [@eq:lanczos] with a parametrized filter $g_\theta(\Sigma) :=
+\diag(\theta)$, $\theta \in \R^K$, into [@eq:loss] gives
+$$ L = \frac{1}{N} \sum_{n=0}^{N-1}
+\norm{V_n Q_n \diag(\theta) Q_n^T V_n^T x_n - y_n}_2^2 =
+\frac{1}{N} \norm{\diag(\theta) \hat{X} - \hat{Y}}_F^2 $$
+where $\hat{X} = [\hat{x}_0, \ldots, \hat{x}_{N-1}] \in \R^{K \times N}$,
+$\hat{Y} = [\hat{y}_0, \ldots, \hat{y}_{N-1}] \in \R^{K \times N}$ and
+$\hat{x}_n = Q_n^T V_n^T x_n \in \R^K$, $\hat{y}_n = Q_n^T V_n^T y_n \in \R^K$
+are approximate representations of the signals $x_n$, $y_n$ in the orthonormal
+basis $V_n Q_n \in \R^{M \times K}$ of $\mathcal{K}_K(\L,x_n)$. Similarly to
+[@eq:loss], the gradient is given by [@eq:gradient] and a closed-form solution
+by [@eq:direct].
+
+The expression can be simplified by setting[^2] $v_0 := x / \norm{x}_2$ such
+that $V^T x = \norm{x}_2 e_1$ and
+$$ V g_\theta(H) V^T x =
+\norm{x}_2 V Q \diag(\theta) Q^T e_1 =
+\norm{x}_2 V Q \diag(q) \theta $$
+where $e_1 \in \R^K$ denotes the first unit vector and $q = Q^T e_1 \in \R^K$
+is the first row of $Q$. Inserting into [@eq:loss] gives
+$$ L =
+\frac{1}{N} \sum_{n=0}^{N-1} \norm{\tilde{X}_n \theta - y_n}_2^2 =
+\frac{1}{N} \sum_{k=0}^{K-1} \norm{\bar{X}_{\cdot,k} \theta_k - \bar{y}}_2^2 =
+\frac{1}{N} \norm{\bar{X} \theta - \bar{y} }_2^2 $$
+where $\bar{y} \in \R^{NM}$ is the vectorized matrix $Y$ and $\bar{X} :=
+[\tilde{X}_0, \ldots, \tilde{X}_{N-1}]^T \in \R^{NM \times K}$ is a stack of
+$N$ matrices $\tilde{X}_n := \norm{x_n}_2 V_n Q_n \diag(q_n) \in \R^{M \times
+K}$ where $V_n$, $Q_n$ and $q_n$ are derived from $x_n$. The second form (in
+terms of independent coefficients $\theta_k$) is valid because $\bar{X}$ is
+orthogonal, i.e $\bar{X}^T \bar{X}$ is a diagonal matrix, so that the solution
+[@eq:direct_c] can be written as
+$$ \theta^* = \argmin_\theta L =
+\underbrace{\sum_{n=0}^{N-1} \Big( \norm{x_n}_2 \diag(q_n) \Big)^{-2}}
+_{(\bar{X}^T\bar{X})^{-1}} \bar{X}^T \bar{y} $$
+where $\bar{X}^T \bar{y} = [\langle \bar{X}_{\cdot,0}, \bar{y} \rangle, \ldots,
+\langle \bar{X}_{\cdot,K-1}, \bar{y} \rangle]^T \in \R^K$ is the projection of
+$\bar{y}$ onto the $K$ basis vectors $\bar{X}_{\cdot,k} \in \R^{MN}$. While
+this closed-form evaluation is fast and stable, a gradient descent scheme can
+be used with [@eq:gradient_c].
+
+[^2]: The first basis vector $v_0$ can be set to an arbitrary unit vector.
+
+While the time and space complexities are similar, this method has two
+advantages over the Chebyshev approximation: (1) it does not require the
+normalization of the Laplacian spectrum and (2), the optimization is easier[^3]
+as the parameters $\theta_k$ are independent of each other. See
+[@susnjara_accelerated_2015] for a discussion of the approximation quality and
+a comparison with the Chebyshev approximation.
+
+[^3]: Easier because the solution can be found without the need of a large
+matrix inversion nor a least-square solver. The convergence of \gls{SVD} is
+also faster.
+
 ## Convolution of graph signals
 
 which gives
