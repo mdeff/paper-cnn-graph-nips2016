@@ -17,13 +17,13 @@ all: $(PDF)
 		-V fontsize=11pt \
 		--filter pandoc-crossref
 
-# Report errors on final pass only.
 %.pdf: %.tex
-	@-pdflatex -interaction=batchmode $<
-	@bibtex $(*F)
-	@-pdflatex -interaction=batchmode $<
-	@pdflatex $<
-	@rm -f *.aux *.log *.toc *.bbl *.blg *.out
+	@latexmk $<
 
 clean:
-	@rm -f *.tex *.pdf
+	@rm -f *.{aux,bbl,blg,fdb_latexmk,fls,log,out}
+	@rm -f *.{bcf,run.xml}
+	@rm -f *.tex
+
+cleanall:
+	@rm -f *.pdf
