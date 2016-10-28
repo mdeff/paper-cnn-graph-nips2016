@@ -1,5 +1,6 @@
 ---
-title: 'Convolutional Neural Networks on Graphs'
+title: 'Convolutional Neural Networks for Graphs'
+subtitle: 'Graph Neural Networks'
 author:
 - Michaël Defferrard^1^
   \footnote{Corresponding author - michael.defferrard@epfl.ch}
@@ -10,10 +11,13 @@ include-before: ^1^ LTS2, Ecole Polytechnique Fédérale de Lausanne,
 keywords:
 - graph signal processing
 - deep learning
-abstract: Disrupting Deep Learning.
+abstract: This paper introduces Graph Neural Network (GNN), a novel framework
+  to process data on irregular, i.e. non-Euclidean domains modelized as graphs.
+  Even recent developments in Deep Learning who use graph embeddings don't make
+  use of the graph structure per se.
 date: \today
 header-includes:
-- \usepackage[acronym]{glossaries} \makeglossaries
+- \usepackage[acronym]{glossaries}
 - \newacronym{SVD}{SVD}{Singular Value Decomposition}
 - \newacronym{SGD}{SGD}{Stochastic Gradient Descent}
 - \newacronym{PSD}{PSD}{positive semidefinite}
@@ -22,10 +26,13 @@ header-includes:
 - \DeclareMathOperator*{\spn}{span}
 - \renewcommand{\L}{\mathcal{L}}
 - \renewcommand{\G}{\mathcal{G}}
+- \renewcommand{\H}{\mathcal{H}}
+- \newcommand{\K}{\mathcal{K}}
 - \newcommand{\V}{\mathcal{V}}
 - \newcommand{\E}{\mathcal{E}}
 - \newcommand{\W}{\mathcal{W}}
 - \newcommand{\R}{\mathbb{R}}
+- \newcommand{\N}{\mathbb{N}}
 - \newcommand{\Xh}{\hat{X}}
 - \newcommand{\Yh}{\hat{Y}}
 - \newcommand{\st}{\ \text{s.t.} \,}
@@ -38,11 +45,20 @@ Large networks allow to learn complex relationships. Although they overfit
 easily if the training set is small because there is a lot of parameters to
 learn.
 
-Convolutional networks offer a great reduction of parameters on regular
-Euclidean domain. This work proposes to generalize it to the discrete model of
-manifolds, graphs. Such an approach was proposed by [@bruna_spectral_2013;
-@henaff_deep_2015], we will refine it with proper graph signal processing tools.
+Convolutional neural networks (CNN) offer a great reduction of parameters on
+regular Euclidean domain. This work proposes to generalize it to the discrete
+model of manifolds, graphs. Such an approach was proposed by
+[@bruna_spectral_2013; @henaff_deep_2015], we will refine it with proper graph
+signal processing tools.
 
+This paper introduces a framework to use CNN with signals defined on weighted
+graphs. Our work leverages spectral methods, which are much faster than
+a spatial approach would be, in the same sense as doing convolutions as
+multiplication in the Fourier domain (with the help of the FFT) is much faster
+than multiplying patches on an image.
+
+Another option to do clustering or regression on data graphs is to first embed
+the graph and then use the embedding as additional features.
 
 # Related work
 
@@ -66,7 +82,7 @@ Comparison with first generation graph CNN [@henaff_deep_2015].
 	$O(n)$ if the weight matrix is sparse, i.e. grows linearly with $N$ This
 	addresses the first limitation mentioned in [@henaff_deep_2015].
 
-# Method
+# Model
 
 ## Spectral Graph Theory
 
@@ -331,15 +347,226 @@ of a large matrix and 2) \gls{SGD} converges to a better solution with less
 iterations. See [@susnjara_accelerated_2015] for a discussion of the
 approximation quality and a comparison with the Chebyshev approximation.
 
-## Convolution of graph signals
+## Graph coarsening
 
-which gives
-$$a_j^{(l)'} = f(U_{l-1}^T \hat{H}_{l,i,j} U_{l-1} a_i^{(l-1)} + b_{l,i,j,\cdot})$$ {#eq:spectral_mult}
-in the spectral domain. See [@eq:spectral_mult].
+The graph partitioning problem has been widely studied. Applications include
+VLSI design, load balancing for parallel computations, network analysis, and
+optimal scheduling. The goal is to partition the vertices of a graph into
+a certain number of disjoint sets of approximately the same size so that a cut
+metric is minimized. This problem is NP-complete even for several restricted
+classes of graphs, and there is no constant factor approximation algorithm for
+general graphs [Bui and Jones 1992]. While notable developments in exact
+algorithms and heuristics have been done, only the introduction of the
+general-purpose multilevel methods during the 1990s has provided a breakthrough
+in efficiency and quality [Safro 2009 2012]. Graph coarsening, where the problem
+instance is gradually mapped to smaller ones to reduce the original complexity,
+i.e., the graph underlying the problem is compressed, is the first step of
+these multilevel methods.
 
-## Architecture
+Existing multilevel algorithms for combinatorial optimization problems (such as
+k-partitioning, linear ordering, clustering, and segmentation) can be divided
+into two classes: contraction-based schemes and algebraic multigrid
+(AMG)-inspired schemes.
 
-Image.
+Alternative standard algorithms for graph coarsening include the Kron reduction
+[], Label Propagation [], spectral clustering [] or a sampling [Nath
+uncertainty]. A standard approach for graph coarsening is the maximal match, as
+used by METIS for graph partitioning [?].
+
+The assumption behind METIS is that a (near) optimal partitioning on a coarser
+graph implies a good partitioning in the finer graph. In general, it only holds
+true when the degree of nodes in the graph is bounded by a constant [Karypis
+95]. Some real-life graphs, e.g. social networks or WWW, are right-skewed, i.e.
+there exists hub vertices which have very large degrees. These graphs follow
+a power-law degree distribution.
+
+# Applications
+
+## Regression
+
+Solving a linear regression problem on graph signals is akin to minimize
+[@eq:loss] where $Y$ is the dependent variable and $X$ the independent
+observations.
+
+## Representation learning
+
+Representation learning is the problem of finding an appropriate (to some
+criteria) representation $y_i$ of a sample $x_i$ defined as
+$$ \min_{A,Y} \norm{ AX - Y }_F^2 + \tau P(Y) $$
+where $A \in \R^{M \times M}$ is some operator and $P(Y)$ is some prior on $Y$.
+Take $P(Z)=\norm{Z}_F^2$ and you get a Thikhonov prior. Take $P(Y)
+= \norm{Y}_1$ and you get sparse coding (with dictionary learning).
+
+## Classification
+
+There are dependent vectors $X = \{x_i\}_{i=0}^{N-1} \in \R^{M \times N}$ we
+want to predict from observations $Y = \{y_i\}_{i=0}^{N-1} \in \R^{M \times
+N}$.
+
+In the classification case, $y_i \in \N$ is a discrete number which represents
+a class, e.g. $y_i=-1$ indicates that sample $x_i$ belongs to class 1 and
+$y_i=+1$ to class 2.
+
+### Representation learning
+
+Three ways to reduce the number of parameters:
+
+1. Graph coarsening
+2. No weights: loss of spatiality (convolutional only)
+3. Non-linear activation function
+
+But $\theta$ and $w$ are redundant, so
+$$ L = \norm{\overline{\bar{X} \theta}^T 1_{FM} - y}_2^2 $$
+$$ \bar{X} \in \R^{NM \times K} $$
+$$ \theta \in \R^{K \times F} $$
+
+$$ \nabla_\theta L = \bar{X}^T (\bar{X} \theta - z) $$
+$$ \nabla_\theta L = (\overline{\bar{X} \theta}^T 1_{FM} - y) $$
+
+$$ \bar{X} 1_{FM} (\overline{\bar{X} \theta}^T 1_{FM} - y) $$
+$$ (\bar{X} 1_{FM} \overline{\bar{X}}^T 1_{FM})^{-1} \bar{X} 1_{FM} y $$
+
+### Linear classification
+
+Empirical risk minimization (statistical learning).
+
+The $\ell_2$ regularized least-square model, also known as ridge regression,
+is defined as
+$$ L =
+\frac{1}{N} \sum_{i=0}^{N-1} |f_w(x_i) - y_i|^2 + \tau \norm{f}_\H^2,
+$$ {#eq:rls}
+where $f_w \in \H$ is some classification function parametrized by $w$ and $\H$
+is an Hilbert space.
+
+Introducing the linear classifier $f(x) = w^T x$ into [@eq:rls] gives
+$$ L = \frac{1}{N} \norm{X^T w - y}_2^2  + \tau \norm{w}_2^2, $$
+where $w \in \R^M$ are the weights to learn. Note that there is no bias because
+the data can be centered around zero (we know the lower and upper bounds on
+luminosity values).
+
+Gradient
+$$ \nabla_w L = \frac{2}{N} X (X^T w - y) + 2 \tau w $$ {#eq:gradient_rls}
+
+Optimality condition $\nabla L = 0$
+$$ w^* = \argmin_w \nabla L =
+\left(X X^T + \tau N I_M \right)^{-1} X y $$ {#eq:sol_rls}
+
+### Feature learning
+
+Introducing graph filter learning as a scheme for feature learning gives the
+objective
+$$ L = \frac{1}{N} \sum_{i=0}^{N-1}
+\Big| f_w \Big( A_\theta(\L) x_i \Big) - y_i \Big|^2 +
+\tau_R \norm{f_w}_\H^2, $$
+where the filter bank $A_\theta(\L) = \bigcup_{i=0}^{F-1} g_{\theta_i}(\L) \in
+\R^{FM \times M}$ is a block-diagonal matrix composed of $F$ filters
+$g_{\theta_i}(\L)$ which extract different features.
+
+Using a linear classifier and the Lanczos parametrization introduced in
+\ref{lanczos-parametrization} gives
+$$ L =
+\frac{1}{N} \norm{\overline{\bar{X} \theta}^T w - y}_2^2 +
+\tau_R \norm{w}_2^2, $$ {#eq:rls_gfl}
+where $w \in \R^{FM}$ are the weights to learn, $\bar{X} \in \R^{NM
+\times K}$ is the Lanczos basis described in \ref{lanczos-parametrization},
+$\theta \in \R^{K \times F}$ are the $K$ coefficients of the $F$ filters and
+$\overline{\bar{X} \theta} \in \R^{FM \times N}$ is a rearrangement of the
+matrix $\bar{X} \theta \in \R^{NM \times F}$. Note that there is now $F$ times
+more weigts to learn, i.e. $w \in \R^{FM}$.
+
+$\bar{X} \theta \in \R^{NM \times F}$
+
+$$ \frac{2}{N} \bar{X} w (\overline{\bar{X} \theta}^T w - y) $$
+
+$$ (\bar{X} w \overline{\bar{X}}^T w)^{-1} \bar{X}wy $$
+
+### Splitting scheme
+
+The splitting scheme
+$$ L =
+\frac{1}{N} \norm{Z^T w - y}_2^2 +
+\frac{\tau_F}{N} \norm{\overline{\bar{X} \theta} - Z}_F^2 +
+\tau_R \norm{w}_2^2 $$
+may be used to minimize the non-convex objective [@eq:rls_gfl] for $\theta$ and
+$w$, where $Z = [z_0, \ldots, z_{N-1}] \in \R^{FM \times N}$ are the signals in
+feature space. Solving the overall non-convex problem requires to iteratively
+solve the following three convex sub-problems:
+
+1. The gradient and solution to $\min_\theta L$ are given by [@eq:gradient_c]
+and [@eq:direct_l], substituting $\bar{y}$ by $\bar{Z} \in \R^{NM \times F}$,
+a rearrangement of $Z$.
+
+2. The gradient of $\min_Z L$ is
+$$ \nabla_Z L =
+\frac{2}{N} w (w^T Z - y^T) + \frac{2\tau_F}{N} (Z - \overline{\bar{X} \theta}) $$
+and the closed-form solution is
+$$ Z^* = \argmin_Z L =
+\left( \tau_F I_{FM} + w w^T \right)^{-1}
+\left( \tau_F \overline{\bar{X} \theta} + w y^T \right). $$
+
+3. The gradient and solution to $\min_w L$ are given by [@eq:gradient_rls]
+and [@eq:sol_rls], substituting $X$ by $Z$.
+
+### Graph coarsening
+
+To reduce again the number of parameters in $w$, the graph should be coarsened
+to trade feature resolution at the price of vertex resolution.
+
+### Kernel methods
+
+The same can be done for kernel methods.
+
+We want to learn a classification function $f(x) = \sum_i \K(x,x_i) \alpha_i
+\in \R$, where $\K(\cdot,\cdot)$ is some kernel function, which maps a sample
+$x$ to a label $y$. The loss function to minimize over the training set is then
+given by
+$$ L = \sum_i |f(x_i) - y_i|^2 + \tau \norm{f}_{H_\K}^2 =
+\norm{ \K \alpha - y }_2^2 + \tau \alpha^T \K \alpha, $$
+where $\K_{i,j} = \K(x_i, x_j)$ is the kernel function evaluated at all
+training samples and $\alpha \in \R^N$ are the parameters.
+
+$$ \nabla_\alpha L = \K (\K \alpha - y) + \tau \K \alpha $$
+$\K$ is symmetric.
+
+$$ \alpha^* = \argmin_\alpha L = (\K + \tau I_N)^{-1} y $$
+
+### Feature learning
+
+A general formulation of the loss for a classification problem is given by
+$$ \min_{\theta_A, \theta_h} \left\{ L = \frac{1}{N} \sum_{i=0}^{N-1}
+\left| h_{\theta_h}(A_{\theta_A}(\L) x_i) - y_i \right|^2 +
+\tau_A \Omega_A(A_{\theta_A}) + \tau_h \Omega_h(h_{\theta_h}) \right\} $$
+where $A$ is an operator which transforms the input signals into a suitable,
+i.e. learned, representation and $h$ is a classification function. $\Omega_A$
+and $\Omega_h$ are regularizations, $\tau_A$ and $\tau_h$ are hyper-parameters.
+
+The SVM classification function $h \in H_\K$ is defined as
+$$ h_{\theta_h}(x) = \sum_{i=0}^{N-1} \alpha_i \K(x, x_i) + \beta,
+\ \theta_h = (\alpha_i, \beta), $$
+where $\K(\cdot,\cdot)$ is some kernel function. It is regularized by
+$$ \Omega_h = \norm{h}_{H_\K}^2. $$
+
+In our graph filters learning setting, the mapping $A \in \R^{FM \times M}$ is
+given by the filter bank
+$$ A_{\theta_A}(\L) = \bigcup_{f=0}^{F-1} g_{\theta_f}(\L),
+\ \theta_A = (\theta_f), $$
+a block-diagonal matrix composed of $F$ filters, which extracts multiple
+features from the input signal.
+
+While the optimization complexity would increase a lot if we were to minimize
+for the model complexity $K$, we can easily include a penalty of the form
+$$ \Omega_A = \sum_f \sum_i |\theta_f(\lambda_i) w(\lambda_i)|^2 $$
+where $w(\lambda_i) \sim 1 / \lambda_i$.
+
+Learning complexity: there is $FK$ parameters in $\theta_A$ and $N+1$
+parameters in $\theta_h$.
+
+## Going deep
+
+Define convolutional neural networks on irregular domains by learning multiple
+layers of graph filters.
+
+Image of the architecture.
 
 # Experiments
 
@@ -370,7 +597,15 @@ parametrized by cubic splines.
 
 ### Lanczos Parametrization
 
-# Conclusion
+## Classification
+
+### Sampled MNIST
+
+### Text documents
+
+# Discussion
+
+# Conclusion and Outlook
 
 That was awesome.
 
