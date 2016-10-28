@@ -20,7 +20,7 @@
 \usepackage{nicefrac}       % compact symbols for 1/2, etc.
 \usepackage{microtype}      % microtypography
 
-\title{Convolutional Neural Networks for Graphs}
+\title{Convolutional Neural Networks on Graphs\\ with Fast Spectral Filtering}
 
 % The \author macro works with any number of authors. There are two
 % commands used to separate the names and addresses of multiple
@@ -84,6 +84,43 @@ data on irregular, i.e.~non-Euclidean domains modelized as graphs. Even recent
 developments in Deep Learning who use graph embeddings don't make use of the
 graph structure per se.
 \end{abstract}
+
+
+
+%%% XAV %%%
+\section{Story}
+(1) Several DL approaches to perform DL on networks s.a. bruna, johnson. It has become an essential problem to go beyond existing DL techniques. Our main contribution is to define DL on graphs using rigorous math framework based on signal processing on graphs tools.  \\
+(2) We introduce efficient computational techniques that scales w.r.t. E and not $n^2$, and simultaneously offer control of spatial local filters\\
+(3) We test w.r.t. fully connected and bruna on mnist, 20news, rcv1\\
+(4) Such framework offers the necessary basis to be developed in several directions s.a. johnson, natural graphs, etc.\\
+%%% XAV %%%
+
+
+
+%%% XAV %%%
+\section{Outline}
+(1) Introduction \& Motivation\\
+(2) Signal Processing on Graphs\\
+(3) CNNs on Graphs\\
+(4) Fast Graph filtering\\
+(5) Graph Coarsening with Kron Reduction\\
+(6) Experiments\\
+%%% XAV %%%
+
+
+%%% XAV %%%
+\section{Contributions}
+$\bullet$ Spectral extension of CNNs using signal graph processing paradigm \cite{shuman_emerging_2013} for shift-invariance property on graphs.\\
+$\bullet$ Fast graph filtering using Chebyshev and Lanczos techniques (no costly EVD required).\\
+$\bullet$ Exact control of spatial filtering size for optimal local feature extraction on graphs.\\
+$\bullet$ Less (?) parameters to learn than original CNNs.\\
+$\bullet$ Experiments on unstructured text document data with classification of RCV1 (Reuters), 20news, WEBKB4.\\
+%%% XAV %%%
+
+
+
+
+
 
 \section{Introduction}\label{introduction}
 
