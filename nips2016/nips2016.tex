@@ -19,8 +19,14 @@
 \usepackage{amssymb}
 \usepackage{nicefrac}       % compact symbols for 1/2, etc.
 \usepackage{microtype}      % microtypography
+\usepackage{subfigure}
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{color}
 
-\title{Convolutional Neural Networks on Graphs\\ with Fast Spectral Filtering}
+
+
+\title{Convolutional Neural Networks on Graphs\\ with Fast Localized Spectral Filtering}
 
 % The \author macro works with any number of authors. There are two
 % commands used to separate the names and addresses of multiple
@@ -78,676 +84,391 @@
 
 \maketitle
 
+
+
 \begin{abstract}
-This paper introduces Graph Neural Network (GNN), a novel framework to process
-data on irregular, i.e.~non-Euclidean domains modelized as graphs. Even recent
-developments in Deep Learning who use graph embeddings don't make use of the
-graph structure per se.
+Convolutional neural networks have greatly improved state-of-the-art performances in computer vision and speech analysis tasks, due to its high ability to extract multiple levels of representations of data. In this work, we are interested in generalizing convolutional neural networks from low-dimensional regular grids, where image, video and speech are represented, to high-dimensional irregular domains, such as social networks, biological graphs like gene regulatory and brain connectivity networks, telecommunication networks, or words' embedding. We present a formulation of convolutional neural networks on graphs in the context of the emerging field of signal processing on graphs, which provides the necessary mathematical background and efficient numerical schemes to design fast localized convolutional filters on graphs. Numerical experiments on MNIST and 20NEWS demonstrate the ability of the system to learn local stationary features on graphs, as long as the graph is well-constructed.
 \end{abstract}
 
-
-
-%%% XAV %%%
-\section{Story}
-(1) Several DL approaches to perform DL on networks s.a. bruna, johnson. It has become an essential problem to go beyond existing DL techniques. Our main contribution is to define DL on graphs using rigorous math framework based on signal processing on graphs tools.  \\
-(2) We introduce efficient computational techniques that scales w.r.t. E and not $n^2$, and simultaneously offer control of spatial local filters\\
-(3) We test w.r.t. fully connected and bruna on mnist, 20news, rcv1\\
-(4) Such framework offers the necessary basis to be developed in several directions s.a. johnson, natural graphs, etc.\\
-%%% XAV %%%
+%Previous works have been developed along this today essential line of research, but they lack of mathematical foundations and efficient learning of filters.
 
 
 
-%%% XAV %%%
-\section{Outline}
-(1) Introduction \& Motivation\\
-(2) Signal Processing on Graphs\\
-(3) CNNs on Graphs\\
-(4) Fast Graph filtering\\
-(5) Graph Coarsening with Kron Reduction\\
-(6) Experiments\\
-%%% XAV %%%
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=13.5cm]{images/illustrationCNNgraphs.eps}
+%\includegraphics[width=13.5cm]{images/illustrationCNNgraphs.png}
+\caption{Architecture of the proposed CNNs on graphs. Notation: $l$ is the coarsening level, $x^l$ are the downsampled signals at layer $l$, $G^l$ is the coarser graph, $g_{\theta^{K_l}}$ are the spectral filters at layer $l$, $x_g^l$ are the filtered signals, $p_l$ is the coarsening exponent, $n_c$ is the number of classes, $y$ is the output signal, and $\theta^l$ is the number of parameters to learn at $l$.}
+\label{fig:}
+\end{figure}
 
 
-%%% XAV %%%
+
+
+
+
+
+\section{Introduction}
+\vspace{-0.2cm}
+Convolutional neural networks (CNNs) \cite{pro:LeCunBottouBengioHaffner98MNIST} offer an efficient architecture to extract highly meaningful statistical patterns in large-scale and high-dimensional datasets. The key success of CNNs is its advanced ability to learn local stationary structures and compose them to form multi-scale hierarchical patterns. Precisely, CNNs extract the local stationarity property of the input data or signals by revealing local features that are shared across the data domain. These similar features are identified with localized convolutional filters or kernels, which are learned from the data. Convolutional filters are shift- or translation-invariant filters, meaning they are able to recognize identical features independently of their spatial locations. Localized kernels or compactly supported filters refer to filters that extract local features independently of the input data size, with a support size that can be much smaller than the input size. \\
+The compositional local stationarity property of CNNs can be efficiently implemented on regular grids, like image and sound domains, as convolutional and downsampling operators are mathematically well-defined on such discretized Euclidean spaces. This has led to the breakthrough of CNNs in image, video, and sound recognition tasks \cite{art:LeCunBengioHinton15DL} as these data lie on low-dimensional regular lattices. But not all data lie on regular grids. User data on social networks, gene data on biological regulatory networks, log data on telecommunication networks, or text documents on words' embedding are important examples of data lying on irregular or non-Euclidean domains. Unfortunately, CNNs cannot be directly applied to such complex domains.\\
+A generalization of CNNs to irregular grids is not direct as the basic convolutional and downsampling operators, necessary to extract compositional local stationarity features, are not mathematically clear on these domains. This makes this extension mathematically challenging, both in theory and in implementation. The goal of this work is to leverage the recent works of \cite{pro:GregorLeCun10LRF,pro:CoatesNg11LRF,art:BrunaZarembaSzlamLeCun13DLgraphs,art:HenaffBrunaLeCun15DLgraphs,art:HammondVandergheynstGribonval11GraphWav,art:ShumanNarangFrossardOrtegaVandergheynst13ReviewSPG,art:ShumanRicaudVandergheynst16Local} to introduce an efficient implementation of CNNs on irregular domains represented here as graphs. Graphs are universal representations of heterogeneous pairwise relationships between possibly high-dimensional data. Graphs can encode complex geometric structures, and can be studied with strong mathematical tools such as graph spectral theory, a blend between graph theory and harmonic analysis.\\
+The major bottleneck of generalizing CNNs to graphs is the design of fast and localized filters on graphs, that are the core elements to extract local stationarity structures. Our major goal is to overcome this barrier. We will make use of recent tools developed in the context of signal processing on graphs (SPG) \cite{art:ShumanNarangFrossardOrtegaVandergheynst13ReviewSPG} to precisely control the spatial support of graph filters using the so-called polynomial kernel localization \cite{art:ShumanRicaudVandergheynst16Local}, and to perform an efficient backward propagation technique using the Chebyshev technique \cite{art:HenaffBrunaLeCun15DLgraphs}. Eventually, a generic and efficient implementation of CNNs on graphs may pave the way to the development of a potentially large class of deep learning techniques for graph-based data. 
+  
+
+
+\section{Related Works}
+\vspace{-0.2cm}
+{\bf CNNs on non-Euclidean domains.} Extending the success of CNNs to non-Euclidean domains is essential to boost the power analysis of data lying on complex networks like biological, social or telecommunication networks. This is a recent line of works, with a preliminary approach coming from the local reception fields in \cite{pro:GregorLeCun10LRF,pro:CoatesNg11LRF}, and applied successfully to object recognition in computer vision. The main idea is to unsupervisedly learn groups of similar features. This is highly useful to automatically choose a limited number of connections between two successive layers. This approach is however not able to extract similar groups over the data domain, as it is not clear how to define convolutional filters on these groups.  \\
+In \cite{art:BrunaZarembaSzlamLeCun13DLgraphs,art:HenaffBrunaLeCun15DLgraphs}, the authors proposed a generalization of CNNs on graphs using graph counterparts of grid convolution and downsampling. They were able to learn shift-invariant or convolutional filters on graphs using the convolution theorem \cite{book:Mallat99wavelets} that defines convolutional operators as linear operators that diagonalize in the Fourier basis (represented by the eigenvectors of the Laplacian operator). They also designed a strategy to learn the graph structure from the data, and apply their model on image recognition, text categorization and bioinformatics. This promising approach is however limited in implementation as forward and backward evaluations have complexity $O(n^2)$ due to the matrix multiplication operations that operate the graph Fourier transforms. Besides, there is no strong control over the support size of the convolutional kernels, which is essential to design localized filters to extract local stationary features, independent of the input size. \\
+The authors in \cite{pro:MasciBoscainiBronsteinVandergheynst15GeoDL,art:MasciBoscainiBronsteinVandergheynst15ShapeNet} introduced ShapeNet, a generalization of CNNs to 3D-meshes, a class of smooth low-dimensional non-Euclidean spaces. They used geodesic polar coordinates to define mesh patches and formulated a deep learning architecture. They obtained state-of-the-art results for shape recognition tasks.\\
+Finally, the papers \cite{pro:ChenChengMallat14deepHaar,pro:RustamovGuibas14deepHaar} investigated the construction Haar wavelet transforms on graphs using a deep hierarchical architecture. They applied these deep wavelets on graphs to object recognition on sphere, and to sparse reconstruction of faces. \\
+{\bf Signal Processing on Graphs.} SPG is an emerging field that aims at bridging the gap between signal processing techniques like wavelet analysis and graph theory such as spectral graph analysis \cite{art:BelkinNiyogi05LaplaBeltrami,art:VonLuxburg07Tutorial}. The main goal is to generalize fundamental analysis operations for signals from regular grids to irregular structures embodying by graphs. We refer the reader to \cite{art:ShumanNarangFrossardOrtegaVandergheynst13ReviewSPG} for an introduction of the field. Standard operations on grids such as convolution, translation, filtering, dilatation, modulation, downsampling do not extend directly to graphs and thus require new mathematical definitions while keeping the original intuitive concepts. In this context, the authors of \cite{art:HammondVandergheynstGribonval11GraphWav,art:CoifmanLafon06DifMap,pro:GavishNadlerCoifman10GraphHaar} revisited the construction of wavelet operators on graphs. In \cite{art:ShumanFarajiVandergheynst16PyramTrans,art:RamEladCohen11TreeWavelets}, the authors designed a technique to perform mutli-scale pyramid transforms on graphs. The works of \cite{pro:TsitsveroBarbarossa15Uncert,pro:PasdeloupAlamiGriponRabbat15Uncert,art:PerraudinRicaudShumanVandergheynst16Uncert} redefined uncertainty principles on graphs, and showed that intuitive concepts may be lost, but can also produce enhanced localization principles for signals on graphs. In \cite{pro:HammondRaoaroorJacquesVandergheynst10LassoGraWav}, it was shown how to carry out lasso-based signal regularization on graphs, and studied the intertwined relationships between smoothness and sparsity on graphs. In \cite{pro:TremblayPuyGribonvalVandergheynst16CompSpecClus}, the authors investigated compressed sensing recovery conditions for graph spectral signal analysis. \\
+Beyond this work, our long-term goal is to make use of SPG tools as much as possible to formulate mathematically well-designed techniques of CNNs on graphs. This paper introduces the mathematical and computational foundations of such models, while future developments may consider enhanced graph filters like graph wavelet operators, spectral graph coarsening techniques, and improved localization properties.
+
+
+
+
 \section{Contributions}
-$\bullet$ Spectral extension of CNNs using signal graph processing paradigm \cite{shuman_emerging_2013} for shift-invariance property on graphs.\\
-$\bullet$ Fast graph filtering using Chebyshev and Lanczos techniques (no costly EVD required).\\
-$\bullet$ Exact control of spatial filtering size for optimal local feature extraction on graphs.\\
-$\bullet$ Less (?) parameters to learn than original CNNs.\\
-$\bullet$ Experiments on unstructured text document data with classification of RCV1 (Reuters), 20news, WEBKB4.\\
-%%% XAV %%%
-
-
-
-
-
-
-\section{Introduction}\label{introduction}
-
-Large networks allow to learn complex relationships. Although they
-overfit easily if the training set is small because there is a lot of
-parameters to learn.
-
-Convolutional neural networks (CNN) offer a great reduction of
-parameters on regular Euclidean domain. This work proposes to generalize
-it to the discrete model of manifolds, graphs. Such an approach was
-proposed by \citep{bruna_spectral_2013, henaff_deep_2015}, we will
-refine it with proper graph signal processing tools.
-
-This paper introduces a framework to use CNN with signals defined on
-weighted graphs. Our work leverages spectral methods, which are much
-faster than a spatial approach would be, in the same sense as doing
-convolutions as multiplication in the Fourier domain (with the help of
-the FFT) is much faster than multiplying patches on an image.
-
-Another option to do clustering or regression on data graphs is to first
-embed the graph and then use the embedding as additional features.
-
-\section{Related work}\label{related-work}
-
-Comparison with fully connected NN (Reuters used in
-\citep{srivastava_dropout_2014})
-
-\begin{itemize}
-\item
-  + less parameters via convolution
-\item
-  ? accuracy
-\end{itemize}
-
-Comparison with first generation graph CNN \citep{henaff_deep_2015}.
-
-\begin{itemize}
-\item
-  + better accuracy
-\item
-  = same number of parameters
-\item
-  - graph construction vs supervised estimation
-\item
-  Theoretical:
-
-  \begin{itemize}
-  \item
-    + proper spectral graph signal processing tools
-  \item
-    + kNN graph (sparse weight matrix) vs fully connected graph. SVD
-    complexity for Fourier basis is O(n\^{}3), we avoid it.
-  \item
-    + METIS vs naive agglomeration
-  \item
-    + Chebyshev polynomials vs splines to approximate filters Filtering
-    from \(O(n^2)\) to \(O(|E| K)\) where \(K\) is the polynomial order
-    approximately \(O(n)\) if the weight matrix is sparse, i.e.~grows
-    linearly with \(N\) This addresses the first limitation mentioned in
-    \citep{henaff_deep_2015}.
-  \end{itemize}
-\end{itemize}
-
-\section{Model}\label{model}
-
-\subsection{Spectral Graph Theory}\label{spectral-graph-theory}
-
-A graph \(\G = (\V, \E, \W)\) is defined by a set \(V\) of \(|V| = M\)
-nodes and a set \(E\) of weighted edges. The connectivity of the graph
-is captured by the adjacency matrix \(W \in \R^{M \times M}\) which
-entry \(W_{i,j}\) denotes the weight of the edge \((v_i, v_j) \in E\)
-which connects the vertex \(v_i \in V\) to \(v_j \in V\). It is set to
-\(0\) if the vertices are not connected, i.e. \((v_i, v_j) \notin E\).
-Assuming an undirected graph, \(W\) is a symmetric matrix. A graph
-signal is any signal \(x \in \R^M\) defined on the vertices of \(G\).
-
-The combinatorial graph Laplacian is defined as
-\[ \L^c := D - W \in \R^{M \times M}, \] where \(D \in \R^{M \times M}\)
-is the diagonal degree matrix defined as \(D_{i,i} := \sum_j W_{i,j}\).
-Note that it is a difference operator such that
-\[ (\L^c x)_i = \sum_j W_{i,j} (x_i - x_j). \] The normalized graph
-Laplacian is defined as
-\[ \L^n := I_M - D^{-1/2} W D^{-1/2} \in \R^{M \times M}, \] where
-\(I_M \in \R^{M \times M}\) is the identity matrix. Finally, the
-random-walk graph Laplacian is defined as
-\[ \L^{rw} := I_M - D^{-1} W \in \R^{M \times M}. \] Note that this work
-is independent of the chosen graph Laplacian \(\L\), which can be any of
-\(\L^c\), \(\L^n\) or \(\L^{rw}\).
-
-In analogy to the real line Fourier Transform, a Fourier basis is given
-by the eigenvectors of the Laplacian
-\[ \L u_i = \lambda_i u_i \st \norm{u_i}_2=1,
-\ u_i \in \R^M, \ i = 0, \ldots, M-1, \] with their associated
-eigenvalues \(\lambda_i\). Assuming the graph is connected, we may order
-the vector \(\lambda := [\lambda_0, \ldots, \lambda_{M-1}]^T \in \R^M\)
-of eigenvalues such that
-\[ 0 = \lambda_{min} = \lambda_0 < \lambda_1 \leq \ldots \leq
-\lambda_{M-1} = \lambda_{max}. \] As the Laplacian is a real symmetric
-and \gls{PSD} matrix, the eigenvalues are real and positive, and the
-eigenvectors are orthonormal. The Laplacian is indeed diagonalized by
-the Fourier basis \(U := [u_0, \ldots, u_{M-1}] \in \R^{M \times M}\)
-such that
-\begin{equation} \L = U \Lambda U^T, \label{eq:lap_diag}\end{equation}
-where \(\Lambda := \diag(\lambda) \in \R^{M \times M}\) denotes a
-diagonal matrix of eigenvalues and \(U^T\) is the matrix transpose of
-\(U\). See \citep{chung_spectral_1997} for details on spectral graph
-theory.
-
-The Graph Fourier Transform \(\hat{x} \in \R^M\) of any graph signal
-\(x\) is given by \[ \hat{x} = U^T x =
-[\langle u_0, x \rangle, \ldots, \langle u_{M-1}, x \rangle]^T, \] where
-\(\langle \cdot , \cdot \rangle\) denotes the standard \(\ell_2\) inner
-product \citep{shuman_emerging_2013}. The inverse transform is then
-given by \[
-x = U \hat{x}. \]
-
-It follows that any signal \(\hat{x}\) can be filtered in the spectral
-domain by \[ \hat{y} = g_\theta(\Lambda) \hat{x}, \] where the operator
-\(g_\theta(\Lambda) \in \R^{M \times M}\), a matrix function, yields a
-diagonal matrix of \(M\) Fourier coefficients parametrized by
-\(\theta\). The filtering operation can equivalently take place in the
-vertex domain as \[ y = U g_\theta(\Lambda) U^T x = g_\theta(\L) x \]
-where the operator
-\(g_\theta(\L) = g_\theta(U \Lambda U^T) = U g_\theta(\Lambda) U^T \in \R^{M \times M}\)
-is akin to a convolution with the filter \(Ug_\theta(\Lambda)\) in the
-vertex domain. Note that the filtering operation is defined as a
-multiplication in the spectral domain because a convolution cannot be
-defined in the vertex domain \citep{shuman_emerging_2013}.
-
-\subsection{Graph Filter Learning}\label{graph-filter-learning}
-
-Given a graph \(G\), a set
-\(X = [x_0, \ldots, x_{N-1}] \in \R^{M \times N}\) of \(N\) source graph
-signals of dimensionality \(M\) and their associated set
-\(Y = [y_0, \ldots, y_{N-1}] \in \R^{M \times N}\) of target signals, we
-want to learn the parameters \(\theta \in \R^M\) of a graph filter
-\(g_\theta(\Lambda) := \diag(\theta)\) such as to minimize the convex
-mean square error \begin{equation} L =
-\frac{1}{N} \sum_{i=0}^{N-1} \norm{ g_\theta(\L) x_i - y_i }_2^2 =
-\frac{1}{N} \norm{ U \diag(\theta) U^T X - Y }_F^2, \label{eq:loss}\end{equation}
-where \(\norm{\cdot}_2^2\) denotes the squared \(\ell_2\) norm and
-\(\norm{\cdot}_F^2\) the squared Frobenius norm.
-
-Note that, while being the most flexible definition of
-\(g_\theta(\Lambda)\), the independence of the Fourier coefficients
-\(\theta\) from the eigenvalues \(\Lambda\) does omit all information
-about frequencies. As we know that the lower frequencies are more
-important for clustering {[}ref NCut{]}, we could have designed a
-parametric filter with less parameters.
-
-Rewriting eq.~\ref{eq:loss} in the spectral domain while decomposing it
-w.r.t. the scalar coefficients \(\theta_i\) gives \[ L =
-\frac{1}{N} \norm{ \diag(\theta) U^T X - U^T Y }_F^2 =
-\frac{1}{N} \sum_{i=0}^{M-1} \norm{\theta_i\Xh_{i,\cdot}-\Yh_{i,\cdot}}_2^2, \]
-where \(\Xh = U^TX \in \R^{M \times N}\) and
-\(\Yh = U^TY \in \R^{M \times N}\) are the spectral representations of
-the signals \(X\) and \(Y\). The gradient for each coefficient is then
-given by \[ \nabla_{\theta_i} L =
-\frac{2}{N} ( \theta_i \Xh_{i,\cdot} - \Yh_{i,\cdot} ) \Xh^T_{\cdot,i} \]
-and can be rewritten in a vectorized form as
-\begin{equation} \nabla_{\theta} L =
-\frac{2}{N} \diag \left( (\diag(\theta) \Xh - \Yh) \Xh^T \right) =
-\frac{2}{N} \left( ( \theta 1_N^T \odot \Xh - \Yh ) \odot \Xh \right) 1_N,
-\label{eq:gradient}\end{equation} where \(1_N\) denotes a unit vector of
-length \(N\) and \(\odot\) the element-wise Hadamard product. The second
-form avoids the computation of the useless off-diagonal elements.
-
-A closed-form solution is given by the optimality condition
-\(\nabla_{\theta}L=0\) such that
-\begin{equation} \theta^* = \argmin_\theta L =
-(\Xh \odot \Yh) 1_N \oslash (\Xh \odot \Xh) 1_N, \label{eq:direct}\end{equation}
-where \(\oslash\) denotes an element-wise division. Note that this
-method is impractical for large \(M\) and \(N\) (sufficiently large for
-\(X\) and \(Y\) to not fit in memory). A \gls{SGD} based on
-eq.~\ref{eq:gradient} is then necessary.
-
-There are however two major computational drawbacks to this optimization
-process: 1) the Fourier transform \(\Xh=U^TX\) of a set of signals costs
-\(O(M^2N)\) operations and 2) the eigenvalue decomposition
-\(\L = U \Lambda U^T\) costs \(O(M^3)\). The total cost of filtering is
-thus \(O(M^2 \max(M,N))\), a problem already stated in
-\citep{henaff_deep_2015}. We propose to overcome these computational
-issues using efficient numerical approximations such as the Chebyshev
-polynomials or the Lanczos algorithm.
-
-\subsubsection{Chebyshev
-Parametrization}\label{chebyshev-parametrization}
-
-The main idea, to avoid the Fourier basis, is twofold: 1) parametrize
-the filter, in the spectral domain, as a truncated Chebyshev expansion
-and 2) recursively compute the Chebyshev polynomials from the Laplacian.
-This approximate method for spectral graph filtering was first proposed
-in \citep{hammond_wavelets_2011} for a fast wavelet transform on graphs.
-
-Recall that the Chebyshev polynomial \(T_k(x)\) of order \(k\) may be
-generated by the stable recurrence relation
-\(T_k(x) = 2x T_{k-1}(x) - T_{k-2}(x)\) with \(T_0 = 1\) and
-\(T_1 = x\). These polynomials form an orthogonal basis for
-\(L^2([-1,1], dy / \sqrt{1-y^2})\), the Hilbert space of square
-integrable functions with respect to the measure \(dy/\sqrt{1-y^2}\).
-
-The graph filter \(g_\theta(\Lambda)\) can thus be constructed from the
-truncated expansion
-\[ g_\theta(\Lambda) := \sum_{k=0}^{K-1} \theta_k T_k(\tilde{\Lambda}) \]
-of polynomial order \(K-1\), where the parameter \(\theta \in \R^K\),
-\(K \ll M\), is a vector of Chebyshev coefficients and
-\(T_k(\tilde{\Lambda}) \in \R^{M \times M}\) is the Chebyshev polynomial
-of order \(k\) evaluated at
-\(\tilde{\Lambda} := 2 \Lambda / \lambda_{max} - I_M \in \R^{M \times M}\),
-a diagonal matrix of scaled eigenvalues (so that they lie in
-\([-1,1]\)). While reducing the number of parameters from \(M\) to
-\(K\), this parametrization enforces smoothness in the spectral domain,
-which translates to localization in the vertex domain. It can indeed be
-shown that \((\L^k)_{i,j}=0\) if the shortest-path between vertices
-\(v_i\) and \(v_j\) is longer than \(k\) edges
-\citep{hammond_wavelets_2011}, which limits the influence of a
-\(K^\text{th}\) order filter to \(K\) hopes. This is often a desired
-property, e.g.~to learn local features for classification.
-
-To avoid the Fourier basis \(U\), we express the polynomials as
-functions of the Laplacian \(\L\) instead of its eigenvalues \(\Lambda\)
-using eq.~\ref{eq:lap_diag}, such that the filtering operator in the
-vertex domain is given by
-\begin{equation} g_\theta(\L) = U g_\theta(\Lambda) U^T =
-\sum_{k=0}^{K-1} U \theta_k T_k(\tilde{\Lambda}) U^T =
-\sum_{k=0}^{K-1} \theta_k T_k(\tilde{\L}), \label{eq:chebyshev}\end{equation}
-where \(T_k(\tilde{\L}) \in \R^{M \times M}\) is the Chebyshev
-polynomial of order \(k\) evaluated at the scaled Laplacian
-\(\tilde{\L} := 2 \L / \lambda_{max} - I_M\). Note that the spectrum of
-the normalized Laplacian is bounded by \(2\)
-\citep{chung_spectral_1997}, such that the scaling can simply be
-\(\tilde{\L} = \L - I_M\), tolerating some imprecision in the
-approximation due to the loss of a fraction \(2-\lambda_{max}\) of the
-domain.
-
-Inserting eq.~\ref{eq:chebyshev} into eq.~\ref{eq:loss} we obtain
-\begin{equation} L =
-\frac{1}{N} \norm{ \sum_{k=0}^{K-1} \theta_k T_k(\tilde{\L}) X - Y }_F^2 =
-\frac{1}{N} \norm{ \bar{X} \theta - \bar{y} }_2^2, \label{eq:loss_c}\end{equation}
-where \(\bar{y} \in \R^{MN}\) is the vectorized matrix \(Y\) and the
-\(k^\text{th}\) column of \(\bar{X} \in \R^{MN \times K}\) is the
-vectorized matrix
-\(\tilde{X}_k := T_k(\tilde{\L}) X \in \R^{M \times N}\). The gradient
-is then given by \begin{equation} \nabla_\theta L =
-\frac{2}{N} \bar{X}^T (\bar{X} \theta - \bar{y}). \label{eq:gradient_c}\end{equation}
-
-While the system \(\bar{X} \theta - \bar{y}\) is largely over-determined
-as \(K \ll MN\), a closed-form solution of eq.~\ref{eq:loss_c} is given
-by the optimality condition \(\nabla_\theta L = 0\) so that
-\begin{equation} \theta^* = \argmin_\theta L = \bar{X}^+ \bar{y}, \label{eq:direct_c}\end{equation}
-where \(\bar{X}^+ = (\bar{X}^T\bar{X})^{-1} \bar{X}^T\) is the
-pseudo-inverse of \(\bar{X}\). The computation of the inverse is fast
-and stable for small \(K\). Alternative approximate solution methods for
-larger order \(K\) include the computation of the pseudo-inverse with
-\gls{SVD}, the use of a least-square solver or a gradient descent scheme
-based on eq.~\ref{eq:gradient_c}.
-
-Using the recurrence
-\[ \tilde{X}_k = 2\tilde{\L} \tilde{X}_{k-1} - \tilde{X}_{k-2} \] with
-\(\tilde{X}_0 = X\) and \(\tilde{X}_1 = \tilde{\L} X\), the computation
-of \(\bar{X}\) given \(X\) costs \(O(K|E|N) = O(KMN)\) operations if the
-number of edges \(|E|\) is proportional to the number of nodes \(M\),
-e.g.~for kNN graphs. As the cost of the product \(\bar{X}\theta\) is
-similar, the entire filtering operation has a computational cost of
-\(O(KMN)\) whereas the straightforward implementation using the Fourier
-basis has a cost of \(O(M^2\max(M,N)\). When applying multiple filters
-to the same set of signals, as is the case with \gls{SGD}, one may save
-computations by storing and querying \(\bar{X}\) instead of \(X\), at
-the expense of \(K\) times the memory.
-
-\subsubsection{Lanczos Parametrization}\label{lanczos-parametrization}
-
-Another applicable parametrization is based on the Lanczos algorithm, an
-adaptation of the power iteration to find the largest or smallest
-eigenvalues and corresponding eigenvectors of a linear system. It was
-first introduced for fast graph filtering in
-\citep{susnjara_accelerated_2015}.
-
-The algorithm, described in
-\citep{gallopoulos_efficient_1992, susnjara_accelerated_2015},
-constructs an orthonormal basis
-\(V = [v_0, \ldots, v_{K-1}] \in \R^{M \times K}\) of the Krylov
-subspace \(\mathcal{K}_K(\L,x) = \spn\{ x, \L x, \ldots, \L^{K-1} x \}\)
-and a tri-diagonal matrix \(H = V^T \L V \in \R^{K \times K}\) with a
-computational cost of \(O(K |E|)\). Note that for large
-\(K \gtrapprox 30\), the original iterative algorithm may loose the
-basis orthogonality such that a necessary orthogonalization step will
-increase the complexity \citep{susnjara_accelerated_2015}. Filtering the
-signal \(x\) with \(g_\theta(\L)\) can then be approximated by an order
-\(K-1\) polynomial as \begin{equation} y = g_\theta(\L) x \approx
-V g_\theta(H) V^T x = V Q g_\theta(\Sigma) Q^T V^T x \label{eq:lanczos}\end{equation}
-where \(Q \Sigma Q^T = H\) is the eigendecomposition of \(H\). There
-exist fast methods for the eigendecomposition of symmetric tri-diagonal
-matrices {[}{]}. As for the Chebyshev approximation, this construction
-enforces smoothness in the spectral domain.
-
-Inserting eq.~\ref{eq:lanczos} with a parametrized filter
-\(g_\theta(\Sigma) := \diag(\theta)\), \(\theta \in \R^K\), \(K \ll M\),
-into eq.~\ref{eq:loss} gives \[ L = \frac{1}{N} \sum_{n=0}^{N-1}
-\norm{V_n Q_n \diag(\theta) Q_n^T V_n^T x_n - y_n}_2^2 =
-\frac{1}{N} \norm{\diag(\theta) \hat{X} - \hat{Y}}_F^2 \] where
-\(\hat{X} = [\hat{x}_0, \ldots, \hat{x}_{N-1}] \in \R^{K \times N}\),
-\(\hat{Y} = [\hat{y}_0, \ldots, \hat{y}_{N-1}] \in \R^{K \times N}\) and
-\(\hat{x}_n = Q_n^T V_n^T x_n \in \R^K\),
-\(\hat{y}_n = Q_n^T V_n^T y_n \in \R^K\) are approximate representations
-of the signals \(x_n\), \(y_n\) in the orthonormal basis
-\(V_n Q_n \in \R^{M \times K}\) of \(\mathcal{K}_K(\L,x_n)\). Similarly
-to eq.~\ref{eq:loss}, the gradient is given by eq.~\ref{eq:gradient} and
-a closed-form solution by eq.~\ref{eq:direct}.
-
-The expression eq.~\ref{eq:lanczos} can be simplified by setting
-\(v_0 := x / \norm{x}_2\) (the first basis vector can be set to an
-arbitrary unit length vector) such that \(V^T x = \norm{x}_2 e_1\) and
-\[ V g_\theta(H) V^T x =
-\norm{x}_2 V Q \diag(\theta) Q^T e_1 =
-\norm{x}_2 V Q \diag(q) \theta \] where \(e_1 \in \R^K\) denotes the
-first unit vector and \(q = Q^T e_1 \in \R^K\) is the first row of
-\(Q\). Inserting into eq.~\ref{eq:loss} gives \[ L =
-\frac{1}{N} \sum_{n=0}^{N-1} \norm{\tilde{X}_n \theta - y_n}_2^2 =
-\frac{1}{N} \sum_{k=0}^{K-1} \norm{\bar{X}_{\cdot,k} \theta_k - \bar{y}}_2^2 =
-\frac{1}{N} \norm{\bar{X} \theta - \bar{y} }_2^2 \] where
-\(\bar{y} \in \R^{NM}\) is the vectorized matrix \(Y\) and
-\(\bar{X} := [\tilde{X}_0, \ldots, \tilde{X}_{N-1}]^T \in \R^{NM \times K}\)
-is a stack of \(N\) matrices
-\(\tilde{X}_n := \norm{x_n}_2 V_n Q_n \diag(q_n) \in \R^{M \times K}\)
-where \(V_n\), \(Q_n\) and \(q_n\) are derived from \(x_n\). The second
-form (in terms of independent coefficients \(\theta_k\)) is valid
-because \(\bar{X}\) is orthogonal, i.e \(\bar{X}^T \bar{X}\) is a
-diagonal matrix, so that the solution eq.~\ref{eq:direct_c} can be
-written as \begin{equation} \theta^* = \argmin_\theta L =
-\underbrace{\sum_{n=0}^{N-1} \Big( \norm{x_n}_2 \diag(q_n) \Big)^{-2}}
-_{(\bar{X}^T\bar{X})^{-1}} \bar{X}^T \bar{y} \label{eq:direct_l}\end{equation}
-where
-\(\bar{X}^T \bar{y} = [\langle \bar{X}_{\cdot,0}, \bar{y} \rangle, \ldots, \langle \bar{X}_{\cdot,K-1}, \bar{y} \rangle]^T \in \R^K\)
-is the projection of \(\bar{y}\) onto the \(K\) basis vectors
-\(\bar{X}_{\cdot,k} \in \R^{MN}\). While this closed-form evaluation is
-fast and stable, a gradient descent scheme can be used with
-eq.~\ref{eq:gradient_c}.
-
-While the time and space complexities are similar, this method has two
-advantages over the Chebyshev approximation: 1) it does not require the
-normalization of the Laplacian spectrum (thus the estimation of
-\(\lambda_{max}\)) and 2) the optimization is easier as the parameters
-\(\theta_k\) are independent of each other thanks to the orthogonal
-basis. By easier we mean that 1) the closed-form solution
-eq.~\ref{eq:direct_l} does not involve the inversion of a large matrix
-and 2) \gls{SGD} converges to a better solution with less iterations.
-See \citep{susnjara_accelerated_2015} for a discussion of the
-approximation quality and a comparison with the Chebyshev approximation.
-
-\subsection{Graph coarsening}\label{graph-coarsening}
-
-The graph partitioning problem has been widely studied. Applications
-include VLSI design, load balancing for parallel computations, network
-analysis, and optimal scheduling. The goal is to partition the vertices
-of a graph into a certain number of disjoint sets of approximately the
-same size so that a cut metric is minimized. This problem is NP-complete
-even for several restricted classes of graphs, and there is no constant
-factor approximation algorithm for general graphs {[}Bui and Jones
-1992{]}. While notable developments in exact algorithms and heuristics
-have been done, only the introduction of the general-purpose multilevel
-methods during the 1990s has provided a breakthrough in efficiency and
-quality {[}Safro 2009 2012{]}. Graph coarsening, where the problem
-instance is gradually mapped to smaller ones to reduce the original
-complexity, i.e., the graph underlying the problem is compressed, is the
-first step of these multilevel methods.
-
-Existing multilevel algorithms for combinatorial optimization problems
-(such as k-partitioning, linear ordering, clustering, and segmentation)
-can be divided into two classes: contraction-based schemes and algebraic
-multigrid (AMG)-inspired schemes.
-
-Alternative standard algorithms for graph coarsening include the Kron
-reduction {[}{]}, Label Propagation {[}{]}, spectral clustering {[}{]}
-or a sampling {[}Nath uncertainty{]}. A standard approach for graph
-coarsening is the maximal match, as used by METIS for graph partitioning
-{[}?{]}.
-
-The assumption behind METIS is that a (near) optimal partitioning on a
-coarser graph implies a good partitioning in the finer graph. In
-general, it only holds true when the degree of nodes in the graph is
-bounded by a constant {[}Karypis 95{]}. Some real-life graphs,
-e.g.~social networks or WWW, are right-skewed, i.e.~there exists hub
-vertices which have very large degrees. These graphs follow a power-law
-degree distribution.
-
-\section{Applications}\label{applications}
-
-\subsection{Regression}\label{regression}
-
-Solving a linear regression problem on graph signals is akin to minimize
-eq.~\ref{eq:loss} where \(Y\) is the dependent variable and \(X\) the
-independent observations.
-
-\subsection{Representation learning}\label{representation-learning}
-
-Representation learning is the problem of finding an appropriate (to
-some criteria) representation \(y_i\) of a sample \(x_i\) defined as
-\[ \min_{A,Y} \norm{ AX - Y }_F^2 + \tau P(Y) \] where
-\(A \in \R^{M \times M}\) is some operator and \(P(Y)\) is some prior on
-\(Y\). Take \(P(Z)=\norm{Z}_F^2\) and you get a Thikhonov prior. Take
-\(P(Y) = \norm{Y}_1\) and you get sparse coding (with dictionary
-learning).
-
-\subsection{Classification}\label{classification}
-
-There are dependent vectors
-\(X = \{x_i\}_{i=0}^{N-1} \in \R^{M \times N}\) we want to predict from
-observations \(Y = \{y_i\}_{i=0}^{N-1} \in \R^{M \times N}\).
-
-In the classification case, \(y_i \in \N\) is a discrete number which
-represents a class, e.g. \(y_i=-1\) indicates that sample \(x_i\)
-belongs to class 1 and \(y_i=+1\) to class 2.
-
-\subsubsection{Representation learning}\label{representation-learning-1}
-
-Three ways to reduce the number of parameters:
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\item
-  Graph coarsening
-\item
-  No weights: loss of spatiality (convolutional only)
-\item
-  Non-linear activation function
-\end{enumerate}
-
-But \(\theta\) and \(w\) are redundant, so
-\[ L = \norm{\overline{\bar{X} \theta}^T 1_{FM} - y}_2^2 \]
-\[ \bar{X} \in \R^{NM \times K} \] \[ \theta \in \R^{K \times F} \]
-
-\[ \nabla_\theta L = \bar{X}^T (\bar{X} \theta - z) \]
-\[ \nabla_\theta L = (\overline{\bar{X} \theta}^T 1_{FM} - y) \]
-
-\[ \bar{X} 1_{FM} (\overline{\bar{X} \theta}^T 1_{FM} - y) \]
-\[ (\bar{X} 1_{FM} \overline{\bar{X}}^T 1_{FM})^{-1} \bar{X} 1_{FM} y \]
-
-\subsubsection{Linear classification}\label{linear-classification}
-
-Empirical risk minimization (statistical learning).
-
-The \(\ell_2\) regularized least-square model, also known as ridge
-regression, is defined as \begin{equation} L =
-\frac{1}{N} \sum_{i=0}^{N-1} |f_w(x_i) - y_i|^2 + \tau \norm{f}_\H^2,
-\label{eq:rls}\end{equation} where \(f_w \in \H\) is some classification
-function parametrized by \(w\) and \(\H\) is an Hilbert space.
-
-Introducing the linear classifier \(f(x) = w^T x\) into eq.~\ref{eq:rls}
-gives \[ L = \frac{1}{N} \norm{X^T w - y}_2^2  + \tau \norm{w}_2^2, \]
-where \(w \in \R^M\) are the weights to learn. Note that there is no
-bias because the data can be centered around zero (we know the lower and
-upper bounds on luminosity values).
-
-Gradient
-\begin{equation} \nabla_w L = \frac{2}{N} X (X^T w - y) + 2 \tau w \label{eq:gradient_rls}\end{equation}
-
-Optimality condition \(\nabla L = 0\)
-\begin{equation} w^* = \argmin_w \nabla L =
-\left(X X^T + \tau N I_M \right)^{-1} X y \label{eq:sol_rls}\end{equation}
-
-\subsubsection{Feature learning}\label{feature-learning}
-
-Introducing graph filter learning as a scheme for feature learning gives
-the objective \[ L = \frac{1}{N} \sum_{i=0}^{N-1}
-\Big| f_w \Big( A_\theta(\L) x_i \Big) - y_i \Big|^2 +
-\tau_R \norm{f_w}_\H^2, \] where the filter bank
-\(A_\theta(\L) = \bigcup_{i=0}^{F-1} g_{\theta_i}(\L) \in \R^{FM \times M}\)
-is a block-diagonal matrix composed of \(F\) filters
-\(g_{\theta_i}(\L)\) which extract different features.
-
-Using a linear classifier and the Lanczos parametrization introduced in
-\ref{lanczos-parametrization} gives \begin{equation} L =
-\frac{1}{N} \norm{\overline{\bar{X} \theta}^T w - y}_2^2 +
-\tau_R \norm{w}_2^2, \label{eq:rls_gfl}\end{equation} where
-\(w \in \R^{FM}\) are the weights to learn,
-\(\bar{X} \in \R^{NM \times K}\) is the Lanczos basis described in
-\ref{lanczos-parametrization}, \(\theta \in \R^{K \times F}\) are the
-\(K\) coefficients of the \(F\) filters and
-\(\overline{\bar{X} \theta} \in \R^{FM \times N}\) is a rearrangement of
-the matrix \(\bar{X} \theta \in \R^{NM \times F}\). Note that there is
-now \(F\) times more weigts to learn, i.e. \(w \in \R^{FM}\).
-
-\(\bar{X} \theta \in \R^{NM \times F}\)
-
-\[ \frac{2}{N} \bar{X} w (\overline{\bar{X} \theta}^T w - y) \]
-
-\[ (\bar{X} w \overline{\bar{X}}^T w)^{-1} \bar{X}wy \]
-
-\subsubsection{Splitting scheme}\label{splitting-scheme}
-
-The splitting scheme \[ L =
-\frac{1}{N} \norm{Z^T w - y}_2^2 +
-\frac{\tau_F}{N} \norm{\overline{\bar{X} \theta} - Z}_F^2 +
-\tau_R \norm{w}_2^2 \] may be used to minimize the non-convex objective
-eq.~\ref{eq:rls_gfl} for \(\theta\) and \(w\), where
-\(Z = [z_0, \ldots, z_{N-1}] \in \R^{FM \times N}\) are the signals in
-feature space. Solving the overall non-convex problem requires to
-iteratively solve the following three convex sub-problems:
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\item
-  The gradient and solution to \(\min_\theta L\) are given by
-  eq.~\ref{eq:gradient_c} and eq.~\ref{eq:direct_l}, substituting
-  \(\bar{y}\) by \(\bar{Z} \in \R^{NM \times F}\), a rearrangement of
-  \(Z\).
-\item
-  The gradient of \(\min_Z L\) is \[ \nabla_Z L =
-  \frac{2}{N} w (w^T Z - y^T) + \frac{2\tau_F}{N} (Z - \overline{\bar{X} \theta}) \]
-  and the closed-form solution is \[ Z^* = \argmin_Z L =
-  \left( \tau_F I_{FM} + w w^T \right)^{-1}
-  \left( \tau_F \overline{\bar{X} \theta} + w y^T \right). \]
-\item
-  The gradient and solution to \(\min_w L\) are given by
-  eq.~\ref{eq:gradient_rls} and eq.~\ref{eq:sol_rls}, substituting \(X\)
-  by \(Z\).
-\end{enumerate}
-
-\subsubsection{Graph coarsening}\label{graph-coarsening-1}
-
-To reduce again the number of parameters in \(w\), the graph should be
-coarsened to trade feature resolution at the price of vertex resolution.
-
-\subsubsection{Kernel methods}\label{kernel-methods}
-
-The same can be done for kernel methods.
-
-We want to learn a classification function
-\(f(x) = \sum_i \K(x,x_i) \alpha_i \in \R\), where \(\K(\cdot,\cdot)\)
-is some kernel function, which maps a sample \(x\) to a label \(y\). The
-loss function to minimize over the training set is then given by
-\[ L = \sum_i |f(x_i) - y_i|^2 + \tau \norm{f}_{H_\K}^2 =
-\norm{ \K \alpha - y }_2^2 + \tau \alpha^T \K \alpha, \] where
-\(\K_{i,j} = \K(x_i, x_j)\) is the kernel function evaluated at all
-training samples and \(\alpha \in \R^N\) are the parameters.
-
-\[ \nabla_\alpha L = \K (\K \alpha - y) + \tau \K \alpha \] \(\K\) is
-symmetric.
-
-\[ \alpha^* = \argmin_\alpha L = (\K + \tau I_N)^{-1} y \]
-
-\subsubsection{Feature learning}\label{feature-learning-1}
-
-A general formulation of the loss for a classification problem is given
-by \[ \min_{\theta_A, \theta_h} \left\{ L = \frac{1}{N} \sum_{i=0}^{N-1}
-\left| h_{\theta_h}(A_{\theta_A}(\L) x_i) - y_i \right|^2 +
-\tau_A \Omega_A(A_{\theta_A}) + \tau_h \Omega_h(h_{\theta_h}) \right\} \]
-where \(A\) is an operator which transforms the input signals into a
-suitable, i.e.~learned, representation and \(h\) is a classification
-function. \(\Omega_A\) and \(\Omega_h\) are regularizations, \(\tau_A\)
-and \(\tau_h\) are hyper-parameters.
-
-The SVM classification function \(h \in H_\K\) is defined as
-\[ h_{\theta_h}(x) = \sum_{i=0}^{N-1} \alpha_i \K(x, x_i) + \beta,
-\ \theta_h = (\alpha_i, \beta), \] where \(\K(\cdot,\cdot)\) is some
-kernel function. It is regularized by
-\[ \Omega_h = \norm{h}_{H_\K}^2. \]
-
-In our graph filters learning setting, the mapping
-\(A \in \R^{FM \times M}\) is given by the filter bank
-\[ A_{\theta_A}(\L) = \bigcup_{f=0}^{F-1} g_{\theta_f}(\L),
-\ \theta_A = (\theta_f), \] a block-diagonal matrix composed of \(F\)
-filters, which extracts multiple features from the input signal.
-
-While the optimization complexity would increase a lot if we were to
-minimize for the model complexity \(K\), we can easily include a penalty
-of the form
-\[ \Omega_A = \sum_f \sum_i |\theta_f(\lambda_i) w(\lambda_i)|^2 \]
-where \(w(\lambda_i) \sim 1 / \lambda_i\).
-
-Learning complexity: there is \(FK\) parameters in \(\theta_A\) and
-\(N+1\) parameters in \(\theta_h\).
-
-\subsection{Going deep}\label{going-deep}
-
-Define convolutional neural networks on irregular domains by learning
-multiple layers of graph filters.
-
-Image of the architecture.
-
-\section{Experiments}\label{experiments}
-
-\subsection{Filter learning}\label{filter-learning}
-
-Example from the Juypiter notebook.
-
-Ground truth filter. where \(c_\ell = g(\lambda_\ell)\) is the evaluated
-filter.
-
-(randomly generated) graph signals and a filter \(g(\lambda)\) for some
-\(t\), we want to learn the filter coefficients \(C\), a diagonal
-matrix, such that \[\min_C \sum_{i=1}^N \norm{ U^T C U x_i - y_i }_2^2\]
-where \(U\) are the eigenvectors of the graph Laplacian \(L\) and
-\(y_i = x_i * g + \varepsilon, \varepsilon \sim \mathcal{N}(0,\epsilon)\)
-is the target signal (the filtered signal \(x_i\) with additive Gaussian
-noise).
-
-\subsubsection{Non-parametrized filter}\label{non-parametrized-filter}
-
-\subsubsection{Spline Parametrization}\label{spline-parametrization}
-
-The authors of \citep{bruna_spectral_2013, henaff_deep_2015} learned
-graph filters parametrized by cubic splines.
-
-\subsubsection{Chebyshev
-Parametrization}\label{chebyshev-parametrization-1}
-
-\subsubsection{Lanczos Parametrization}\label{lanczos-parametrization-1}
-
-\subsection{Classification}\label{classification-1}
-
-\subsubsection{Sampled MNIST}\label{sampled-mnist}
-
-\subsubsection{Text documents}\label{text-documents}
-
-\section{Discussion}\label{discussion}
-
-\section{Conclusion and Outlook}\label{conclusion-and-outlook}
-
-That was awesome.
-
-\subsubsection*{Acknowledgments}
-
-Thanks ...
-
-\section*{References}
+\vspace{-0.2cm}
+{\textbf {\textit {(1)}}} Learning deep fully connected networks is almost computationally untractable for large data domain. Fortunately, for data satisfying stationarity and hierarchical compositionality structure, CNNs have proven to be remarkably powerful to identify highly informative features using low learning complexity. For example, learning a single layer with $n$ input coordinates and $m<n$ outputs require $O(n^2)$ complexity to learn fully connected networks. It also requires the complexity $O(n)$ to learn any arbitrary filter, and $O(S)$ for localized filters, where $S$ is the size of the filter support, independent of the input size $n$. One of our main contributions is to stay with the same low complexity for learning graph convolutional filters. We will show it is actually possible to keep exactly the same complexity as standard CNNs, i.e. $O(S)$ for localized graph filters.\\
+{\textbf {\textit {(2)}}} The backpropagation learning algorithm requires to run convolutional operations, which can be efficiently implemented by FFT on grids with complexity $O(n\log n)$. Convolution on graphs can also be implemented by matrix multiplications representing the forward and backward graph Fourier transforms, but it is expensive as the complexity is $O(n^2)$. As noticed in \cite{art:HenaffBrunaLeCun15DLgraphs}, this complexity is a strong bottleneck to deal with large-scale problems. We will greatly improve this complexity by reducing to $O(E.S)$, where $E$ is the number of edges in the given graph, using the Chebyshev technique from SPG \cite{art:ShumanNarangFrossardOrtegaVandergheynst13ReviewSPG}. Besides, as most real-world graphs are highly sparse, we have $E\ll n^2$, and therefore a low complexity for the matrix multiplication operations. Eventually, the Chebyshev computations can be naturally distributed on GPUs, as we did in our experiments.\\
+{\textbf {\textit {(3)}}} We introduce an efficient pooling strategy for CNNs on graphs, that also makes use of distributed computing architecture like GPUs. The pooling approach consists on two stages. First, a graph coarsening procedure based on METIS \cite{art:DhillonGuanKulis07Graclus,art:KarypisKumar98Metis} is successively applied to the original graph to produce coarser versions of the graph. Second, at each coarsening level, we sequentially order all nodes such that two successive indexed nodes are the parent nodes of the child node in the next coarser level. This node indexation structure in memory satisfies parallel architectures. \\
+{\textbf {\textit {(4)}}} We regard this proposed work as the funding paper that bridges the gap between two powerful fields, namely deep learning and signal processing on graphs. In the future, we expect to further benefit from tools in SPG to enhance the formulation of CNNs on graphs. \\
+{\textbf {\textit {(5)}}} We revisit the Euclidean case in the numerical experiments with the standard MNIST image classification problem. The model is able to learn localized convolutional filters and achieve 98.65\% of success rate. More interestingly, we apply our model to the text categorization problem on 20NEWS. We also demonstrate that our techniques is able to extract local stationary features, as it improves by 2.5\% the classification accuracy when no convolutional are present. We observe that the quality of the graph construction is strongly linked to the quality of the convolutional layers. Finally, we demonstrate the computational performance of our model over \cite{art:HenaffBrunaLeCun15DLgraphs}.
+
+
+
+\section{Learning Localized Graph Filters}
+\vspace{-0.2cm}
+In this section, we explore how to design efficient localized convolutional filters on graphs.
+
+
+
+\subsection{Signal Processing on Graphs and Localized Filters}
+\vspace{-0.2cm}
+{\bf Graph Fourier Transform.} We are interested in processing signals defined on undirected and connected graphs $G=(V,E,W)$, where $V$ is the set of vertices with $|V|=n$, $E$ is the set of edges and $W$ is the weighted adjacency matrix encoding the connection weights between two vertices. A signal $x:V\rightarrow\mathbb{R}$ defined on the nodes of the graph may be regarded as a vector $x\in\mathbb{R}^n$ where $x_i$ is the value of $x$ at the $i^{th}$ node. An essential operator in spectral graph analysis is the graph Laplacian \cite{book:Chung97Spectral}, which unnormalized definition is $L=D-W\in\mathbb{R}^{n\times n}$ with $D\in\mathbb{R}^{n\times n}$ is the diagonal degree matrix where $D_{ii}=\sum_jW_{ij}$, and its normalized definition is $L=I_n-D^{-1/2}WD^{-1/2}$ where $I_n$ is the identity matrix. As $L$ is a real symmetric positive semidefinite matrix, it has a complete set of orthonormal eigenvectors $\{u_l\}_{l=0}^{n-1}\in\mathbb{R}^n$, known as the graph Fourier modes, and their associated real nonnegative eigenvalues $\{\lambda_l\}_{l=0}^{n-1}$, which are the frequencies of the graph system. Equivalently, linear operator $L$ diagonalizes the Fourier basis matrix $U=[u_0,...,u_{n-1}]\in\mathbb{R}^{n\times n}$ such that $L=U\Lambda U^T$ where $\Lambda=\diag(\lambda_l)$. We can now define the graph Fourier transform (GFT) and its inverse \cite{art:ShumanNarangFrossardOrtegaVandergheynst13ReviewSPG}. The GFT of a spatial signal $x\in\mathbb{R}^n$ is $\hat{x}=U^Tx\in\mathbb{R}^n$, and the inverse GFT is $x=U\hat{x}$. Using GFT we can now generate fundamental operations of signal processing on graphs such as convolution and filtering. \\
+{\bf Convolutional Filters.} The graph convolutional operator is simply defined in the Fourier space such as $f\ast_G g=U((U^Tf) \odot (U^Tg))$, where $\odot$ the element-wise Hadamard product. Then the convolutional filtering operation on graphs is defined as $y=g_\theta(L)x\in\mathbb{R}^n$, where $g_\theta(L)=g_\theta(U\Lambda U^T)=Ug_\theta(\Lambda) U^T\in\mathbb{R}^{n\times n}$ where $g_\theta(\Lambda)=\diag(\theta)$ and $\theta\in\mathbb{R}^n$ is the filter expressed in the Fourier space. Remember that convolutional filters, i.e. translation-invariant filters on graphs, can only be defined in the Fourier domain as convolution operators are not defined in the vertex space. \\
+{\bf Localized Convolutional Filters.} Learning convolutional filters on graphs boils down to learn spectral multipliers $\theta$ of complexity $O(n)$, the size of the input data. Our goal is to reduce this complexity to $O(S)$, the support size of the filter in the vertex space, exactly as in standard CNNs. For this, we will make use of a property called polynomial localization \cite{art:ShumanRicaudVandergheynst16Local}. Let us represent $\theta=\{\theta_{\{{\lambda_l}\}_{l=0}^n}\}\in\mathbb{R}^n$ as a $K$-th differentiable polynomial function: $\theta_{\lambda_l}^K(a)=\sum_{k=0}^{k-1}a_k \lambda_l^k$, where $a=\{a_k\}_{k=0}^{K-1}\in\mathbb{R}^K$. The polynomial localization theorem \cite{art:ShumanRicaudVandergheynst16Local} shows that $(T_ig_{\theta^K})_j=(\delta_i \ast_G (Ug_{\theta^K}))_j=0$ for $d_G(i,j)>K$ where $d_G$ is the shortest distance on graph, meaning that the support of the associated spatial filter is exactly $K$-localized, all values are zero after $K$ hopes. Consequently, spectral filters represented by $K$-order polynomials are spatially localized with support $S=K$, implying the low learning complexity $O(K)$ for each filter. We notice that the authors \cite{art:HenaffBrunaLeCun15DLgraphs} also used a $K$-order polynomials represented by splines, but they did not formalize the quantitive relationship between filter support size and polynomial order. Finally, it is also possible to estimate the spatial decaying profile of the filter \cite{art:ShumanRicaudVandergheynst16Local}: for any K-localized filter centered at vertex $i$, we have the profile $|(T_ig_{\theta^K})(j)|\leq\big[\frac{2\sqrt{n}}{K!}(\frac{\lambda_{max}}{4})^K \sup_{\lambda}|(Ug_{\theta^K})^K(\lambda)|\big]$, which may be useful for graph filter analysis. 
+
+
+
+
+
+\subsection{Fast Filter Learning with Chebyshev Technique}
+\vspace{-0.2cm}
+Let $y$ be a signal $x$ filtered on the graph: $y=g_\theta(L)x=U(g_\theta(\Lambda) (U^Tx))$. Learning a spectral filter can be reduced to a complexity $O(K)$ by polynomial parametrization. However, the numerical computation of $y$ still requires two full matrix multiplications by $U^T,U$ with a high complexity of $O(n^2)$, and these matrix multiplications must be done several times in the backpropagation process. This is a computational bottleneck, identified in \cite{art:HenaffBrunaLeCun15DLgraphs}, with an additional cost of $O(n^3)$ for computing a full eigenvalue decomposition of $L$ to get $U$. We can overcome this computational issue using a Chebyshev technique as proposed in SPG \cite{art:HammondVandergheynstGribonval11GraphWav}. We will also explore in the future the Lanczos technique \cite{art:SusnjaraPerraudinKressnerVandergheynst15Lanczos}, which seems attractive because of the independence of the coefficients. \\
+We first recall the fundamental recurrence property of Chebyshev polynomials. Let the Chebyshev polynomial \(T_k(x)\) of order \(k\) be generated by the recurrence relation \(T_k(x) = 2x T_{k-1}(x) - T_{k-2}(x)\) with \(T_0 = 1\) and
+\(T_1 = x\). These polynomials form an orthogonal basis. Then, the K-compact spectral filter $g_{\theta^K}(\Lambda)$ can be defined as $g_{\theta^K}(\Lambda)=\sum_{k=0}^{K-1}\theta_k T_k(\tilde{\Lambda})$ of order \(k\) evaluated at
+\(\tilde{\Lambda} := 2 \Lambda / \lambda_{max} - I_n \in \R^{n \times n}\), a diagonal matrix of scaled eigenvalues such that they lie in \([-1,1]\). Consequently, the filtering operation is defined as $y=g_{\theta^K}(L)x=Ug_{\theta^K}(\Lambda) U^Tx=\sum_{k=0}^{K-1} U \theta_k T_k(\tilde{\Lambda}) U^Tx=\sum_{k=0}^{K-1} \theta_k T_k(\tilde{L}) x$, where \(T_k(\tilde{L}) \in \R^{n \times n}\) is the Chebyshev polynomial of order \(k\) evaluated at the scaled Laplacian
+\(\tilde{L} := 2 L / \lambda_{max} - I_n\). If we denote $X_k:=T_k(\tilde{\Lambda})x$ and using the recurrence equation, we can generate $X_k=2\tilde{L}X_{k-1}-X_{k-2}$ with \(X_0 = x\) and \(X_1 = \tilde{L} x\). As $L$ is sparse, it is straightforward to see that all matrix multiplications are done between sparse matrices, greatly decreasing the computational complexity for graph filtering from $O(n^2)$ to $O(E.K)$. Finally, matrix multiplications can be efficiently carried out in a distributive way, allowing an efficient GPU implementation of Chebyshev filtering.
+
+
+
+
+\section{Graph Coarsening and Fast Pooling}
+\vspace{-0.2cm}
+Local stationarity property of data is extracted via localized convolutional kernels. In this section, we are interested to extract the multi-scale hierarchical composition property of data. This is efficiently achieved via grid subsampling or downsampling and pooling, which trades spatial resolution with feature resolution reducing the learning complexity without compromising the system performances. In the case of standard CNNs for data lying on regular grids, the subsampling operation is mathematically sound. The translation operator commutes with the downsampling operator, hence not affecting the translation invariance property of the system at different scales of grid resolutions.\\
+How to reduce grid size in the case of graphs? We need to construct meaningful neighbourhoods on graphs where similar features may be clustered together. This naturally boils down to compute a multi-scale clustering of the graph that preserves local geometric structures. Unfortunately, it is well-known that graph clustering is a NP-hard problem \cite{art:BuiJonesGraphPartNPhard}, and approximations must be explored. Several clustering techniques exist like spectral clustering \cite{art:VonLuxburg07Tutorial}. However, we are more interested in clustering techniques that can reduce the size of the graph by a factor 2, which offers a precise control on the coarsening process. This is essential to keep control on the reduction factor to be able to extract fine hierarchical compositional structures. Algebraic multigrid techniques on graphs \cite{art:RonSafroBrandt11MultigridGraph} can be used in this context.\\
+In this work, we make use of the downsampling or coarsening technique introduced in METIS \cite{art:DhillonGuanKulis07Graclus,art:KarypisKumar98Metis} which has shown to be extremely efficient at clustering a large variety of graphs. METIS uses a greedy algorithm to compute successive coarser versions of a given graph. Its greedy rule consists, at any given coarsening level, in matching two nodes that locally maximizes a balanced cut energy like normalized cut \cite{art:ShiMalik00NCut}, which are excellent clustering energies. Precisely, we randomly pick an unmarked vertex $i$ and match it with one of its unmarked neighbors $j$ that maximizes the local normalized cut $\frac{W_{ij}}{d_i}+\frac{W_{ij}}{d_j}$. The two matched vertices are then marked. The matching is repeated until all nodes have been explored. This is an extremely fast coarsening technique, which divides by almost a factor 2 the size of the nodes from one level to the next coarser level. The coarsening factor is not exactly as there exist a few singletons, non-matched nodes. We can however control the reduction factor and set it to exactly 2 by simply adding artificial disconnected nodes to the singletons. We then order the nodes such that two successive indexed nodes are the parent nodes of the child node in the next coarser level. The major reason to do this is to benefit from parallel hardware architectures like GPUs to considerably speed up the pooling operations, which must be done several times during backprogation.\\
+In a future work, we will explore the use of SPG by using a Kron reduction technique \cite{art:ShumanFarajiVandergheynst16PyramTrans}. The Kron graph coarsening technique has the main advantage to preserve the ordering of the Laplacian spectrum, and may be able to commute with the graph convolution operator. If proven, this would be a very essential mathematical property of CNNs on graphs, exactly as regular grid downsampling in standard CNNs. 
+
+
+
+
+
+
+
+
+%\newpage
+
+\section{Numerical Experiments}
+\vspace{-0.4cm}
+We performed the numerical experiments with TensorFlow, an open source software library for deep learning developed by the Google Brain Team, which features various backends, notable CUDA for GPU computing.
+ 
+ 
+\subsection{Revisiting Euclidean CNNs on MNIST}
+\vspace{-0.2cm}
+Our first experiment aims at reproducing the performance of standard CNNs on the highly popular MNIST benchmark dataset \cite{pro:LeCunBottouBengioHaffner98MNIST}. This is an important sanity check for our proposed generalized model. It should be able to recover the original object classification rate as the convolutional layers are also designed to extract local stationary features on any graph, including the 2D grid graph on which images reside. \\
+MNIST is a dataset of 70,000 digit numbers represented on a 2D grid of size $28\times 28$, such that data points lie on a space of $784$ dimensions. TensorFlow reports an accuracy of 99.20\% on MNIST with a LeNet5-like CNN architecture. Our proposed CNNs on graphs with a graph of $8$-NN (nearest neigbors) of a 2D Euclidean grid achieves a precision of 98.65\%, as reported in Table \ref{tab1}.
+
+
+\begin{table*}[h!]
+ \centering
+{\small
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\hline
+ Algorithms & Accuracy  \\
+\hline
+Linear SVM & 91.76  \\
+Softmax & 92.36  \\
+CNNs [LeNet5-like] & 99.20  \\
+graph CNNs: CN32-P4-CN64-P4-FC512-softmax & 98.65 \\
+\hline
+\end{tabular}
+}
+\caption{Classification results on MNIST.} 
+\label{tab1}
+\end{table*}
+
+
+
+\noindent
+We report in Table \ref{tab2} the speedup offered by GPUs. A GPU implementation of graph CNNs is 8x faster than a CPU implementation, i.e. the same order of speedup than standard CNNs, as it only uses matrix multiplications which are efficiently implemented in CUDA BLAS.
+
+
+\begin{table*}[h!]
+ \centering
+{\small
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\hline
+ Architecture & Time  & Speedup \\
+\hline
+CNNs with CPU & 210ms & -\\
+CNNs with GPU NVIDIA K40c & 31ms & 6.77x\\
+graph CNNs with CPU & 200ms & -\\
+graph CNNs  with GPU NVIDIA K40c & 25ms & 8.00x\\
+\hline
+\end{tabular}
+}
+\caption{Computational time for processing a mini-batch of 100 images.} 
+\label{tab2}
+\end{table*}
+
+
+\noindent
+We now discuss the influence of the graph quality over the performance of the CNNs on graphs model. Convolutional layers aims at extracting local stationary features, or repetitive feature patches over the image domain. This implies 2 requirements to be successful. First, the data must satisfy this property, which we know to be true for MNIST. Second, the graph must be well constructed to be able to extract local stationary features. In the case of images, a simple $k$-NN graph of the grid is good enough, and the value of $k$ does not have a strong influence on the results. However, let us destroy the graph structure by using a random graph, then the accuracy drops to 95.39\%, which is the order of a simple fully connected graph with a softmax classifier, that is when the convolutional layers are not used. Table \ref{tab3} reports the results.
+
+
+\begin{table*}[h!]
+ \centering
+{\small
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\hline
+ Architecture & $G_1=$ 2D Euclidean grid  & $G_2=$ Random graph \\
+\hline
+graph CNNs: CN32-softmax & 97.40 & 96.88\\
+graph CNNs: CN32-P4-CN64-P4-FC512-softmax & 98.65 & 95.39 \\
+\hline
+\end{tabular}
+}
+\caption{Influence of the graph quality over CNNs on graphs.} 
+\label{tab3}
+\end{table*}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%\newpage 
+
+\subsection{Text Categorization with the 20NEWS Dataset}
+\vspace{-0.2cm}
+For this section, we consider the text categorization task with the 20NEWS dataset which consists of 18,846 text documents associated with 20 classes \cite{art:Joachims9620NEWS}. The number of unique words in this corpus is 93,953, so the dimensionality of these data points is around 94k. We extract 10,000 words that most occur in the corpus.\\
+The original full dataset is split into a training set of 11,314 documents and a test set of 7,532 documents. Our goal is to classify the test set. We remind that standard CNNs cannot be directly applied to this problem. A natural alternative would be to use a deep fully connected networks, but they are computationally expensive. To decrease the computational learning complexity of fully connected networks, the authors of \cite{art:HenaffBrunaLeCun15DLgraphs} suggested to carry out dropout regularization \cite{art:SrivastavaHintonKrizhevskySutskeverSalakhutdinov14dropout} on these networks. Table \ref{tab4a} reports the classification performances of a set of algorithms on 20NEWS, and the proposed graph CNNs with one convolutional layer of 32 filters and a softmax classifier.
+
+
+
+\begin{table*}[h!]
+ \centering
+{\small
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\hline
+ Algorithms & Word2vec features  \\
+\hline
+Linear SVM & 65.90  \\
+Multinomial NB & 68.51 \\
+Softmax & 66.28 \\
+FC + softmax + dropout & 64.64 \\
+FC + FC + softmax + dropout & 65.76 \\
+graph CNNs: CN32-softmax & 68.26 \\
+\hline
+\end{tabular}
+}
+\caption{Classification accuracies on 20NEWS with features learned by word2vec \cite{pro:MikolovChenCorradoDean13word2vec}.} 
+\label{tab4a}
+\end{table*}
+
+
+
+
+
+\noindent
+As text documents do not naturally lie on a graph, it is here necessary to construct a graph of words' embedding. This is a very essential step as the graph quality will have a strong impact on the ability of convolutional layers to identify local stationary features present in the data. We also observe that local stationarity is an assumption that is made about the data, and the CNNs are fundamentally designed on this data hypothesis. However, we believe this stationarity assumption to be present in many real-world data, as structured data are usually composed of repetitive small patterns at different scales of observation. We investigate here 5 graphs of words: a graph of learned embedding of the corpus using word2vec \cite{pro:MikolovChenCorradoDean13word2vec}, a graph of normalized word counts across each document,
+a graph of pre-trained embedding of words \cite{pro:MikolovChenCorradoDean13word2vec}, a graph of approximate nearest neighbors (ANN) using LSHForest on the learned embedding \cite{pro:MikolovChenCorradoDean13word2vec}, and a random graph. The classification results are reported in Table \ref{tab4b}. It shows that the graph $G_1$ learned from the training set is the best at capturing the local stationarity property of text documents, improving the fully connected networks performance from 65.76\%, reported Table \ref{tab4a}, to 68.26\%. It is worth noticing that the approximate $k$-NN graph $G_4$ constructed from the best learned features is almost as worse as a random graph, meaning that it is a better strategy to learn a good low-dimensional words' embedding first and then construct an exact $k$-NN graph from this embedding. As the graph quality has an impact on the performance of the classification system, a next step would be to learn a better graph as already pointed in \cite{art:HenaffBrunaLeCun15DLgraphs}. A natural and future approach would be to alternate learning of the NN weights and learning of the graph of data, as a virtuous circle. 
+
+
+
+
+\begin{table*}[h!]
+ \centering
+{\small
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\hline
+ Architecture & $G_1$= learned  & $G_2$= normalized  & $G_3$= pre-trained & $G_4$= ANN  &  $G_5$= random   \\
+  & graph \cite{pro:MikolovChenCorradoDean13word2vec} & word count graph & graph  &  graph  & graph \\
+\hline
+CN32-softmax & 68.26 & 67.50 & 66.98 & 67.86 & 67.75  \\
+\hline
+\end{tabular}
+}
+\caption{Classification accuracies of graph CNNs with different graph constructions on 20NEWS.} 
+\label{tab4b}
+\end{table*}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\subsection{Comparison with Non-Parametric Filters and Henaff-Bruna-LeCun \cite{art:HenaffBrunaLeCun15DLgraphs}}
+\vspace{-0.2cm}
+The advantages of our graph CNNs over \cite{art:HenaffBrunaLeCun15DLgraphs} are listed below:\\
+$\bullet$ Improved learning complexity from quadratic to linear: In \cite{art:HenaffBrunaLeCun15DLgraphs}, graph convolutional operations need $O(n^2)$ operations, while our technique requires $O(E.K)$ operations, where $E$ is the number of edges and $K$ is the polynomial order of the spectral filters. As we consider $k$-NN graphs, $E=n.k$ and the complexity becomes linear $O(n)$ w.r.t. the input size $n$, while  \cite{art:HenaffBrunaLeCun15DLgraphs} stays quadratic. To give some figures, in our experiments, we have for the first layer, $n=10^4, k=8, K=32$, so the total number of operations is $E.K=10^4.8.32 \simeq 3.10^5$ and $n^2=10^8$. Figure \ref{fig2} compares the computational times.\\
+$\bullet$  No eigenvalue decomposition required: The spectral graph CNNs \cite{art:HenaffBrunaLeCun15DLgraphs} require to compute a full eigenvalue decomposition (EVD) to compute the Fourier basis. This has a complexity of $0(n^3)$ with $n=10^{4}$, which is memory expensive. Our technique does not require an EVD, it only requires multiplications between the graph Laplacian sparse matrix and vectors. \\
+$\bullet$ Improved memory efficiency: \cite{art:HenaffBrunaLeCun15DLgraphs} needs to store in memory the Fourier basis of size $O(n^2)$, this can greatly limit the performance of GPU computing. Our technique requires to store the sparse Laplacian of size $O(E)=O(n)$ in the case of k-NN graphs.
+
+
+
+
+
+%\begin{table*}[h!]
+ %\centering
+%{\small
+%\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+%\hline
+% Nb of words & Non-Param filters  & Splines filters \cite{art:HenaffBrunaLeCun15DLgraphs} & Chebyshev filters [Our model] \\
+%\hline
+%1k words & 25ms & 25ms & 18.75ms \\
+%2k words & 57.5ms & 58.75ms & 28.75ms \\
+%4k words & 170ms & 170ms & 50ms \\
+%6k words & 348.75ms & 348.75ms & 73.75ms \\
+%8k words & 578.75ms & 580.0ms & 95.0ms \\
+%\hline
+%\end{tabular}
+%}
+%\caption{Comparison of computational times between non-parametric filters (CN32+softmax), spline-based filters \cite{art:HenaffBrunaLeCun15DLgraphs} (CN32+softmax and $K=5$) and Chebyshev-based filters (CN32+softmax and $K=5$) on 20NEWS. We consider a mini-batch size of 100 data, and computations are carried out on an NVIDIA GPU K40c.} 
+%\label{tab5}
+%\end{table*}
+
+
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=5cm]{images/speed.png}
+\caption{Plots of computational times w.r.t. the number of selected words in 20NEWS for non-parametric filters, spline-based filters \cite{art:HenaffBrunaLeCun15DLgraphs} and Chebyshev-based filters. The architecture is CN32+softmax with $K=5$ for splines and Chebyshev. We consider a mini-batch size of 100 data, and computations are carried out on an NVIDIA GPU K40c.}
+\label{fig2}
+\end{figure}
+
+
+
+
+
+
+
+\noindent
+Observe that non-parametric filters are most costly as they require $O(n)$ parameters to learn, and they are unable to learn localized filters, unlike \cite{art:HenaffBrunaLeCun15DLgraphs} and our model. This is particularly illustrated on Table \ref{tab6}, where non-parametric filters provide less accurate results. Besides, our model outperforms the classification accuracy of \cite{art:HenaffBrunaLeCun15DLgraphs} on MNIST.
+
+
+\begin{table*}[h!]
+ \centering
+{\small
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\hline
+ Architecture & Accuracy  \\
+\hline
+CN10 (Non-Param filters) + softmax & 95.75 \\
+CN10 (Spline filters)  + softmax & 97.26 \\
+CN10 (Chebyshev filters)  + softmax & 97.48 \\
+CN32-P4-CN64-P4-FC512-softmax  (Non-Param filters) & 96.28 \\
+CN32-P4-CN64-P4-FC512-softmax  (Spline filters) & 97.15 \\
+CN32-P4-CN64-P4-FC512-softmax  (Chebyshev filters) & 98.65 \\
+\hline
+\end{tabular}
+}
+\caption{Comparison of precisions between non-parametric filters, spline-based filters \cite{art:HenaffBrunaLeCun15DLgraphs} and Chebyshev-based filters [our model] on MNIST. For spline and Chebyshev filters, we picked $K=20$.} 
+\label{tab6}
+\end{table*}
+
+
+\noindent
+Eventually, we plot in Figure  \ref{fig1} the curves of accuracy and energy loss w.r.t. the number of iterations for the three types of filters. 
+
+
+\begin{figure}[h!]
+\centering
+\subfigure[]{\includegraphics[width=6cm]{images/acc.png}}
+\hspace{0.5cm}
+\subfigure[]{\includegraphics[width=6cm]{images/loss.png}}
+\caption{Plots of accuracy (a) and energy loss (b) w.r.t. the number of iterations.}
+\label{fig1}
+\end{figure}
+
+
+
+\section{Conclusion and Future Work}
+\vspace{-0.2cm}
+We have introduced an efficient implementation of CNNs on non-Euclidean manifolds represented by graphs using tools from SPG. Experiments have shown the ability of the model to extract the local stationary features through the graph convolutional layers. Future works will investigate two directions. First, we will explore applications of this generic model to important fields where the data naturally lie on non-artificially constructed graphs such as social networks, biological networks, or telecommunication networks. It makes actually more sense to apply this generalized CNN framework to natural network-based data, rather than artificially created networks which quality may vary as seen in the experiments. Second, we will also improve this framework with tools developed in SGP, including graph wavelet operators \cite{art:HammondVandergheynstGribonval11GraphWav,art:CoifmanLafon06DifMap,pro:GavishNadlerCoifman10GraphHaar,pro:ChenChengMallat14deepHaar,pro:RustamovGuibas14deepHaar}, spectral graph coarsening techniques \cite{art:ShumanFarajiVandergheynst16PyramTrans}, and improved localization properties \cite{pro:TsitsveroBarbarossa15Uncert,pro:PasdeloupAlamiGriponRabbat15Uncert,art:PerraudinRicaudShumanVandergheynst16Uncert}.
+
+
+
+
+
+
+
+
+
+
+
+
+\newpage
+
+%\vspace{-0.15cm} in .bbl
+\bibliographystyle{plain}
+{\setstretch{0}
+{\small
+%\bibliography{bib_nips16}
+\bibliography{bib_nips16_short}
+}
+}
+
+
 
 
 \end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
