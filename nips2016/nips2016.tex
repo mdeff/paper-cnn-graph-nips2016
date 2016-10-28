@@ -171,7 +171,7 @@ We first recall the fundamental recurrence property of Chebyshev polynomials. Le
 \vspace{-0.2cm}
 Local stationarity property of data is extracted via localized convolutional kernels. In this section, we are interested to extract the multi-scale hierarchical composition property of data. This is efficiently achieved via grid subsampling or downsampling and pooling, which trades spatial resolution with feature resolution reducing the learning complexity without compromising the system performances. In the case of standard CNNs for data lying on regular grids, the subsampling operation is mathematically sound. The translation operator commutes with the downsampling operator, hence not affecting the translation invariance property of the system at different scales of grid resolutions.\\
 How to reduce grid size in the case of graphs? We need to construct meaningful neighbourhoods on graphs where similar features may be clustered together. This naturally boils down to compute a multi-scale clustering of the graph that preserves local geometric structures. Unfortunately, it is well-known that graph clustering is a NP-hard problem \cite{art:BuiJonesGraphPartNPhard}, and approximations must be explored. Several clustering techniques exist like spectral clustering \cite{art:VonLuxburg07Tutorial}. However, we are more interested in clustering techniques that can reduce the size of the graph by a factor 2, which offers a precise control on the coarsening process. This is essential to keep control on the reduction factor to be able to extract fine hierarchical compositional structures. Algebraic multigrid techniques on graphs \cite{art:RonSafroBrandt11MultigridGraph} can be used in this context.\\
-In this work, we make use of the downsampling or coarsening technique introduced in METIS \cite{art:DhillonGuanKulis07Graclus,art:KarypisKumar98Metis} which has shown to be extremely efficient at clustering a large variety of graphs. METIS uses a greedy algorithm to compute successive coarser versions of a given graph. Its greedy rule consists, at any given coarsening level, in matching two nodes that locally maximizes a balanced cut energy like normalized cut \cite{art:ShiMalik00NCut}, which are excellent clustering energies. Precisely, we randomly pick an unmarked vertex $i$ and match it with one of its unmarked neighbors $j$ that maximizes the local normalized cut $\frac{W_{ij}}{d_i}+\frac{W_{ij}}{d_j}$. The two matched vertices are then marked. The matching is repeated until all nodes have been explored. This is an extremely fast coarsening technique, which divides by almost a factor 2 the size of the nodes from one level to the next coarser level. The coarsening factor is not exactly as there exist a few singletons, non-matched nodes. We can however control the reduction factor and set it to exactly 2 by simply adding artificial disconnected nodes to the singletons. We then order the nodes such that two successive indexed nodes are the parent nodes of the child node in the next coarser level. The major reason to do this is to benefit from parallel hardware architectures like GPUs to considerably speed up the pooling operations, which must be done several times during backprogation.\\
+In this work, we make use of the downsampling or coarsening technique introduced in METIS \cite{art:DhillonGuanKulis07Graclus,art:KarypisKumar98Metis} which has shown to be extremely efficient at clustering a large variety of graphs. METIS uses a greedy algorithm to compute successive coarser versions of a given graph. Its greedy rule consists, at any given coarsening level, in matching two nodes that locally maximizes a balanced cut energy like normalized cut \cite{art:ShiMalik00NCut}, which are excellent clustering energies. Precisely, we follow \cite{art:BressonHuLaurentSzlamvonBrecht14Reseed} by randomly picking an unmarked vertex $i$ and match it with one of its unmarked neighbors $j$ that maximizes the local normalized cut $\frac{W_{ij}}{d_i}+\frac{W_{ij}}{d_j}$. The two matched vertices are then marked. The matching is repeated until all nodes have been explored. This is an extremely fast coarsening technique, which divides by almost a factor 2 the size of the nodes from one level to the next coarser level. The coarsening factor is not exactly as there exist a few singletons, non-matched nodes. We can however control the reduction factor and set it to exactly 2 by simply adding artificial disconnected nodes to the singletons. We then order the nodes such that two successive indexed nodes are the parent nodes of the child node in the next coarser level. The major reason to do this is to benefit from parallel hardware architectures like GPUs to considerably speed up the pooling operations, which must be done several times during backprogation.\\
 In a future work, we will explore the use of SPG by using a Kron reduction technique \cite{art:ShumanFarajiVandergheynst16PyramTrans}. The Kron graph coarsening technique has the main advantage to preserve the ordering of the Laplacian spectrum, and may be able to commute with the graph convolution operator. If proven, this would be a very essential mathematical property of CNNs on graphs, exactly as regular grid downsampling in standard CNNs. 
 
 
@@ -199,7 +199,7 @@ MNIST is a dataset of 70,000 digit numbers represented on a 2D grid of size $28\
 {\small
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
 \hline
- Algorithms & Accuracy  \\
+ Algorithm & Accuracy  \\
 \hline
 Linear SVM & 91.76  \\
 Softmax & 92.36  \\
@@ -286,7 +286,7 @@ The original full dataset is split into a training set of 11,314 documents and a
 {\small
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
 \hline
- Algorithms & Word2vec features  \\
+ Algorithm & Word2vec features  \\
 \hline
 Linear SVM & 65.90  \\
 Multinomial NB & 68.51 \\
@@ -307,7 +307,7 @@ graph CNNs: CN32-softmax & 68.26 \\
 
 \noindent
 As text documents do not naturally lie on a graph, it is here necessary to construct a graph of words' embedding. This is a very essential step as the graph quality will have a strong impact on the ability of convolutional layers to identify local stationary features present in the data. We also observe that local stationarity is an assumption that is made about the data, and the CNNs are fundamentally designed on this data hypothesis. However, we believe this stationarity assumption to be present in many real-world data, as structured data are usually composed of repetitive small patterns at different scales of observation. We investigate here 5 graphs of words: a graph of learned embedding of the corpus using word2vec \cite{pro:MikolovChenCorradoDean13word2vec}, a graph of normalized word counts across each document,
-a graph of pre-trained embedding of words \cite{pro:MikolovChenCorradoDean13word2vec}, a graph of approximate nearest neighbors (ANN) using LSHForest on the learned embedding \cite{pro:MikolovChenCorradoDean13word2vec}, and a random graph. The classification results are reported in Table \ref{tab4b}. It shows that the graph $G_1$ learned from the training set is the best at capturing the local stationarity property of text documents, improving the fully connected networks performance from 65.76\%, reported Table \ref{tab4a}, to 68.26\%. It is worth noticing that the approximate $k$-NN graph $G_4$ constructed from the best learned features is almost as worse as a random graph, meaning that it is a better strategy to learn a good low-dimensional words' embedding first and then construct an exact $k$-NN graph from this embedding. As the graph quality has an impact on the performance of the classification system, a next step would be to learn a better graph as already pointed in \cite{art:HenaffBrunaLeCun15DLgraphs}. A natural and future approach would be to alternate learning of the NN weights and learning of the graph of data, as a virtuous circle. 
+a graph of pre-trained embedding of words \cite{pro:MikolovChenCorradoDean13word2vec}, a graph of approximate nearest neighbors (ANN) using LSHForest \cite{pro:BawaCondieGanesan05LSHForest} on the learned embedding \cite{pro:MikolovChenCorradoDean13word2vec}, and a random graph. The classification results are reported in Table \ref{tab4b}. It shows that the graph $G_1$ learned from the training set is the best at capturing the local stationarity property of text documents, improving the fully connected networks performance from 65.76\%, reported Table \ref{tab4a}, to 68.26\%. It is worth noticing that the approximate $k$-NN graph $G_4$ constructed from the best learned features is almost as worse as a random graph, meaning that it is a better strategy to learn a good low-dimensional words' embedding first and then construct an exact $k$-NN graph from this embedding. As the graph quality has an impact on the performance of the classification system, a next step would be to learn a better graph as already pointed in \cite{art:HenaffBrunaLeCun15DLgraphs}. A natural and future approach would be to alternate learning of the NN weights and learning of the graph of data, as a virtuous circle. 
 
 
 
@@ -346,7 +346,7 @@ CN32-softmax & 68.26 & 67.50 & 66.98 & 67.86 & 67.75  \\
 \vspace{-0.2cm}
 The advantages of our graph CNNs over \cite{art:HenaffBrunaLeCun15DLgraphs} are listed below:\\
 $\bullet$ Improved learning complexity from quadratic to linear: In \cite{art:HenaffBrunaLeCun15DLgraphs}, graph convolutional operations need $O(n^2)$ operations, while our technique requires $O(E.K)$ operations, where $E$ is the number of edges and $K$ is the polynomial order of the spectral filters. As we consider $k$-NN graphs, $E=n.k$ and the complexity becomes linear $O(n)$ w.r.t. the input size $n$, while  \cite{art:HenaffBrunaLeCun15DLgraphs} stays quadratic. To give some figures, in our experiments, we have for the first layer, $n=10^4, k=8, K=32$, so the total number of operations is $E.K=10^4.8.32 \simeq 3.10^5$ and $n^2=10^8$. Figure \ref{fig2} compares the computational times.\\
-$\bullet$  No eigenvalue decomposition required: The spectral graph CNNs \cite{art:HenaffBrunaLeCun15DLgraphs} require to compute a full eigenvalue decomposition (EVD) to compute the Fourier basis. This has a complexity of $0(n^3)$ with $n=10^{4}$, which is memory expensive. Our technique does not require an EVD, it only requires multiplications between the graph Laplacian sparse matrix and vectors. \\
+$\bullet$  No eigenvalue decomposition required: The spectral graph CNNs \cite{art:HenaffBrunaLeCun15DLgraphs} require to compute a full eigenvalue decomposition (EVD) to compute the Fourier basis. This has a complexity of $O(n^3)$ with $n=10^{4}$, which is memory expensive. Our technique does not require an EVD, it only requires multiplications between the graph Laplacian sparse matrix and vectors. \\
 $\bullet$ Improved memory efficiency: \cite{art:HenaffBrunaLeCun15DLgraphs} needs to store in memory the Fourier basis of size $O(n^2)$, this can greatly limit the performance of GPU computing. Our technique requires to store the sparse Laplacian of size $O(E)=O(n)$ in the case of k-NN graphs.
 
 
@@ -377,7 +377,7 @@ $\bullet$ Improved memory efficiency: \cite{art:HenaffBrunaLeCun15DLgraphs} need
 \begin{figure}[h!]
 \centering
 \includegraphics[width=5cm]{images/speed.png}
-\caption{Plots of computational times w.r.t. the number of selected words in 20NEWS for non-parametric filters, spline-based filters \cite{art:HenaffBrunaLeCun15DLgraphs} and Chebyshev-based filters. The architecture is CN32+softmax with $K=5$ for splines and Chebyshev. We consider a mini-batch size of 100 data, and computations are carried out on an NVIDIA GPU K40c.}
+\caption{Plots of computational times w.r.t. $n$, the number of selected words in 20NEWS, for non-parametric filters, spline-based filters \cite{art:HenaffBrunaLeCun15DLgraphs} and Chebyshev-based filters [our model]. The architecture is CN32+softmax with $K=5$ for splines and Chebyshev. We consider a mini-batch size of 100 data, and computations are carried out on an NVIDIA GPU K40c.}
 \label{fig2}
 \end{figure}
 
@@ -388,7 +388,7 @@ $\bullet$ Improved memory efficiency: \cite{art:HenaffBrunaLeCun15DLgraphs} need
 
 
 \noindent
-Observe that non-parametric filters are most costly as they require $O(n)$ parameters to learn, and they are unable to learn localized filters, unlike \cite{art:HenaffBrunaLeCun15DLgraphs} and our model. This is particularly illustrated on Table \ref{tab6}, where non-parametric filters provide less accurate results. Besides, our model outperforms the classification accuracy of \cite{art:HenaffBrunaLeCun15DLgraphs} on MNIST.
+Observe that non-parametric filters are costly as they require $O(n)$ parameters to learn, and they are unable to learn localized filters, unlike \cite{art:HenaffBrunaLeCun15DLgraphs} and our model. This is particularly illustrated on Table \ref{tab6}, where non-parametric filters provide less accurate results. Besides, our model outperforms the classification accuracy of \cite{art:HenaffBrunaLeCun15DLgraphs} on MNIST.
 
 
 \begin{table*}[h!]
@@ -407,7 +407,7 @@ CN32-P4-CN64-P4-FC512-softmax  (Chebyshev filters) & 98.65 \\
 \hline
 \end{tabular}
 }
-\caption{Comparison of precisions between non-parametric filters, spline-based filters \cite{art:HenaffBrunaLeCun15DLgraphs} and Chebyshev-based filters [our model] on MNIST. For spline and Chebyshev filters, we picked $K=20$.} 
+\caption{Comparison of precisions between non-parametric filters, spline-based filters \cite{art:HenaffBrunaLeCun15DLgraphs} and Chebyshev-based filters on MNIST. For spline and Chebyshev filters, we picked $K=20$.} 
 \label{tab6}
 \end{table*}
 
@@ -421,7 +421,7 @@ Eventually, we plot in Figure  \ref{fig1} the curves of accuracy and energy loss
 \subfigure[]{\includegraphics[width=6cm]{images/acc.png}}
 \hspace{0.5cm}
 \subfigure[]{\includegraphics[width=6cm]{images/loss.png}}
-\caption{Plots of accuracy (a) and energy loss (b) w.r.t. the number of iterations.}
+\caption{Plots of accuracy (a) and energy loss (b) w.r.t. the number of iterations for the first 2000 iterations.}
 \label{fig1}
 \end{figure}
 
@@ -448,8 +448,8 @@ We have introduced an efficient implementation of CNNs on non-Euclidean manifold
 \bibliographystyle{plain}
 {\setstretch{0}
 {\small
-%\bibliography{bib_nips16}
-\bibliography{bib_nips16_short}
+\bibliography{refs}
+%\bibliography{bib_nips16_short}
 }
 }
 
