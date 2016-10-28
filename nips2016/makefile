@@ -1,18 +1,18 @@
-PDF := $(patsubst %.tex, %.pdf, $(wildcard *.tex))
-SRC := $(filter-out %_crop.pdf, $(wildcard images/*.pdf))
-FIG := $(patsubst %.pdf, %_crop.pdf, $(SRC))
-
-.SECONDARY: $(FIG)
+PDF  = $(patsubst %.tex,%.pdf,$(wildcard *.tex))
+BIB  = $(wildcard *.bib)
 
 all: $(PDF)
 
-%.pdf: %.tex $(FIG)
+%.pdf: %.tex $(BIB)
 	latexmk -pdf $<
 
-%_crop.pdf: %.pdf
-	pdfcrop $< $@
-
 clean:
-	rm -f *.{aux,bbl,blg,fdb_latexmk,fls,log,out}
+	rm -f *.{aux,bbl,blg,fdb_latexmk,fls,log,out,lof,dvi}
 	rm -f *.{bcf,run.xml}
-	rm -f $(FIG)
+	rm -f *.{toc,snm,nav}
+	rm -f *.gz*
+
+cleanall: clean
+	rm -f $(PDF)
+
+.PHONY: all clean cleanall
