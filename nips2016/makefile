@@ -11,6 +11,7 @@ clean:
 	rm -f *.{bcf,run.xml}
 	rm -f *.{toc,snm,nav}
 	rm -f *.gz*
+	rm -f **/*eps-converted-to.pdf
 
 cleanall: clean
 	rm -f $(PDF)
