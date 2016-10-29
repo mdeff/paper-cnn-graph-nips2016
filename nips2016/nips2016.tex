@@ -1,3 +1,6 @@
+
+\pdfoutput=1
+
 \documentclass{article}
 
 % if you need to pass options to natbib, use, e.g.:
@@ -31,6 +34,8 @@
 %\usepackage{svg}
 \usepackage{setspace}
 \usepackage{color}
+
+\usepackage{amsmath}
 
 % Use less space
 %\usepackage{titlesec}		% space before / after headings
@@ -109,26 +114,7 @@ art:HenaffBrunaLeCun15DLgraphs}
 \begin{abstract}
 
 
-	Convolutional neural networks (CNNs) have greatly improved state-of-the-art
-	performances in a number of fields, notably computer vision and natural
-	language processing. In this work, we are interested in generalizing the
-	formulation of CNNs from low-dimensional regular Euclidean domains, where
-	images (2D), videos (3D) and audios (1D) are represented, to high-dimensional
-	irregular domains such as social networks or biological networks represented by graphs. This paper introduces a formulation
-	of CNNs on graphs in the context of spectral graph theory. We borrow the
-	fundamental tools from the emerging field of signal processing on graphs,
-	which provides the necessary mathematical background and efficient numerical
-	schemes to design localized graph filters efficient to learn and evaluate. 
-	As a matter of fact, we introduce the first technique that offers the same computational complexity than standard CNNs, while being universal to any graph structure. 
-	%Similarly to classical CNNs, the computational complexity as well as the
-	%number of parameters to learn are independent of the data dimensionality.
-	Numerical experiments on MNIST and 20NEWS demonstrate the ability of this novel deep learning system to learn local, stationary, and compositional features on graphs, as long as the graph
-	is well-constructed. %This work can be thought as the foundation of a second
-	%generation of CNNs on graphs built on spectral graph theory, being
-	%mathematically well defined, bringing better test performance and being
-	%faster to evaluate and train than the first generation introduced by Bruna,
-	%LeCun et al.
-	
+Convolutional neural networks (CNNs) have greatly improved state-of-the-art performances in a number of fields, notably computer vision and natural language processing. In this work, we are interested in generalizing the formulation of CNNs from low-dimensional regular Euclidean domains, where images (2D), videos (3D) and audios (1D) are represented, to high-dimensional irregular domains such as social networks or biological networks represented by graphs. This paper introduces a formulation of CNNs on graphs in the context of spectral graph theory. We borrow the fundamental tools from the emerging field of signal processing on graphs, which provides the necessary mathematical background and efficient numerical schemes to design localized graph filters efficient to learn and evaluate.  As a matter of fact, we introduce the first technique that offers the same computational complexity than standard CNNs, while being universal to any graph structure. Numerical experiments on MNIST and 20NEWS demonstrate the ability of this novel deep learning system to learn local, stationary, and compositional features on graphs, as long as the graph is well-constructed. 	
 	
 	 
 
@@ -151,8 +137,7 @@ art:HenaffBrunaLeCun15DLgraphs}
 
 \begin{figure}[h!]
 \centering
-\includegraphics[width=\textwidth]{images/illustrationCNNgraphs.eps}
-%\includegraphics[width=13.5cm]{images/illustrationCNNgraphs.png}
+\includegraphics[width=\textwidth]{images/illustrationCNNgraphs}
 \caption{Architecture of the proposed CNNs on graphs. Notation: $l$ is the
 coarsening level, $x^l$ are the downsampled signals at layer $l$, $\G^l$ is the coarser graph, $g_{\theta^{K_l}}$ are the spectral filters at layer $l$, $x_g^l$ are the filtered signals, $p_l$ is the coarsening exponent, $n_c$ is the number of classes, $y$ is the output signal, and $\theta^l$ is the number of parameters to learn at $l$.}
 \label{fig_illustration}
@@ -690,7 +675,7 @@ Model & Architecture & Accuracy \\
 \midrule
 %Linear SVM & 91.76  \\
 %Softmax & 92.36  \\
-Classical CNN & C32-P4-C64-P4-FC512 & \textbf{99.33}  \\
+Classical CNN & C32-P4-C64-P4-FC512 & 99.33  \\
 Proposed graph CNN & GC32-P4-GC64-P4-FC512 & 99.14  \\
 \bottomrule
 \end{tabular}
@@ -783,8 +768,8 @@ Dataset & Architecture & Non-Param \eqnref{filt_non-param} &
 Spline \eqnref{filt_spline} \cite{\bruna} &
 Chebyshev \eqnref{filt_cheby} \\
 \midrule
-MNIST & GC10 & 95.75 & 97.26 & \textbf{97.48} \\
-MNIST & GC32-P4-GC64-P4-FC512 & 96.28 & 97.15 & \textbf{99.14} \\
+MNIST & GC10 & 95.75 & 97.26 & {97.48} \\
+MNIST & GC32-P4-GC64-P4-FC512 & 96.28 & 97.15 & {99.14} \\
 %20NEWS & GC32 & \todo{?} & \todo{?} & \todo{?} \\
 \bottomrule \end{tabular}
 \caption{Comparison of accuracy results for different types of spectral filters.
