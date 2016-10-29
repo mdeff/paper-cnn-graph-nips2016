@@ -1,0 +1,167 @@
+Todo
+* compare with GNN
+* read recent spatial approaches
+* constructed graph on MNIST
+* run on RCV1
+* review "?" in text
+
+Acceptance
+* oral: ~2%
+* spotlight: ~5%
+* poster: ~22%
+
+Private
+
+It appears to us that we got good reviews from reviewers who consider themselves
+experts or are confident. Less confident reviewers seem to have not understood
+the paper, thus its potential. E.g. they ask questions whose answers are in the
+paper already.
+
+General
+
+We thank all the reviewers for reading the paper and providing valuable
+feedback. The specific comments of each reviewer are addressed below.
+
+We already cleaned up and edited the paper in the hope to make it more
+accessible. We'll take into account the feedbacks for the final revision.
+
+We plan to publicly release the code once the paper is published so that people
+can reproduce our results, compare with our model or apply it to their problems.
+
+Note that very recent works [post-submission refs?] (posted on arXiv after the
+submission deadline) shows the growing interest for a generalization of CNNs to
+arbitrary graphs. While both these approaches are spatial, we look forward to
+compare with them.
+
+Reviewer 1: comparison with GNN.
+
+GNN does embed the graph into an high-dimensional space.
+Limited to combinatorial Laplacian, no normalized?.
+Classify graphs (graph-focused) or nodes (node-focused).
+Thanks for pointing this up. We'll add this discussion to the final version of
+the paper.
+
+First, the goal of GNNs is to classify graphs or nodes, while the proposed
+method classifies signals on graphs. Then, each approach could be twisted and we
+could treat a graph signal as labels, but then there'll be no pooling.
+Our method may be used to classify nodes, by treating a graph signal as a set of
+labels, but we don't see how GNNs could be used to classify graph signals.
+
+Note suited for multiple signals on graph. But for features who leave on nodes.
+
+GNNs is designed as a spatial method.
+
+Second, GNNs need to perform as many backpropagation operations as there are
+edges and nodes in the graph per learning iteration. Complexity of 
+
+Graph neural networks (GNNs) (Scarselli et al., 2009) are a recurrent neural
+network architecture defined on graphs. GNNs apply recurrent neural networks for
+walks on the graph structure, propagating node representations until a fixed
+point is reached. The resulting node representations are then used as features
+in classification and regression problems. GNNs support only discrete labels and
+perform as many backpropagation operations as there are edges and nodes in the
+graph per learning iteration. Gated Graph Sequence Neural Networks modify GNNs
+to use gated recurrent units and to output sequences (Li et al., 2015).
+
+One back-propagation per output: each node embedding is an output.
+
+Reviewer 1: rotational invariance.
+
+Your analysis is correct, the proposed filters are isotropic, i.e. they are
+oblivious to the orientation of an edge. The learned filters therefore provide
+rotational invariance. Whether this is a limitation or an asset depends on the
+problem and should be verified empirically, as for any invariance (translation,
+scale). In an experiment (not in the paper) where we did randomly rotate (from
+-90° to 90°) each MNIST digit (no data augmentation), we obtained 91.47%
+accuracy while classical CNNs got 70.65%. Rotational invariance can therefore be
+an asset. Moreover, data augmentation schemes have used rotated versions of
+(part of) images to force a network to learn this invariance, and Spatial
+Transformer Networks [1], who learn invariance to translation, scale, rotation
+and more generic warping, did show state-of-the-art performance on several
+benchmarks. We did not include these preliminary results in the paper as we want
+to test on larger image datasets the impact of this invariance. As part of this
+future work, we'll investigate the possibility to build our filters on
+anisotropic Laplacians [2], which should allow us to learn directional /
+oriented filters.
+
+Reviewer 3.
+
+The limited results in Table 4 could be due to the small size (~19k documents)
+of the 20NEWS dataset. We performed the same task on RCV1 (800k documents), and
+obtained...
+Unfortunately after the submission deadline. Or say that Bruna did it.
+
+Reviewer 6.
+
+Thanks for your encouragement. Please note that most of the recent works are
+based on a spatial formulation. What are the limitations? We look forward to
+compare all these approaches.
+
+Reviewer 7: single graph.
+
+As you rightfully pointed out, our spectral construction does not transfer
+directly to other graphs. That is an advantage of spatial constructions?. We do
+however believe that graphs from a certain class (e.g. social graphs) share a
+similar spectrum, which would allow to learn and transfer the Chebyshev
+coefficients across graphs. That is a planned future work.?
+
+Reviewer 7: pooling on graphs.
+
+A pooling strategy on arbitrary graphs will always? require some sort of
+coarsening, i.e. a way to group similar vertices. As we pointed out, there
+exists plenty of methods for multi-level clustering. The proposed CNN on graphs
+is agnostic to the choice of a particular algorithm, and we hope that future
+research in the area will bring better algorithms. Moreover, the coarsening step
+only has to be performed once, before training.
+
+Reviewer 7: MNIST experiment.
+
+You are right, we did experiment with a regular grid on MNIST because it is the
+sole way to compare with classical CNNs. The ~3% performance loss you mention
+(from Table 3 I guess?) is caused by the use of random graph, i.e. random
+connections between pixels. It is clear that in this setting we expect to loose
+much performance, which indeed shows that the grid structure is important for
+images. We could also build a graph from the pixel values only, which would
+approach a regular grid?. Performances are obviously not state-of-the-art, we
+only wanted to compare with the classical LeNet-5 and not bother with model
+tuning.
+
+Reviewer 7 & 8: 20NEWS experiment, usefulness of the graph.
+
+We did compare with baselines only. The small performance improvement is
+probably because the constructed graph is not good enough. There is probably a
+better way. Constructing graphs from data is an open research question. This is
+however a non-issue when the data naturally lies on a graph structure. Then why
+didn't we do it ??
+
+The usefulness of the graph structure obviously depends on the quality of the
+graph. That is the point we tried to make in section 6.2: if a given graph does
+not improve much on a random graph, then this graph is not well suited for the
+problem at hand. If the graph is well constructed, e.g. the grid for MNIST, then
+results are good. Moreover, the very recent works in this area [refs] suggest
+that this is a research direction of interest.
+
+Reviewer 8 & 9: understanding.
+
+As you pointed out, you do not seem to be familiar with the field of Graph
+Signal Processing. Due to space constraints, we had to write densely and
+specifically pointed out a review of the field [29]. Moreover, most of the
+reviewers seem to have understood the paper well. We did however clean the paper
+up and hope it is easier to read. 
+
+Reviewer 8: performance.
+
+Our method is both faster and more effective, see Table 6 (Spline filters), than
+[13]. The theoretical difference is that our filters are exactly localized in K
+hops.
+
+Reviewer 9: natural graphs.
+
+The problem with signals on natural graphs is that, at least for now, not many
+datasets are public, and when they are, they are quite small. ?? We do however
+plan to make experiments on Wikipedia, using hyperlinks and user activity to
+build a graph. This will however require us to build a new dataset.
+
+[1] Spatial Transformer Networks 
+[2] anisotropic 
+[3] Rotation-invariant convolutional neural networks for galaxy morphology prediction
