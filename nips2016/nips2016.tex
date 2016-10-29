@@ -174,20 +174,21 @@ locations. Localized kernels or compactly supported filters refer to filters
 that extract local features independently of the input data size, with a support
 size that can be much smaller than the input size.
 
+%\newpage
 The compositional local stationarity property of CNNs can be efficiently
-implemented on regular grids, like image and sound domains, as convolutional and
-downsampling operators are mathematically well-defined on such discretized
+implemented on regular grids, like image and sound domains, as convolutional, 
+downsampling and pooling operators are mathematically well-defined on such discretized
 Euclidean spaces. This has led to the breakthrough of CNNs in image, video, and
 sound recognition tasks \cite{art:LeCunBengioHinton15DL} as these data lie on
 low-dimensional regular lattices. But not all data lie on regular grids. User
 data on social networks, gene data on biological regulatory networks, log data
 on telecommunication networks, or text documents on words' embedding are
 important examples of data lying on irregular or non-Euclidean domains.
-Unfortunately, CNNs cannot be directly applied to such complex domains.
+Unfortunately, CNNs cannot be directly applied to such complex domains.% as the building blocks of CNNs, convolution, downsampling, and pooling, are only defined for regular grids.
 
-A generalization to irregular grids is not straightforward as the building blocks of
-CNNs, the convolution, the downsampling, and the pooling operators, cannot be directly applied to these domains. This makes this extension challenging, both theoretically and
-implementation-wise. This work leverages the recent works of
+%A generalization to irregular grids is not straightforward as the building blocks of CNNs, convolution, downsampling, and pooling, are only defined for regular grids. 
+
+A generalization to irregular grids is not straightforward as the standard operators of convolution, downsampling, and pooling, are only defined for regular grids. This makes this extension challenging, both theoretically and implementation-wise. This work leverages the recent works of
 \cite{pro:GregorLeCun10LRF, pro:CoatesNg11LRF,
 art:BrunaZarembaSzlamLeCun13DLgraphs, art:HenaffBrunaLeCun15DLgraphs,
 art:HammondVandergheynstGribonval11GraphWav,
@@ -689,8 +690,8 @@ Model & Architecture & Accuracy \\
 \midrule
 %Linear SVM & 91.76  \\
 %Softmax & 92.36  \\
-Classical CNN & C32-P4-C64-P4-FC512 & \textbf{99.20} \todo{99.33} \\
-Proposed graph CNN & GC32-P4-GC64-P4-FC512 & 98.65 \todo{99.14} \\
+Classical CNN & C32-P4-C64-P4-FC512 & \textbf{99.33}  \\
+Proposed graph CNN & GC32-P4-GC64-P4-FC512 & 99.14  \\
 \bottomrule
 \end{tabular}
 \caption{Classification accuracies for the proposed model and a classical CNN on
@@ -726,19 +727,19 @@ To demonstrate the versatility of our model to work with graphs generated from u
 
 
 \begin{table*}[h!] \centering
-\begin{tabular}{lcc} \toprule
-Model & Accuracy & \todo{Parameters} \\
+\begin{tabular}{lc} \toprule
+Model & Accuracy \\
 \midrule
 Linear SVM & 65.90 \\
 Multinomial Naive Bayes & 68.51 \\
 %Multinomial logistic regression (softmax) & 66.28 \\
-Softmax & 66.28 & $200\times10^3$ \\
+Softmax & 66.28 \\
 \addlinespace
-FC2500 & 64.64 & $\sim25\times10^6$ \\
-FC2500-FC500 & 65.76 & $\sim26\times10^6$ \\
+FC2500 & 64.64 \\
+FC2500-FC500 & 65.76 \\
 \addlinespace
-GC32 & 68.26 5\\
-GC32-FC500 & \todo{?} \\
+GC32 & 68.26 \\
+%GC32-FC500 & \todo{?} \\
 \bottomrule \end{tabular}
 \caption{Classification accuracies for the proposed model and a other algorithms
 on 20NEWS.} 
@@ -751,11 +752,11 @@ the 10,000 most common words from the 93,953 unique words in this corpus. Each
 document is represented using the bag-of-words model, normalized across words.
 To test our model, we constructed a 16-NN graph of the word2vec
 \cite{pro:MikolovChenCorradoDean13word2vec} embedding of those words, which
-produced a graph of $n = |\V| = 10,000$ nodes (no fake nodes because we do not
-coarsen the graph) and
-$|\E| = 132,834$ edges. All CNN models were trained for 20 epochs by the Adam
+produced a graph of $n = |\V| = 10,000$ nodes and
+$|\E| = 132,834$ edges.  All CNN models were trained for 20 epochs by the Adam
 optimizer \cite{art:KingmaBa14AdamOpt} with a learning rate of 0.1, without regularization nor
 dropout. The filter support was set to $K = 5$.
+
 
 \tabref{20news} shows that CNNs on graphs provide decent performances. While it does not outperform the kernel-based method of multinomial naive Bayes classifier on this small dataset, it does defeat fully connected networks, which require much more parameters to be learned. More importantly, these results verify the validity of the statistical assumptions made for the data, that are locality and stationarity, and which are at the core of the design of any CNN technique. While we know that these data properties are true for low-dimensional Euclidean data like audios, images and videos, we also show experimentally that they are also satisfied for text documents as long as the graph is properly constructed. \secref{graph_quality} will study the influence of the graph quality. 
 
@@ -783,12 +784,11 @@ Spline \eqnref{filt_spline} \cite{\bruna} &
 Chebyshev \eqnref{filt_cheby} \\
 \midrule
 MNIST & GC10 & 95.75 & 97.26 & \textbf{97.48} \\
-MNIST & GC32-P4-GC64-P4-FC512 & 96.28 & 97.15 & \textbf{98.65} \\
-20NEWS & GC32 & \todo{?} & \todo{?} & \todo{?} \\
+MNIST & GC32-P4-GC64-P4-FC512 & 96.28 & 97.15 & \textbf{99.14} \\
+%20NEWS & GC32 & \todo{?} & \todo{?} & \todo{?} \\
 \bottomrule \end{tabular}
 \caption{Comparison of accuracy results for different types of spectral filters.
-Spline and Chebyshev filters use \todo{$K=20$}, \todo{$K=5$ for 20NEWS}
-parameters.} 
+Spline and Chebyshev filters use $K=25$.} % \todo{$K=5$ for 20NEWS}
 \label{tab:filters}
 \end{table*}
 
@@ -819,7 +819,7 @@ Model & Architecture & CPU & GPU & Speedup \\
 Classical CNN & C32-P4-C64-P4-FC512 & 210 & 31 & 6.77x \\
 Proposed graph CNN & GC32-P4-GC64-P4-FC512 & 200 & 25 & 8.00x \\
 \bottomrule \end{tabular}
-\caption{Time to process a mini-batch of $S=100$ MNIST images. That is the total
+\caption{Time to process a mini-batch of 100 MNIST images. That is the total
 training time divided by the number of gradient steps.} 
 \label{tab:speedup}
 \end{table*}
@@ -828,7 +828,7 @@ training time divided by the number of gradient steps.}
 \centering
 \vspace{-20pt}
 \includegraphics[width=\textwidth]{images/runtime_crop}
-\caption{Training time over a mini-batch of $S=100$ 20NEWS documents w.r.t. $n$, the
+\caption{Training time over a mini-batch of 100 20NEWS documents w.r.t. $n$, the
 number of selected words, for the three considered filters. The architecture is
 GC32 with $K=5$ for Spline and Chebyshev.}
 \label{fig:runtime}
@@ -872,7 +872,7 @@ graph. \tabref{mnist_quality} reports a large drop of accuracy when using a rand
 Architecture & 8-NN on 2D Euclidean grid & random \\
 \midrule
 GC32 & 97.40 & 96.88 \\
-GC32-P4-GC64-P4-FC512 & 98.65\todo{99.14} & 95.39 \\
+GC32-P4-GC64-P4-FC512 & 99.14 & 95.39 \\
 \bottomrule \end{tabular}
 \caption{Classification accuracies with different graph constructions on MNIST.} 
 \label{tab:mnist_quality}
@@ -903,7 +903,7 @@ from this embedding.
 & \multicolumn{2}{c}{word2vec} & & \\
 bag-of-words & pre-trained & learned & approximate & random \\
 \midrule
-67.50 & \todo{66.98} & 68.26 & 67.86 & 67.75 \\
+67.50 & 66.98 & 68.26 & 67.86 & 67.75 \\
 \bottomrule \end{tabular}
 \caption{Classification accuracies of GC32 with different graph constructions on 20NEWS.} 
 \label{tab4b}
