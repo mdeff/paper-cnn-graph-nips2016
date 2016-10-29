@@ -1,37 +1,33 @@
-
-
 ############
 ALL
 ############
 
-4950
- 
-We warmly thank the referees for their time and valuable comments. 
+4992
+
+We warmly thank the referees for their time and valuable comments.
 
 Referees 1,3,7
-Accuracy Gap for MNIST: The gap between standard CNN and graph CNN may be due to our isotopic filters. We also observed that with 20 epochs (instead of 10 in our submission) for LeNet5 architecture, standard CNN has 99.33% accuracy and graph CNN has 99.14%. This reveals a slower convergence of graph CNN, and the need to investigate better optimization strategies. 
+While the isotropic nature of our filters (see answer to R1) and the lack of experience on architecture design are certainly explanations for the gap between classical CNNs and graph CNNs on MNIST, we observed that with 20 epochs (instead of 10 in our submission) for the same LeNet5 architectures, classical CNNs obtained 99.33% accuracy and graph CNNs 99.14%. This reveals a slower convergence of graph CNNs, and the need to investigate better suited optimization or initialization strategies.
 
 Referees 3,7,8
-Graph Usefulness and Experiments: The goal of Tables 3,5 is to show that the usefulness of the graph structure directly depends on the graph quality. When random graphs are used, then convolutional layers are useless, and graph CNN are not well suited for the problem. If the graph is well constructed, like the grid for MNIST, then graph CNN provide good performances. For 20NEWS, we did not try to optimize the graph structure. There may be better ways to construct higher-quality graphs, but it was not our objective. 
-The goal of Table 4 is to demonstrate that convolutional layers CN32 are also effective on graphs that are not regular image grids. This is showed by comparing CN32 to fully connected (FC) networks. We also compared against the effective Multinomial NB document classification technique, and SVM and linear classifier baseline techniques. Graph CNN did not overcome Multinomial NB. It may be due to the small size of the dataset (20NEWS has 19K documents). CNN usually perform less than other classification techniques for small datasets. We plan to apply our technique to the larger text dataset RCV1 (800K documents). 
+The goal of Tables 3 and 5 is to show that the usefulness of the graph structure directly depends on the graph quality. Random graphs are used as a baseline to assess graph quality, as convolutional layers are almost useless in this setting. A well suited graph, like the grid for MNIST, is useful and allows our model to perform well. We did however not try to optimize the graph structure for 20NEWS: there may be better ways to construct higher-quality graphs. It was not our objective, which was to show how graph quality impacts performance.
+The goal of Table 4 is to demonstrate that a convolutional layer is also effective on graphs that are not regular grids, by comparing it to fully connected networks. We also compared against the effective Multinomial Naive Bayes and two baselines. Graph CNNs did not overcome Multinomial NB, likely because of the small size of the 20NEWS dataset (~19k documents). We plan to apply our technique to the larger RCV1 dataset (800k documents).
 
 Referee 1
-Thanks for pointing out GNN (we will add this ref). On the high level, GNN is a spatial technique, and our model is spectral. GNN was designed to classify nodes/graphs by first embedding each node in an Euclidean space with RNN, and then using those as features for classification. Our technique is developed to classify graph signals by successively extracting higher level features, as done for classical CNN. Regarding the referee’s comment, we read carefully the two GNN papers, and were not able to express the graph CNN in terms of GNN, as suggested by the referee. We would be grateful if the referee could point out more connections between our model and the GNN papers.
-The spectral filters are indeed rotationally invariant. Although it first appears to be a limitation, we think the rotational invariance property might actually be an advantage. Our motivation is inspired by the following experiment (not reported in the paper). We learned the classic and graph CNN from a rotated MNIST dataset, i.e. each training image is randomly rotated (no data augmentation here, simply rotation of original images). Classic CNN obtained 70% of accuracy, and graph CNN 91%. Although such experiment is naive, it reveals that spatial invariance properties like rotation can be an asset in some applications where the training data are not enough to capture all meaningful features. We will investigate such idea in a future work, that is if such invariance property is an advantage for large-scale image datasets, where same objects may rotate, and thus requiring standard CNN to learn more filters than graph CNN. 
-We will also study the possibility to learn anisotropic Laplacians, and thus anisotropic filters. 
+Thanks for pointing out GNN (we will add this ref). At a high level, GNN was designed to classify nodes or graphs by first embedding each node in an Euclidean space with an RNN, then using those as features for classification/regression. Our technique was developed to classify graph signals by successively extracting higher level features, similarly to classical CNNs. After reading the paper carefully, we were not able to express our graph CNN in terms of a GNN, as suggested by the referee. We would be grateful if the referee could point out more connections between our model and the GNN papers.
+The spectral filters are indeed rotationally invariant. Whether this is a limitation or an advantage depends on the problem and should be verified empirically, as for any other invariance. Our claim is motivated by the following experiment (not reported in the paper): on a rotated MNIST dataset, i.e. each image is randomly rotated (no data augmentation here), our model obtained an accuracy of 91% while classical CNNs obtained 70%. Although such experiment is naive, it reveals that spatial invariance properties like rotation can be an asset in some applications. Moreover, rotational invariance has been sought in the past. Many data augmentation schemes have used rotated versions of (part of) images to force a network to learn this invariance. Spatial Transformer Networks have been developed to learn invariance to translation, scale, rotation and more generic warping. In a future work, we will test our model on large-scale image datasets and investigate if such an invariance is an advantage. We will also study the possibility to learn anisotropic filters with the help of anisotropic Laplacians.
 
 Referee 7
-We indeed consider a single graph in this work, which is already meaningful for multiple applications s.a. brain connectivity analysis, and social network analysis. Transfer graph features/filters from one graph to another graph is obviously of great interest, and can also be explored with spectral techniques like the one proposed here (e.g. learn and transfer Chebyshev coefficients across graphs). We reserve this extension for another paper. 
-Pooling is a pillar operation in any CNN architecture as it allows to reduce spatial resolution and increase feature resolution. In the case of grids, it is mathematically well-defined, but in case of graphs it is equivalent to graph clustering or coarsening, i.e. grouping similar vertices together, which is NP-hard. We opted here for the Metis model, which has proved to be very efficient. Note also that the coarsening step is performed only once.
+We indeed consider a single graph in this work, which is already meaningful for multiple applications such as brain connectivity analysis, documents network analysis and social network analysis. Transferring graph features/filters from one graph to another is obviously of great interest, and can also be explored with spectral techniques like the one proposed here (e.g. learn and transfer Chebyshev coefficients across graphs). We reserve this extension for another paper.
+A pooling strategy will always require some sort of coarsening, i.e. a way to group nodes to form a receptive field. While grouping is straightforward on grids, clustering or coarsening on arbitrary graphs is NP-hard. We opted here for the greedy Graclus algorithm, which has proved to be very efficient. Note that our method is however agnostic to the chosen coarsening algorithm and that coarsening is performed only once.
 
 Referee 8
-We have recently improved the presentation of the paper, and will release the new version in the final version of the paper.
-The performance analysis of standard CNN is a central and open mathematical question. It is thus challenging to state anything about the theoretical performances of our model. The only performance study is experimental and summarised in Table 6.  
+We did recently improve the presentation of the paper. Expect the final version .
+The performance analysis of classical CNNs is a central and open mathematical question. It is thus challenging to state anything about the theoretical performances of our model. The only performance study is experimental and summarized in Table 6, which shows that our model is indeed superior to [13].
 
 Referee 9
-Presentation: See our answer to R8.
-We indeed did not introduce any natural graph experiments in this work. Our first goal was to introduce an efficient graph CNN technique. However, a data analysis project on Wikipedia network using this technique is ongoing.
-
+Presentation: see our answer to R8.
+We did not introduce any natural graph experiments in this work. Our first goal was to introduce an efficient extension of CNNs to graphs and demonstrate its usefulness. Constructed graphs are a great way of demonstrating this. However, a data analysis project on the network of Wikipedia articles using this technique is ongoing.
 
 
 
@@ -39,5 +35,6 @@ We indeed did not introduce any natural graph experiments in this work. Our firs
 Private to AC
 ############
 
-The general consensus of the referees lean towards acceptance. Referees 1,3,6,7 agree that the model is novel, effective and potentially impactful. The only concerns come from Referees 8,9 who acknowledge their low confidence in their understanding of the paper main contributions. 
+The general consensus of the referees lean towards acceptance. Referees 1,3,6,7 agree that the model is novel, effective and potentially impactful. The only concerns come from Referees 8,9 who acknowledge their low confidence in their understanding of the paper main contributions.
 
+Please note that, to foster innovation, we are going to publish the code used to produce our results once the paper is published.
