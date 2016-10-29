@@ -1,0 +1,865 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"><title>
+	Reviews For Paper
+</title>
+<style>
+body
+{
+	font-family:verdana,arial,helvetica;
+}
+#header
+{
+    width: 100%;
+    font-size: small;
+    background-color:#F7F7F7;
+}
+.headerSeparator
+{
+    background-color: #105586;
+}
+.printThemeText
+{
+    font-size:small;
+}
+.printThemeTable td
+{
+    vertical-align:top;
+}
+.printThemeGrid th
+{
+    color:white;
+    background:#5D7B9D;
+    font-weight:bold;
+}
+.printThemeGrid
+{
+    border-collapse:collapse;
+}
+.printThemeGrid td, .printThemeGrid th
+{
+    border:solid 1px #D6D3CE;
+    padding:4px 4px 4px 4px;
+}
+.printThemeGrid .row
+{ 
+    background-color:#F7F6F3;
+    color:#333333;
+    vertical-align:top;
+}
+.printThemeGrid .altrow
+{ 
+    background-color:White;
+    color:#284775;
+    vertical-align:top;
+}
+.cellprompt
+{
+	font-weight:bold;
+	white-space:nowrap;
+    width:100px;	
+}
+.paperHeader
+{
+    background-color:#dee3e7;
+    margin:5px 5px 15px 0px;
+    width:99%;
+    font-family:Verdana;
+    font-size:medium;
+    font-weight:bold;
+}
+.sectionHeader
+{
+    background-color:#dee3e7;
+    padding:5px 5px 5px 0px;
+    width:99%;
+    text-decoration:underline;
+    font-family:Verdana;
+    font-size:small;
+    font-weight:bold;
+}
+.underlineheader
+{
+    text-decoration:underline;
+    font-weight:bold;
+    padding:5px 0px;
+}
+.response
+{
+    padding:5px 0px;
+}
+.reviewerlabel
+{
+    padding-right:20px;
+}
+.pageTitle
+{
+    background-color:#dee3e7;
+    padding:5px 5px 5px 5px;
+    margin-top:10px;
+    width:99%;
+    font-family:Verdana;
+    font-size:medium;
+    font-weight:bold;
+}
+.submissionDetailsView
+{
+}
+.submissionDetailsView tr
+{
+    vertical-align:top;
+}
+.submissionDetailsView td.prompt
+{
+    font-weight:bold;
+}
+.submissionDetailsView tr.sectionSeparator
+{
+
+}
+.submissionDetailsView tr.sectionSeparator td
+{
+    background-color:#dee3e7;
+    padding:5px 5px 5px 5px;
+    font-family:Verdana;
+    font-size:small;
+    font-weight:bold;
+    color:Navy;
+}
+/*CSS Grid View General Definitions*/
+.CssGridView
+{
+    font-size:small; 
+}
+
+.CssGridView td, .CssGridView th
+{
+    padding:4px 4px 4px 4px;
+}
+
+/*CSS Compact Grid View General Definitions*/
+.CssGridViewCompact img
+{
+    border-style:none;
+    border-width:0px;
+}
+
+.CssGridViewCompact
+{
+    font-size:1em;
+    border-style:solid;
+    border-color:#D6D3CE;
+    border-width:1px;
+}
+
+.CssGridViewCompact .hrow a
+{
+    font-size:1em;
+}
+
+.CssGridViewCompact .row a, .CssGridViewCompact .altrow a
+{
+    font-size:0.8em;
+}
+
+.CssGridViewCompact .row .normal a, .CssGridViewCompact .row .normal, .CssGridViewCompact .altrow .normal a, .CssGridViewCompact .altrow .normal
+{
+    font-size:1em;
+}
+
+/*CSS Grid View Header Styles*/
+.CssGridView .hrow, .CssGridViewCompact .hrow
+{ 
+    background-color:#5D7B9D;
+    font-weight:bold;
+    color:White;
+}
+
+
+.CssGridViewCompact .hrow td
+{ 
+    border-bottom-width:0px;
+}
+
+.CssGridViewCompact .hrow th
+{ 
+    border-top-width:0px;
+    font-size:0.8em;
+    vertical-align:top;
+    border-left-width:0px;
+    border-right-width:0px;
+}
+
+.CssGridViewCompact .smaller
+{
+    font-size:0.8em;
+}
+
+/*CSS Grid View Row Styles*/
+.CssGridViewCompact .row, .CssGridViewCompact .altrow
+{
+    border-top-style:solid;
+    border-top-color:#D6D3CE;
+    border-top-width:1px;
+    border-bottom-style:solid;
+    border-bottom-color:#D6D3CE;
+    border-bottom-width:1px;
+}
+
+/*CSS Grid View Header Styles*/
+.CssGridViewCompact .hrow .leftborder, .CssGridViewCompact .row .leftborder, .CssGridViewCompact .altrow .leftborder
+{
+    border-left-width:1px;
+    border-left-color:#D6D3CE;
+    border-left-style:solid;
+}
+
+.CssGridViewCompact .hrow .rightborder, .CssGridViewCompact .row .rightborder, .CssGridViewCompact .altrow .rightborder
+{
+    border-right-width:1px;
+    border-right-color:#D6D3CE;
+    border-right-style:solid;
+}
+
+.CssGridView .hrow a, .CssGridViewCompact .hrow a
+{ 
+    color:White;
+}
+ 
+.CssGridView .row, .CssGridViewCompact .row
+{ 
+    background-color:#F7F6F3;
+    color:#333333;
+    vertical-align:top;
+}
+
+.CssGridView .altrow, .CssGridViewCompact .altrow
+{ 
+    vertical-align:top;
+}
+
+.CssGridViewCompact .row td
+{ 
+    border-left-width:0px;
+    border-right-width:0px;
+}
+ 
+.CssGridViewCompact .altrow
+{ 
+    background-color:White;
+    color:#284775;
+    vertical-align:top;
+}
+
+.CssGridView .altrow tr, .CssGridViewCompact .altrow tr, .CssGridView .row tr, .CssGridViewCompact .row tr
+{ 
+    vertical-align:top;
+}
+</style>
+<style type="text/css">:root #lca-cookie-notification,
+:root .euCookie.mscom-alertitem,
+:root #header + #content > #left > #rlblock_left,
+:root #content > #right > .dose > .dosesingle,
+:root #content > #center > .dose > .dosesingle
+{display:none !important;}</style></head>
+<body>
+<form name="aspnetForm" method="post" action="./ViewReviewsForPaper.aspx?paperId=1911" id="aspnetForm">
+<div>
+<input name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKMTAxNDM4ODU3Ng9kFgJmD2QWAgIDD2QWAmYPZBYCAgUPDxYCHgdWaXNpYmxlZ2QWBgIBD2QWAmYPZBYCZg9kFgQCAQ9kFgICAQ9kFgJmDw8WAh4EVGV4dAUEMTkxMWRkAgIPZBYCAgEPZBYCZg8PFgIfAQVOQ29udm9sdXRpb25hbCBOZXVyYWwgTmV0d29ya3Mgb24gR3JhcGhzIHdpdGggRmFzdCBMb2NhbGl6ZWQgU3BlY3RyYWwgRmlsdGVyaW5nZGQCAw8PFgIfAGhkZAIFDxYCHgtfIUl0ZW1Db3VudAIGFgxmD2QWBgIDD2QWAmYPFQETQXNzaWduZWRfUmV2aWV3ZXJfMWQCBw88KwARAwAPFgQeC18hRGF0YUJvdW5kZx8CAghkARAWABYAFgAMFCsAABYCZg9kFhICAQ9kFgRmDw8WAh8BBT5TdW1tYXJ5OiBQcm92aWRlIGEgYnJpZWYgc3VtbWFyeSBvZiB0aGUgY29udGVudHMgb2YgdGhlIHBhcGVyLmRkAgEPZBYCZg8VAeoCVGhpcyBwYXBlciBwcmVzZW50cyBhbiBleHRlbnNpb24gb2YgQ29udm9sdXRpb25hbCBOZXVyYWwgTmV0d29ya3MgdG8gaXJyZWd1bGFyIGdyaWRzIGluIGFyYml0cmFyeSBkaW1lbnNpb24sIHVzaW5nIHRoZSBwcm9wZXJ0aWVzIG9mIHRoZSBHcmFwaCBMYXBsYWNpYW4gU3BlY3RydW0uIFRoZSBwcm9wb3NlZCBhcmNoaXRlY3R1cmUgb3ZlcmNvbWVzIGEgY29tcHV0YXRpb25hbCBidXJkZW4gb2YgcHJldmlvdXMgc3BlY3RyYWwgbWV0aG9kcywgbGVhZGluZyB0byBlZmZpY2llbnQgdHJhaW5pbmcgYW5kIGV2YWx1YXRpb24sIGFzIGRlbW9uc3RyYXRlZCBvbiBpbWFnZSBjbGFzc2lmaWNhdGlvbiBhbmQgdGV4dCBjYXRlZ29yaXphdGlvbi5kAgIPZBYEZg8PFgIfAQX+AUZhdGFsIGZsYXdzOiBEb2VzIHRoZSBwYXBlciBoYXZlIGEgJnF1b3Q7ZmF0YWwgZmxhdyZxdW90OyBtYWtpbmcgaXQgdW5maXQgZm9yIHB1YmxpY2F0aW9uLCByZWdhcmRsZXNzIG9mIG90aGVyIGNyaXRlcmlhIChtYXkgaW5jbHVkZSBvdXQgb2Ygc2NvcGUsIGRvdWJsZSBwdWJsaWNhdGlvbiwgcGxhZ2lhcmlzbSwgd3JvbmcgcHJvb2ZzLCBmbGF3ZWQgZXhwZXJpbWVudHMpPyBVc2UgdGhlIHRleHQgYm94IHRvIGp1c3RpZnkgeW91ciBhbnN3ZXIuZGQCAQ9kFgJmDxUBHE5vIChub3QgYXMgZmFyIGFzIEkgY2FuIHNlZSlkAgMPZBYEZg8PFgIfAQVtVGVjaG5pY2FsIHF1YWxpdHk6IHdoZXRoZXIgZXhwZXJpbWVudGFsIG1ldGhvZHMgYXJlIGFwcHJvcHJpYXRlLCBwcm9vZnMgYXJlIHNvdW5kLCByZXN1bHRzIGFyZSB3ZWxsIGFuYWx5emVkLmRkAgEPZBYCZg8VASQzLVBvc3RlciBsZXZlbCAodG9wIDMwJSBzdWJtaXNzaW9ucylkAgQPZBYEZg8PFgIfAQVeTm92ZWx0eS9vcmlnaW5hbGl0eTogaW4gYW55IGFzcGVjdCBvZiB0aGUgd29yaywgdGhlb3J5LCBhbGdvcml0aG0sIGFwcGxpY2F0aW9ucywgZXhwZXJpbWVudGFsLmRkAgEPZBYCZg8VATEzLVBvc3RlciBsZXZlbCAoc29tZSBub3RhYmxlIG5vdmVsIGNvbnRyaWJ1dGlvbnMpZAIFD2QWBGYPDxYCHwEFvwFQb3RlbnRpYWwgaW1wYWN0IG9yIHVzZWZ1bG5lc3M6IGNvdWxkIGJlIHNvY2lldGFsLCBhY2FkZW1pYywgb3IgcHJhY3RpY2FsIGFuZCBzaG91bGQgYmUgbGFzdGluZyBpbiB0aW1lLCBhZmZlY3RpbmcgYSBsYXJnZSBudW1iZXIgb2YgcGVvcGxlIGFuZC9vciBicmlkZ2UgdGhlIGdhcCBiZXR3ZWVuIG11bHRpcGxlIGRpc2NpcGxpbmVzLmRkAgEPZBYCZg8VASAzLVBvc3RlciBsZXZlbCAobG9va3MgcHJvbWlzaW5nKWQCBg9kFgRmDw8WAh8BBWlDbGFyaXR5IGFuZCBwcmVzZW50YXRpb246IGV4cGxhbmF0aW9ucywgbGFuZ3VhZ2UgYW5kIGdyYW1tYXIsIGZpZ3VyZXMsIGdyYXBocywgdGFibGVzLCBwcm9wZXIgcmVmZXJlbmNlcy5kZAIBD2QWAmYPFQEcMy1Qb3N0ZXIgbGV2ZWwgKGdvb2QgZW5vdWdoKWQCBw9kFgRmDw8WAh8BBcYBUXVhbGl0YXRpdmUgYXNzZXNzbWVudDogUHJvdmlkZSBjb25zdHJ1Y3RpdmUgZmVlZGJhY2sgdG8gdGhlIGF1dGhvcnM7IGp1c3RpZnkgYW5kIGNvbXBsZW1lbnQgeW91ciByYXRpbmdzIGFib3ZlLiBUaGlzIGlzIG91ciBNT1NUIElNUE9SVEFOVCBRVUVTVElPTiwgd2UgbmVlZCB0byBnZXQgZ29vZCBhcmd1bWVudHMgZm9yIG91ciBkZWNpc2lvbnMhZGQCAQ9kFgJmDxUB2xlUaGlzIHBhcGVyIGJ1aWxkcyB1cG9uIHByZXZpb3VzIHdvcmsgdG8gcHJvcG9zZSBhIGNvbXB1dGF0aW9uYWxseSBlZmZpY2llbnQgbW9kZWwgdGhhdCBleHRlbmRzIGNvbnZvbHV0aW9ucyB0byBpcnJlZ3VsYXIgZ3JhcGhzLiBUaGUgbWFqb3IgaW5ub3ZhdGlvbiBpcyB0byBleHByZXNzIGdyYXBoIGZpbHRlcmluZyB3aXRoIGEgY29tcGFjdGx5IHN1cHBvcnRlZCBrZXJuZWxzIGFzIGxpbmVhciBjb21iaW5hdGlvbnMgb2Ygb3JkZXIgSyBwb2x5bm9taWFscyBvZiB0aGUgZ3JhcGggTGFwbGFjaWFuLCB0aHVzIG92ZXJjb21pbmcgdGhlIGJ1cmRlbiBvZiBjb21wdXRpbmcgdGhlIExhcGxhY2lhbiBlaWdlbmRlY29tcG9zaXRpb24sIHdoaWNoIGlzIG5lZWRlZCBpbiBib3RoIGZvcndhcmQgYW5kIGJhY2t3YXJkIHBhc3NlcyBpbiB0aGUgcHJldmlvdXMgc3BlY3RyYWwgY29uc3RydWN0aW9uLiA8YnIgLz5Nb3Jlb3ZlciwgdGhlIENoZWJ5c2hldiByZWN1cnJlbmNlIGltcGxpZXMgdGhhdCBvcmRlciBLIGZpbHRlcnMgY2FuIGJlIGNvbXB1dGVkIHdpdGggTyhLIEUpIG9wZXJhdGlvbnMsIHdoZXJlIEUgaXMgdGhlIG51bWJlciBvZiBlZGdlcyBhbmQgY29udHJvbHMgdGhlIGNvc3Qgb2YgY29tcHV0aW5nIEwgeCAoTCA9IExhcGxhY2lhbiBvcGVyYXRvciBvbiB0aGUgZ3JhcGgpLiBUaGlzIGFwcGVhcnMgdG8gYmUgYSB2ZXJ5IGNsZWFuLCBlZmZpY2llbnQgcGFyYW1ldHJpemF0aW9uIHRoYXQgdHJhbnNsYXRlcyBpbnRvIGVmZmljaWVudCBsZWFybmluZyBhbmQgZXZhbHVhdGlvbiBhbmQgb3ZlcmNvbWVzIGFuIGltcG9ydGFudCBjb21wdXRhdGlvbmFsIGxpbWl0YXRpb24uPGJyIC8+PGJyIC8+SSBoYXZlIGEgY291cGxlIG9mIGNvbW1lbnRzIHRoYXQgSSB3b3VsZCBsaWtlIHRoZSBhdXRob3JzIHRvIGRldmVsb3AgZHVyaW5nIHRoZSByZWJ1dHRhbCBwaGFzZTo8YnIgLz4gPGJyIC8+LSBBIHByZXZpb3VzIG1vZGVsIHRoYXQgb3BlcmF0ZXMgaW4gZ2VuZXJhbCBncmFwaHMgaXMgdGhlIHNvLWNhbGxlZCBHcmFwaCBOZXVyYWwgTmV0d29yayAoR05OKSBbU2NhcnNlbGxpIGV0IGFsLiwnMDldLiBUaGUgYmFzaWMgbW9kZWwgY2FuIGJlIHNlZW4gYXMgZm9sbG93cy4gR2l2ZW4gYSBnZW5lcmljIHZlY3Rvci12YWx1ZWQgZnVuY3Rpb24geCBvbiBhIGdyYXBoIEcsIHg6IEctLT4gUl5kLCB3ZSBjb21wdXRlIGl0cyBsaW5lYXIgZGlmZnVzaW9uIFd4KGkpID0gXHN1bV97aiBuZWlnaGJvciBvZiBpfSB3X3tpLGp9IHgoaikgYW5kIGl0cyBub3JtYWxpemVkIHNjYWxpbmcgRHgoaSkgPSAoc3VtX3tqIG5laWdoYm9yIG9mIGl9IHdfe2ksan0pIHgoaSkuIFRoZW4gYSAiR05OIiBsYXllciB0cmFuc2Zvcm1zIHggaW50byBQaGkoeCk6IEctLT5SXntkJ30gdmlhIGEgZ2VuZXJpYyBwb2ludC13aXNlIG9wZXJhdG9yIGNvbWJpbmluZyB4IGFuZCBXeDogUGhpKHgpKGkpID0gUHNpKCBEeChpKSwgV3goaSkpLCB3aXRoIFBzaSBiZWluZyBhIGdlbmVyaWMgcG9pbnR3aXNlIG9wZXJhdG9yOiBQc2k6IFJeZCB4IFJeZCAtLT4gUl57ZCd9LiBGb3IgZXhhbXBsZSwgaWYgUHNpKHgseSkgPSB4IC0geSB3ZSBvYnRhaW4gdGhlIEdyYXBoIExhcGxhY2lhbiBQaGkoeCkgPSBMKHgpLCBhbmQgdGh1cyB0aGUgb3JkZXItSyBncmFwaCBmaWx0ZXJpbmcgY2FuIGJlIHJlYWxpemVkIHdpdGggYSBLLWxheWVyIEdOTiB1c2luZyBsaW5lYXIgcG9pbnR3aXNlIG9wZXJhdG9ycyBQc2kuIFRoZSBtb2RlbCB3aGljaCBjb21wdXRlcyBmaWx0ZXJzIGFzIGxpbmVhciBjb21iaW5hdGlvbnMgb2YgcG93ZXJzIG9mIGdyYXBoIGxhcGxhY2lhbnMgY2FuIHRodXMgYmUgc2VlbiBhcyBhIHNwZWNpYWwgY2FzZSBvZiB0aGUgcHJldmlvdXMgbW9kZWwsIHdoaWNoIGludGVybGVhdmVzIGxpbmVhciBsYXllcnMgUHNpIChyZXNwb25zaWJsZSBvZiBjb21wdXRpbmcgdGhlIHBvd2VycyBvZiB0aGUgbGFwbGFjaWFuKSB3aXRoIG5vbmxpbmVhciBsYXllcnMuIEl0IHdvdWxkIGJlIGludGVyZXN0aW5nIGZvciB0aGUgYXV0aG9ycyB0byBjb21tZW50IG9uIHRoZSBwcm9zL2NvbnMgb2YgdGhlaXIgbW9kZWwgd2l0aCByZXNwZWN0IHRvIHRoZSBnZW5lcmFsIEdOTi4gPGJyIC8+PGJyIC8+LSBUaGUgbnVtZXJpY2FsIGV4cGVyaW1lbnRzIGluIE1OSVNUIHNob3cgZ29vZCBwZXJmb3JtYW5jZSBvZiB0aGUgZ3JhcGggQ05OLCBidXQgYWxzbyBhIGdhcCB3aXRoIHJlc3BlY3QgdG8gdGhlIGNsYXNzaWMgQ05OIGFyY2hpdGVjdHVyZXMuIE9uZSBjYW4gdGh1cyBhc2sgd2hldGhlciB0aGlzIGdhcCBpcyBzaW1wbHkgZHVlIHRvIG1vZGVsIHR1bmluZyBvciBkdWUgdG8gc29tZSBpbnRyaW5zaWMgbGltaXRhdGlvbnMgb2YgZ3JhcGggQ05OcyB3aGVuIHVzZWQgb24gcmVndWxhciwgbG93LWRpbWVuc2lvbmFsIGdyaWRzLiBUaGUgZmlsdGVycyBsZWFybnQgYnkgdGhlIHByb3Bvc2VkIGdyYXBoIENOTiBhcmUgcG9seW5vbWlhbHMgb2YgdGhlIEdyYXBoIExhcGxhY2lhbiwgYW5kIHRoZXJlZm9yZSBhcmUgcm90YXRpb25hbGx5IGludmFyaWFudCwgd2hlcmVhcyBpbiB0aGUgZ3JpZCB0aGUgRXVjbGlkZWFuIGVtYmVkZGluZyBhbGxvd3MgZm9yIGRpcmVjdGlvbmFsIGZpbHRlcnMsIHdoaWNoIGJyaW5nIGEgY3J1Y2lhbCBhZHZhbnRhZ2UgdG8gY2FwdHVyZSBnZW9tZXRyaWMgc3RydWN0dXJlcyBpbiBpbWFnZXMuIElzIHRoaXMgYW5hbHlzaXMgY29ycmVjdD8gSW4gb3RoZXIgd29yZHMsIHRoZXJlIHNlZW1zIHRvIGJlIGEgZnVuZGFtZW50YWwgcHJpY2UgdG8gcGF5IGZvciBnaXZpbmcgdXAgdGhlIGtub3dsZWRnZSBvZiB0aGUgZ3JpZCwgaXRzIHRyYW5zbGF0aW9uIGludmFyaWFuY2UgYW5kIHRoZSBub3Rpb24gb2Ygb3JpZW50YXRpb24uIE9idmlvdXNseSB0aGlzIG9ubHkgY29uY2VybnMgdGhlIGV4YW1wbGVzIHdoZXJlIHRoZSBncmlkIGlzIGF2YWlsYWJsZS4gPGJyIC8+PGJyIC8+T3ZlcmFsbCwgYW5kIGRlc3BpdGUgbXkgcHJldmlvdXMgdHdvIGNvbW1lbnRzLCB0aGlzIHBhcGVyIGJyaW5ncyBhbiBpbXBvcnRhbnQgaW1wcm92ZW1lbnQgdG8gdGhlIHRhYmxlLCB0aGF0IGNhbiBleHRlbmQgdGhlIHVzZSBvZiBkYXRhIGRyaXZlbiwgZW5kLXRvLWVuZCBsZWFybmluZyB3aXRoIGV4Y2VsbGVudCBsZWFybmluZyBjb21wbGV4aXR5IHRvIG90aGVyIGRhdGFzZXRzIGJleW9uZCBpbWFnZXMsIHNwZWVjaCBhbmQgdGV4dC4gSSBob3BlIHRoZSByZWJ1dHRhbCBhZGRyZXNzZXMgbXkgcHJldmlvdXMgY29tbWVudHMgdGhvdWdoISA8YnIgLz48YnIgLz48YnIgLz5kAggPZBYEZg8PFgIfAQUqUmV2aWV3ZXIgY29uZmlkZW5jZSByZWdhcmRpbmcgdGhpcyByZXZpZXcuZGQCAQ9kFgJmDxUBTzMtRXhwZXJ0IChyZWFkIHRoZSBwYXBlciBpbiBkZXRhaWwsIGtub3cgdGhlIGFyZWEsIHF1aXRlIGNlcnRhaW4gb2YgbXkgb3BpbmlvbilkAgkPDxYCHwBoZGQCCA8VAQBkAgEPZBYGAgMPZBYCZg8VARNBc3NpZ25lZF9SZXZpZXdlcl8zZAIHDzwrABEDAA8WBB8DZx8CAghkARAWABYAFgAMFCsAABYCZg9kFhICAQ9kFgRmDw8WAh8BBT5TdW1tYXJ5OiBQcm92aWRlIGEgYnJpZWYgc3VtbWFyeSBvZiB0aGUgY29udGVudHMgb2YgdGhlIHBhcGVyLmRkAgEPZBYCZg8VAYYEVGhpcyBwYXBlciBwcm9wb3NlcyBhIHNvcGhpc3RpY2F0ZWQgYXBwcm9hY2ggdG8gaW1wbGVtZW50aW5nIGNvbnZvbHV0aW9uYWwgZmlsdGVycyBvbiBub24tRXVjbGlkZWFuIGRvbWFpbnMsIGxpa2UgZ3JhcGhzLCBiYXNlZCBvbiBleHBsb2l0aW5nIGRlZXAgcHJvcGVydGllcyBvZiB0aGUgTGFwbGFjaWFuIG9wZXJhdG9yLiBUaGUgd29yayBpcyBiYXNlZCBvbiBleHBsb2l0aW5nIHRoZSBpbnNpZ2h0cyBpbiBhIG51bWJlciBvZiBkaWZmZXJlbnQgYXJlYXMsIGluY2x1ZGluZyBjb21wdXRhdGlvbmFsIGhhcm1vbmljIGFuYWx5c2lzLCBzaWduYWwgcHJvY2Vzc2luZywgbnVtZXJpY2FsIGFuYWx5c2lzIGFuZCBtYWNoaW5lIGxlYXJuaW5nLiBBIHZlcnkgZWZmaWNpZW50IHByb2NlZHVyZSBmb3IgY29tcHV0aW5nIGNvbnZvbHV0aW9uYWwgZmlsdGVycyBvdmVyIGdyYXBocyBpcyBwcm9wb3NlZCBhbmQgc29tZSBzaW1wbGUgZXhwZXJpbWVudHMgYXJlIGdpdmVuIHRvIGlsbHVzdHJhdGUgdGhlIGFwcHJvYWNoLiBkAgIPZBYEZg8PFgIfAQX+AUZhdGFsIGZsYXdzOiBEb2VzIHRoZSBwYXBlciBoYXZlIGEgJnF1b3Q7ZmF0YWwgZmxhdyZxdW90OyBtYWtpbmcgaXQgdW5maXQgZm9yIHB1YmxpY2F0aW9uLCByZWdhcmRsZXNzIG9mIG90aGVyIGNyaXRlcmlhIChtYXkgaW5jbHVkZSBvdXQgb2Ygc2NvcGUsIGRvdWJsZSBwdWJsaWNhdGlvbiwgcGxhZ2lhcmlzbSwgd3JvbmcgcHJvb2ZzLCBmbGF3ZWQgZXhwZXJpbWVudHMpPyBVc2UgdGhlIHRleHQgYm94IHRvIGp1c3RpZnkgeW91ciBhbnN3ZXIuZGQCAQ9kFgJmDxUBHE5vIChub3QgYXMgZmFyIGFzIEkgY2FuIHNlZSlkAgMPZBYEZg8PFgIfAQVtVGVjaG5pY2FsIHF1YWxpdHk6IHdoZXRoZXIgZXhwZXJpbWVudGFsIG1ldGhvZHMgYXJlIGFwcHJvcHJpYXRlLCBwcm9vZnMgYXJlIHNvdW5kLCByZXN1bHRzIGFyZSB3ZWxsIGFuYWx5emVkLmRkAgEPZBYCZg8VASQzLVBvc3RlciBsZXZlbCAodG9wIDMwJSBzdWJtaXNzaW9ucylkAgQPZBYEZg8PFgIfAQVeTm92ZWx0eS9vcmlnaW5hbGl0eTogaW4gYW55IGFzcGVjdCBvZiB0aGUgd29yaywgdGhlb3J5LCBhbGdvcml0aG0sIGFwcGxpY2F0aW9ucywgZXhwZXJpbWVudGFsLmRkAgEPZBYCZg8VATE0LU9yYWwgbGV2ZWwgKHNpZ25pZmljYW50bHkgbm92ZWwgYW5kIGltcHJlc3NpdmUpZAIFD2QWBGYPDxYCHwEFvwFQb3RlbnRpYWwgaW1wYWN0IG9yIHVzZWZ1bG5lc3M6IGNvdWxkIGJlIHNvY2lldGFsLCBhY2FkZW1pYywgb3IgcHJhY3RpY2FsIGFuZCBzaG91bGQgYmUgbGFzdGluZyBpbiB0aW1lLCBhZmZlY3RpbmcgYSBsYXJnZSBudW1iZXIgb2YgcGVvcGxlIGFuZC9vciBicmlkZ2UgdGhlIGdhcCBiZXR3ZWVuIG11bHRpcGxlIGRpc2NpcGxpbmVzLmRkAgEPZBYCZg8VASw0LU9yYWwgbGV2ZWwgKG1hbnkgcGVvcGxlIHdpbGwgcGljayB0aGlzIHVwKWQCBg9kFgRmDw8WAh8BBWlDbGFyaXR5IGFuZCBwcmVzZW50YXRpb246IGV4cGxhbmF0aW9ucywgbGFuZ3VhZ2UgYW5kIGdyYW1tYXIsIGZpZ3VyZXMsIGdyYXBocywgdGFibGVzLCBwcm9wZXIgcmVmZXJlbmNlcy5kZAIBD2QWAmYPFQEpNC1PcmFsIGxldmVsIChleGNlbGxlbnQgaW4gZXZlcnkgcmVzcGVjdClkAgcPZBYEZg8PFgIfAQXGAVF1YWxpdGF0aXZlIGFzc2Vzc21lbnQ6IFByb3ZpZGUgY29uc3RydWN0aXZlIGZlZWRiYWNrIHRvIHRoZSBhdXRob3JzOyBqdXN0aWZ5IGFuZCBjb21wbGVtZW50IHlvdXIgcmF0aW5ncyBhYm92ZS4gVGhpcyBpcyBvdXIgTU9TVCBJTVBPUlRBTlQgUVVFU1RJT04sIHdlIG5lZWQgdG8gZ2V0IGdvb2QgYXJndW1lbnRzIGZvciBvdXIgZGVjaXNpb25zIWRkAgEPZBYCZg8VAf0EVGhpcyBpcyBhIGhpZ2hseSBwcm9taXNpbmcgcGFwZXIsIGFzIGl0IHNob3dzIGhvdyB0byBlZmZpY2llbnRseSBnZW5lcmFsaXplIHRoZSBjb252b2x1dGlvbmFsIG9wZXJhdG9yIGZyb20gcmVjdGFuZ3VsYXIgKDJEKSBkb21haW5zIHRvIHRob3NlIHdpdGggaXJyZWd1bGFyIGdlb21ldHJ5IChncmFwaHMsIHNvY2lhbCBuZXR3b3JrcyBldGMuKS4gVGhlIGFwcHJvYWNoIGlzIG1hdGhlbWF0aWNhbGx5IHNvcGhpc3RpY2F0ZWQsIGJ1aWxkaW5nIG9uIHJlY2VudCBpbnNpZ2h0cyBpbiBhIG51bWJlciBvZiBkaWZmZXJlbnQgYXJlYXMuIFRoZSBwYXBlciBpcyB3ZWxsIHdyaXR0ZW4gZ2l2ZW4gdGhlIHRlY2huaWNhbCBuYXR1cmUgb2YgdGhlIG1hdGVyaWFsLCBhbmQgdGhlIHBvdGVudGlhbCBmb3Igc2lnbmlmaWNhbnQgaW1wYWN0IGlzIGhpZ2guIFRoZSByZXN1bHRzIGFyZSBzb21ld2hhdCBsaW1pdGVkLCBhbmQgdGhlIGltcHJvdmVtZW50IGluIFRhYmxlIDQgZXRjLiBpcyBub3QgaHVnZS4gQnV0IEZpZ3VyZSAyIHNob3dzIHRoZSBoaWdoIGVmZmljaWVuY3kgaW4gY29tcHV0aW5nIGNvbnZvbHV0aW9uYWwgZmlsdGVycyB1c2luZyBzb3BoaXN0aWNhdGVkIENoZWJ5c2hldiBwb2x5bm9taWFsIGFwcHJveGltYXRpb24uIGQCCA9kFgRmDw8WAh8BBSpSZXZpZXdlciBjb25maWRlbmNlIHJlZ2FyZGluZyB0aGlzIHJldmlldy5kZAIBD2QWAmYPFQFPMy1FeHBlcnQgKHJlYWQgdGhlIHBhcGVyIGluIGRldGFpbCwga25vdyB0aGUgYXJlYSwgcXVpdGUgY2VydGFpbiBvZiBteSBvcGluaW9uKWQCCQ8PFgIfAGhkZAIIDxUBAGQCAg9kFgYCAw9kFgJmDxUBE0Fzc2lnbmVkX1Jldmlld2VyXzZkAgcPPCsAEQMADxYEHwNnHwICCGQBEBYAFgAWAAwUKwAAFgJmD2QWEgIBD2QWBGYPDxYCHwEFPlN1bW1hcnk6IFByb3ZpZGUgYSBicmllZiBzdW1tYXJ5IG9mIHRoZSBjb250ZW50cyBvZiB0aGUgcGFwZXIuZGQCAQ9kFgJmDxUBtgFUaGlzIHBhcGVyIGludHJvZHVjZXMgYSBncmFwaCBzaWduYWwgcHJvY2Vzc2luZyBiYXNlZCBjb252b2x1dGlvbmFsIG5ldXJhbCBuZXR3b3JrIGZvcm11bGF0aW9uIG9uIGdlbmVyYWxpemVkIGdyYXBocy4gRXhwZXJpbWVudGFsIHJlc3VsdHMgYXJlIHByZXNlbnRlZCBvbiBNTklTVCBhbmQgMjBORVdTIGRhdGFzZXRzLmQCAg9kFgRmDw8WAh8BBf4BRmF0YWwgZmxhd3M6IERvZXMgdGhlIHBhcGVyIGhhdmUgYSAmcXVvdDtmYXRhbCBmbGF3JnF1b3Q7IG1ha2luZyBpdCB1bmZpdCBmb3IgcHVibGljYXRpb24sIHJlZ2FyZGxlc3Mgb2Ygb3RoZXIgY3JpdGVyaWEgKG1heSBpbmNsdWRlIG91dCBvZiBzY29wZSwgZG91YmxlIHB1YmxpY2F0aW9uLCBwbGFnaWFyaXNtLCB3cm9uZyBwcm9vZnMsIGZsYXdlZCBleHBlcmltZW50cyk/IFVzZSB0aGUgdGV4dCBib3ggdG8ganVzdGlmeSB5b3VyIGFuc3dlci5kZAIBD2QWAmYPFQEcTm8gKG5vdCBhcyBmYXIgYXMgSSBjYW4gc2VlKWQCAw9kFgRmDw8WAh8BBW1UZWNobmljYWwgcXVhbGl0eTogd2hldGhlciBleHBlcmltZW50YWwgbWV0aG9kcyBhcmUgYXBwcm9wcmlhdGUsIHByb29mcyBhcmUgc291bmQsIHJlc3VsdHMgYXJlIHdlbGwgYW5hbHl6ZWQuZGQCAQ9kFgJmDxUBJDMtUG9zdGVyIGxldmVsICh0b3AgMzAlIHN1Ym1pc3Npb25zKWQCBA9kFgRmDw8WAh8BBV5Ob3ZlbHR5L29yaWdpbmFsaXR5OiBpbiBhbnkgYXNwZWN0IG9mIHRoZSB3b3JrLCB0aGVvcnksIGFsZ29yaXRobSwgYXBwbGljYXRpb25zLCBleHBlcmltZW50YWwuZGQCAQ9kFgJmDxUBMTMtUG9zdGVyIGxldmVsIChzb21lIG5vdGFibGUgbm92ZWwgY29udHJpYnV0aW9ucylkAgUPZBYEZg8PFgIfAQW/AVBvdGVudGlhbCBpbXBhY3Qgb3IgdXNlZnVsbmVzczogY291bGQgYmUgc29jaWV0YWwsIGFjYWRlbWljLCBvciBwcmFjdGljYWwgYW5kIHNob3VsZCBiZSBsYXN0aW5nIGluIHRpbWUsIGFmZmVjdGluZyBhIGxhcmdlIG51bWJlciBvZiBwZW9wbGUgYW5kL29yIGJyaWRnZSB0aGUgZ2FwIGJldHdlZW4gbXVsdGlwbGUgZGlzY2lwbGluZXMuZGQCAQ9kFgJmDxUBIDMtUG9zdGVyIGxldmVsIChsb29rcyBwcm9taXNpbmcpZAIGD2QWBGYPDxYCHwEFaUNsYXJpdHkgYW5kIHByZXNlbnRhdGlvbjogZXhwbGFuYXRpb25zLCBsYW5ndWFnZSBhbmQgZ3JhbW1hciwgZmlndXJlcywgZ3JhcGhzLCB0YWJsZXMsIHByb3BlciByZWZlcmVuY2VzLmRkAgEPZBYCZg8VASk0LU9yYWwgbGV2ZWwgKGV4Y2VsbGVudCBpbiBldmVyeSByZXNwZWN0KWQCBw9kFgRmDw8WAh8BBcYBUXVhbGl0YXRpdmUgYXNzZXNzbWVudDogUHJvdmlkZSBjb25zdHJ1Y3RpdmUgZmVlZGJhY2sgdG8gdGhlIGF1dGhvcnM7IGp1c3RpZnkgYW5kIGNvbXBsZW1lbnQgeW91ciByYXRpbmdzIGFib3ZlLiBUaGlzIGlzIG91ciBNT1NUIElNUE9SVEFOVCBRVUVTVElPTiwgd2UgbmVlZCB0byBnZXQgZ29vZCBhcmd1bWVudHMgZm9yIG91ciBkZWNpc2lvbnMhZGQCAQ9kFgJmDxUB1wNHZW5lcmFsaXplZCBjb252b2x1dGlvbmFsIG5ldXJhbHMgbmV0cywgYXBwbGllZCB0byBhcmJpdHJhcnkgZ3JhcGggc3RydWN0dXJlIGFyZSBhIG5ldyBhbmQgdXBjb21pbmcgYXJlYSB3aXRoIG9ubHkgYSBmZXcgcmVjZW50IHdvcmtzLiBSZWdhcmRsZXNzIG9mIHRoZSBpbW1hdHVyaXR5IG9mIHRoZSBmaWVsZCwgdGhlIHByYWN0aWNhbCBhcHBsaWNhdGlvbnMgdGhhdCB3aWxsIGJlbmVmaXQgZnJvbSBzdWNoIGFwcHJvYWNoZXMgYXJlIHNpZ25pZmljYW50bHkgbWFpbiBzdHJlYW0gc3VjaCBhcyBzb2NpYWwgbmV0d29ya3MuIFRoaXMgd29yayBpcyBwcm92aWRpbmcgYSBmcmVzaCBsb29rIHdpdGggYSBuZXcgZm9ybXVsYXRpb24sIGFuZCBJIGJlbGlldmUgaXQgd2lsbCBjb250cmlidXRlIHRvIHRoZSBmaWVsZCBpbiB0ZXJtcyBvZiBib3RoIGFkdmFuY2luZyB0aGlzIGFyZWEgYW5kIHNwYXduaW5nIG5ldyBkaXNjdXNzaW9ucy5kAggPZBYEZg8PFgIfAQUqUmV2aWV3ZXIgY29uZmlkZW5jZSByZWdhcmRpbmcgdGhpcyByZXZpZXcuZGQCAQ9kFgJmDxUBPDItQ29uZmlkZW50IChyZWFkIGl0IGFsbDsgdW5kZXJzdG9vZCBpdCBhbGwgcmVhc29uYWJseSB3ZWxsKWQCCQ8PFgIfAGhkZAIIDxUBAGQCAw9kFgYCAw9kFgJmDxUBE0Fzc2lnbmVkX1Jldmlld2VyXzdkAgcPPCsAEQMADxYEHwNnHwICCGQBEBYAFgAWAAwUKwAAFgJmD2QWEgIBD2QWBGYPDxYCHwEFPlN1bW1hcnk6IFByb3ZpZGUgYSBicmllZiBzdW1tYXJ5IG9mIHRoZSBjb250ZW50cyBvZiB0aGUgcGFwZXIuZGQCAQ9kFgJmDxUBxgZUaGUgcGFwZXIgcHJlc2VudCBhbiBleHRlbnNpb24gb2YgdGhlIHBvcHVsYXIgQ29udm9sdXRpb25hbCBOZXVyYWwgTmV0d29ya3MgdG8gZ3JhcGhzLjxiciAvPldoYXQgbWFrZXMgdGhlIGV4dGVuc2lvbiBvZiBjbGFzc2ljYWwgQ05OIHRvIGdyYXBocyBub3QgdHJpdmlhbCBpcyB0aGUgY29udm9sdXRpb24gb3BlcmF0aW9uLCB3aGljaCBpcyB3ZWxsIGRlZmluZWQgb24gcmVndWxhciBncmlkcy48YnIgLz5UaGUgYXV0aG9ycyBwcm9wb3NlZCBhIHdheSB0byBleHRlbmQgdGhlIGNvbnZvbHV0aW9uIG9wZXJhdGlvbiBvZiBDTk5zIHRvIGdyYXBocyBieSB1c2luZyB0b29scyBmcm9tIFNpZ25hbCBQcm9jZXNzaW5nIG9uIEdyYXBocyBhbmQgZXh0ZW5kaW5nIHRoZSBwcmV2aW91cyB3b3JrIG9mIEhlbmFmZi1CcnVuYS1MZUN1bi48YnIgLz48YnIgLz5UaGUgYXV0aG9ycyB0ZXN0ZWQgdGhlaXIgYXJjaGl0ZWN0dXJlIG9uIHRoZSBjbGFzc2ljYWwgTU5JU1QgYW5kIG9uIDIwTkVXUy48YnIgLz5PbiBNTklTVCB0aGUgcmVzdWx0cyBzaG93ZWQgdGhhdCB0aGUgZ3JhcGgtQ05OIGFwcHJvYWNoZXMgY2xhc3NpY2FsIENOTiBwZXJmb3JtYW5jZSBpZiB0aGUgZ3JhcGggYXBwcm94aW1hdGUgdGhlIHJlZ3VsYXIgZ3JpZCBvZiBhbiBpbWFnZS4gPGJyIC8+T24gMjBORVdTIHRoZSByZXN1bHRzIHNob3dlZCB0aGF0LCBpbiB0aGUgY2FzZSB3aGVuIHRoZSBkYXRhIGRvZXMgbm90IGFsbG93IHRvIGFwcGx5IGNsYXNzaWNhbCBDTk5zLCB0aGUgY29udm9sdXRpb24gc3RlcCBvZiB0aGUgZ3JhcGgtQ05OIGltcHJvdmVzIG92ZXIgYSBub24tY29udm9sdXRpb25hbCBhcmNoaXRlY3R1cmUuZAICD2QWBGYPDxYCHwEF/gFGYXRhbCBmbGF3czogRG9lcyB0aGUgcGFwZXIgaGF2ZSBhICZxdW90O2ZhdGFsIGZsYXcmcXVvdDsgbWFraW5nIGl0IHVuZml0IGZvciBwdWJsaWNhdGlvbiwgcmVnYXJkbGVzcyBvZiBvdGhlciBjcml0ZXJpYSAobWF5IGluY2x1ZGUgb3V0IG9mIHNjb3BlLCBkb3VibGUgcHVibGljYXRpb24sIHBsYWdpYXJpc20sIHdyb25nIHByb29mcywgZmxhd2VkIGV4cGVyaW1lbnRzKT8gVXNlIHRoZSB0ZXh0IGJveCB0byBqdXN0aWZ5IHlvdXIgYW5zd2VyLmRkAgEPZBYCZg8VARxObyAobm90IGFzIGZhciBhcyBJIGNhbiBzZWUpZAIDD2QWBGYPDxYCHwEFbVRlY2huaWNhbCBxdWFsaXR5OiB3aGV0aGVyIGV4cGVyaW1lbnRhbCBtZXRob2RzIGFyZSBhcHByb3ByaWF0ZSwgcHJvb2ZzIGFyZSBzb3VuZCwgcmVzdWx0cyBhcmUgd2VsbCBhbmFseXplZC5kZAIBD2QWAmYPFQEkMy1Qb3N0ZXIgbGV2ZWwgKHRvcCAzMCUgc3VibWlzc2lvbnMpZAIED2QWBGYPDxYCHwEFXk5vdmVsdHkvb3JpZ2luYWxpdHk6IGluIGFueSBhc3BlY3Qgb2YgdGhlIHdvcmssIHRoZW9yeSwgYWxnb3JpdGhtLCBhcHBsaWNhdGlvbnMsIGV4cGVyaW1lbnRhbC5kZAIBD2QWAmYPFQExMy1Qb3N0ZXIgbGV2ZWwgKHNvbWUgbm90YWJsZSBub3ZlbCBjb250cmlidXRpb25zKWQCBQ9kFgRmDw8WAh8BBb8BUG90ZW50aWFsIGltcGFjdCBvciB1c2VmdWxuZXNzOiBjb3VsZCBiZSBzb2NpZXRhbCwgYWNhZGVtaWMsIG9yIHByYWN0aWNhbCBhbmQgc2hvdWxkIGJlIGxhc3RpbmcgaW4gdGltZSwgYWZmZWN0aW5nIGEgbGFyZ2UgbnVtYmVyIG9mIHBlb3BsZSBhbmQvb3IgYnJpZGdlIHRoZSBnYXAgYmV0d2VlbiBtdWx0aXBsZSBkaXNjaXBsaW5lcy5kZAIBD2QWAmYPFQEsNC1PcmFsIGxldmVsIChtYW55IHBlb3BsZSB3aWxsIHBpY2sgdGhpcyB1cClkAgYPZBYEZg8PFgIfAQVpQ2xhcml0eSBhbmQgcHJlc2VudGF0aW9uOiBleHBsYW5hdGlvbnMsIGxhbmd1YWdlIGFuZCBncmFtbWFyLCBmaWd1cmVzLCBncmFwaHMsIHRhYmxlcywgcHJvcGVyIHJlZmVyZW5jZXMuZGQCAQ9kFgJmDxUBHDMtUG9zdGVyIGxldmVsIChnb29kIGVub3VnaClkAgcPZBYEZg8PFgIfAQXGAVF1YWxpdGF0aXZlIGFzc2Vzc21lbnQ6IFByb3ZpZGUgY29uc3RydWN0aXZlIGZlZWRiYWNrIHRvIHRoZSBhdXRob3JzOyBqdXN0aWZ5IGFuZCBjb21wbGVtZW50IHlvdXIgcmF0aW5ncyBhYm92ZS4gVGhpcyBpcyBvdXIgTU9TVCBJTVBPUlRBTlQgUVVFU1RJT04sIHdlIG5lZWQgdG8gZ2V0IGdvb2QgYXJndW1lbnRzIGZvciBvdXIgZGVjaXNpb25zIWRkAgEPZBYCZg8VAcERSW4gbXkgb3BpbmlvbiB0aGlzIGlzIGEgZ29vZCB3b3JrLiBJdCBwdXNoZXMgZm9yd2FyZCB0aGUgcHJldmlvdXMgd29yayBvZiBIZW5hZmYtQnJ1bmEtTGVDdW4gb24gZXh0ZW5kaW5nIENOTnMgdG8gZ3JhcGhzIGFuZCBvdmVyY29tZXMgc29tZSBvZiB0aGUgbGltaXRhdGlvbnMgb2YgdGhlIHByZXZpb3VzIHdvcmsuIEluIHBhcnRpY3VsYXI6IDxiciAvPjEpIEl0IGRvZXMgbm90IHJlcXVpcmUgYW4gZWlnZW5kZWNvbXBvc2l0aW9uIG9mIHRoZSBncmFwaCBMYXBsYWNpYW4sIGNvbnRyYXJ5IHRvIHRoZSBwcmV2aW91cyBhcHByb2FjaCBieSBIZW5hZmYtQnJ1bmEtTGVDdW4uIFN1Y2ggZWlnZW5kZWNvbXBvc2l0aW9uIGJlY29tZXMgYSBsaW1pdGF0aW9uIHdoZW4gdGhlIGRhdGEgc2l6ZSBpbmNyZWFzZXMsIHNpbmNlIGl0cyBjb21wbGV4aXR5IGlzIGN1YmljIGluIHRoZSBudW1iZXIgb2Ygbm9kZXMuIDxiciAvPjIpIFRoZSBjb21wbGV4aXR5IG9mIGxlYXJuaW5nIHRoZSBjb252b2x1dGlvbmFsIGZpbHRlcnMgaXMgcmVkdWNlZCBmcm9tIHF1YWRyYXRpYyB0byBsaW5lYXIgaW4gdGhlIG51bWJlciBvZiBub2RlcyBieSByZXBsYWNpbmcgc3BsaW5lIGludGVycG9sYXRpb24gaW4gdGhlIGZyZXF1ZW5jeSBkb21haW4gd2l0aCBDaGVieXNoZXYgcG9seW5vbWlhbHMgYW5kIGV4cGxvaXRpbmcgdGhlIHByb3BlcnRpZXMgb2YgdGhlIGxhdHRlci48YnIgLz4zKSBUaGUgbWVtb3J5IHJlcXVpcmVkIGlzIGFsc28gcmVkdWNlZCBmcm9tIHF1YWRyYXRpYyB0byBsaW5lYXIuPGJyIC8+VGhlIHBhcGVyIHByZXNlbnRzIHNvbWUgbm92ZWwgY29udHJpYnV0aW9ucy4gPGJyIC8+PGJyIC8+VGhlIG1haW4gbGltaXRhdGlvbiBvZiB0aGUgcHJlc2VudCB3b3JrIGlzIHRoZSBsaW1pdGF0aW9uIHRvIHdvcmsgd2l0aCBhIHNpbmdsZSBncmFwaC4gV2l0aCB0aGUgcHJvcG9zZWQgYXBwcm9hY2ggaW4gZmFjdCBpdCBpcyBub3QgcG9zc2libGUgdG8gY29tcGFyZSBkaWZmZXJlbnQgZ3JhcGhzIG9yIGxlYXJuIHNvbWUgcGFyYW1ldGVycyBvbiBvbmUgZ3JhcGggKGUuZy4gRmFjZWJvb2sgdXNlcnMpIGFuZCB0aGVuIHRyYW5zZmVyIHRoZW0gdG8gYW5vdGhlciBncmFwaCAoZS5nLiBUd2l0dGVyIHVzZXJzKS4gVGhlIHNlY29uZCBtYWluIGxpbWl0YXRpb24sIGluIG15IG9waW5pb24sIHJlc2lkZXMgaW4gdGhlIHBvb2xpbmcgc3RyYXRlZ3kgc2luY2UgaXQgcmVxdWlyZXMgYSBwcm9jZXNzaW5nIHN0ZXAgd2hlcmUgdG8gY29hcnNlbiB0aGUgZ3JhcGguIDxiciAvPjxiciAvPldoYXQgaXMgc2xpZ2h0bHkgbGVzcyBzYXRpc2Z5aW5nIGluIG15IG9waW5pb24gYXJlIHRoZSBleHBlcmltZW50cy4gVGhlIGF1dGhvcnMgdGVzdGVkIHRoZWlyIGFyY2hpdGVjdHVyZSBvbiB0d28gZGF0YXNldHM6IHRoZSBjbGFzc2ljYWwgTU5JU1QgYW5kIDIwTkVXUy4gPGJyIC8+T24gTU5JU1QgdGhleSBzaG93ZWQgcGVyZm9ybWFuY2VzIGNsb3NlIHRvIGEgTGVOZXQ1LWxpa2UgYXJjaGl0ZWN0dXJlIG9ubHkgaW4gdGhlIGNhc2Ugd2hlcmUgdGhlIGdyYXBoIGlzIGEgcmVndWxhciBncmlkICh0cml2aWFsIGdyYXBoIHN0cnVjdHVyZSksIHdoaWxlIHRoZSBwZXJmb3JtYW5jZXMgZHJvcHMgYnkgfjMlIHdoZW4gdGhlIGdyYXBoIHN0cnVjdHVyZSBtb3ZlcyBhd2F5IGZyb20gYSByZWd1bGFyIGdyaWQuIEFsdGhvdWdoIHRoZSBtYWluIGludGVudCBvZiB0aGUgYXV0aG9ycyBoZXJlIHdhcyBwcm9iYWJseSB0byBzaG93IHRoYXQgaW4gY2FzZSBvZiByZWd1bGFyIGdyaWRzIHRoZWlyIHBlcmZvcm1hbmNlIGFwcHJvYWNoIHRoZSBjbGFzc2ljYWwgQ05OcyBvbmUsIEkgd2FudCB0byByZW1hcmsgdGhhdCBib3RoIHRoZSBwZXJmb3JtYW5jZXMgYXJlIGZhciBmcm9tIHRoZSBzdGF0ZS1vZi10aGUtYXJ0LiA8YnIgLz5PbiAyME5FV1MgZXhwZXJpbWVudCBpdCBpcyBub3QgY2xlYXIgdG8gbWUgd2hldGhlciB0aGUgYXV0aG9ycyBjb21wYXJlZCB0aGVpciBwZXJmb3JtYW5jZXMgd2l0aCBzdGF0ZS1vZi10aGUtYXJ0IG1ldGhvZHMgb24gdGhpcyBkYXRhc2V0IG9yIG9ubHkgd2l0aCBiYXNlbGluZXMuIE1vcmVvdmVyLCB0aGUgaW1wcm92ZW1lbnQgZ2l2ZW4gYnkgdGhlIGNvbnZvbHV0aW9uIG9wZXJhdGlvbiBpbiB0aGUgZ3JhcGgtQ05OIGRvZXMgbm90IHNlZW0gdG8gYmUgaHVnZS48YnIgLz48YnIgLz5PdmVyYWxsLCBJIHJlY29tbWVuZCB0aGUgYWNjZXB0YW5jZSBvZiB0aGlzIHdvcmsuZAIID2QWBGYPDxYCHwEFKlJldmlld2VyIGNvbmZpZGVuY2UgcmVnYXJkaW5nIHRoaXMgcmV2aWV3LmRkAgEPZBYCZg8VATwyLUNvbmZpZGVudCAocmVhZCBpdCBhbGw7IHVuZGVyc3Rvb2QgaXQgYWxsIHJlYXNvbmFibHkgd2VsbClkAgkPDxYCHwBoZGQCCA8VAQBkAgQPZBYGAgMPZBYCZg8VARNBc3NpZ25lZF9SZXZpZXdlcl84ZAIHDzwrABEDAA8WBB8DZx8CAghkARAWABYAFgAMFCsAABYCZg9kFhICAQ9kFgRmDw8WAh8BBT5TdW1tYXJ5OiBQcm92aWRlIGEgYnJpZWYgc3VtbWFyeSBvZiB0aGUgY29udGVudHMgb2YgdGhlIHBhcGVyLmRkAgEPZBYCZg8VAa0DVGhlIGF1dGhvcnMgcHJvcG9zZSBhbiBpbXByb3ZlbWVudCBvdmVyIGV4aXN0aW5nIGFwcHJvYWNoZXMgZm9yIHVzaW5nIENOTnMgb24gZGF0YSB0aGF0IGNhbm5vdCBiZSByZXByZXNlbnRlZCBhcyBhIGdyaWQgZ3JhcGggYnV0IGFzIGEgZ3JhcGggbmV2ZXJ0aGVsZXNzLiBUaGUgd29yayBpcyBtb3RpdmF0ZWQgd2l0aCBhcHBsaWNhdGlvbnMgaW4gc29jaWFsIG5ldHdvcmsgYW5hbHlzaXMsIGdlbmUgZGF0YSwgZXRjLjxiciAvPjxiciAvPlRoZSBjbGFpbWVkIGFkdmFuY2VzIGFyZSAoYSkgYSBtb3JlIGVmZmljaWVudCBtZXRob2QgZm9yIGFwcGx5aW5nIGNvbnZvbHV0aW9ucyBpbiBGb3VyaWVyIHNwYWNlIChmcm9tIE8obl4yKSB0byBPKEUpKSBhbmQgKGIpIGEgcG9vbGluZyBtZXRob2QgdGhhdCBjYW4gYmUgcGFyYWxsZWxpemVkIHVzaW5nIEdQVXMuZAICD2QWBGYPDxYCHwEF/gFGYXRhbCBmbGF3czogRG9lcyB0aGUgcGFwZXIgaGF2ZSBhICZxdW90O2ZhdGFsIGZsYXcmcXVvdDsgbWFraW5nIGl0IHVuZml0IGZvciBwdWJsaWNhdGlvbiwgcmVnYXJkbGVzcyBvZiBvdGhlciBjcml0ZXJpYSAobWF5IGluY2x1ZGUgb3V0IG9mIHNjb3BlLCBkb3VibGUgcHVibGljYXRpb24sIHBsYWdpYXJpc20sIHdyb25nIHByb29mcywgZmxhd2VkIGV4cGVyaW1lbnRzKT8gVXNlIHRoZSB0ZXh0IGJveCB0byBqdXN0aWZ5IHlvdXIgYW5zd2VyLmRkAgEPZBYCZg8VARxObyAobm90IGFzIGZhciBhcyBJIGNhbiBzZWUpZAIDD2QWBGYPDxYCHwEFbVRlY2huaWNhbCBxdWFsaXR5OiB3aGV0aGVyIGV4cGVyaW1lbnRhbCBtZXRob2RzIGFyZSBhcHByb3ByaWF0ZSwgcHJvb2ZzIGFyZSBzb3VuZCwgcmVzdWx0cyBhcmUgd2VsbCBhbmFseXplZC5kZAIBD2QWAmYPFQEXMi1TdWItc3RhbmRhcmQgZm9yIE5JUFNkAgQPZBYEZg8PFgIfAQVeTm92ZWx0eS9vcmlnaW5hbGl0eTogaW4gYW55IGFzcGVjdCBvZiB0aGUgd29yaywgdGhlb3J5LCBhbGdvcml0aG0sIGFwcGxpY2F0aW9ucywgZXhwZXJpbWVudGFsLmRkAgEPZBYCZg8VARcyLVN1Yi1zdGFuZGFyZCBmb3IgTklQU2QCBQ9kFgRmDw8WAh8BBb8BUG90ZW50aWFsIGltcGFjdCBvciB1c2VmdWxuZXNzOiBjb3VsZCBiZSBzb2NpZXRhbCwgYWNhZGVtaWMsIG9yIHByYWN0aWNhbCBhbmQgc2hvdWxkIGJlIGxhc3RpbmcgaW4gdGltZSwgYWZmZWN0aW5nIGEgbGFyZ2UgbnVtYmVyIG9mIHBlb3BsZSBhbmQvb3IgYnJpZGdlIHRoZSBnYXAgYmV0d2VlbiBtdWx0aXBsZSBkaXNjaXBsaW5lcy5kZAIBD2QWAmYPFQERMS1Mb3cgb3IgdmVyeSBsb3dkAgYPZBYEZg8PFgIfAQVpQ2xhcml0eSBhbmQgcHJlc2VudGF0aW9uOiBleHBsYW5hdGlvbnMsIGxhbmd1YWdlIGFuZCBncmFtbWFyLCBmaWd1cmVzLCBncmFwaHMsIHRhYmxlcywgcHJvcGVyIHJlZmVyZW5jZXMuZGQCAQ9kFgJmDxUBFzItU3ViLXN0YW5kYXJkIGZvciBOSVBTZAIHD2QWBGYPDxYCHwEFxgFRdWFsaXRhdGl2ZSBhc3Nlc3NtZW50OiBQcm92aWRlIGNvbnN0cnVjdGl2ZSBmZWVkYmFjayB0byB0aGUgYXV0aG9yczsganVzdGlmeSBhbmQgY29tcGxlbWVudCB5b3VyIHJhdGluZ3MgYWJvdmUuIFRoaXMgaXMgb3VyIE1PU1QgSU1QT1JUQU5UIFFVRVNUSU9OLCB3ZSBuZWVkIHRvIGdldCBnb29kIGFyZ3VtZW50cyBmb3Igb3VyIGRlY2lzaW9ucyFkZAIBD2QWAmYPFQGrCkkgaGF2ZSB0d28gbWFpbiBjcml0aWNpc21zIG9mIHRoZSBwYXBlci48YnIgLz48YnIgLz5GaXJzdCwgSSBmaW5kIHRoZSBwcmVzZW50YXRpb24gb2YgdGhlIGlkZWFzIGFuZCB0aGUgdGhlb3J5IHJhdGhlciBwb29yLiBUaGUgZXhwb3NpdGlvbiBpcyBjb25mdXNpbmcgYW5kIHJlcXVpcmVzIG1vcmUgcHJlY2lzZSBkZWZpbml0aW9ucy4gV2hhdCBleGFjdGx5IGFyZSB0aGUgdGVjaG5pY2FsIGNvbnRyaWJ1dGlvbnMgb2YgdGhlIGF1dGhvcnMgcmVtYWlucyBkaWZmaWN1bHQgdG8gZGlzdGluZ3Vpc2ggZnJvbSBleGlzdGluZyByZXN1bHRzLiBUaGF0J3MgZXNwZWNpYWxseSB0cnVlIGZvciBzZWN0aW9uIDQgd2hlcmUgdGhlIGF1dGhvcnMgd3JpdGUgZGVuc2VseSBhbmQgbWl4IGEgbG90IG9mIHRlcm1pbm9sb2d5LiBNeSByZWNvbW1lbmRhdGlvbiB3b3VsZCBiZSB0byBjbGVhbiB0aGUgcGFwZXIgdXAgYW5kIHByb3ZpZGUgcHJlY2lzZSBkZWZpbml0aW9ucyBhbmQgYSBzdG9yeSBsaW5lIHRoYXQncyBhIGJpdCBlYXNpZXIgdG8gZm9sbG93LiBUaGUgcGFwZXIgaXMgdmVyeSBpbmFjY2Vzc2libGUgaW4gaXRzIGN1cnJlbnQgZm9ybS48YnIgLz48YnIgLz5UaGUgc2Vjb25kIGNyaXRpY2lzbSBjb25jZXJucyB0aGUgZXhwZXJpbWVudHMuIEl0IGlzIG5vdCBvYnZpb3VzIHRvIG1lIHRoYXQgdGhlIHJlc3VsdHMgYXJlIGRlZmluaXRlLiBGb3IgaW5zdGFuY2UsIEkgZmluZCBpdCBzdHJhbmdlIHRoYXQgdXNpbmcgcmFuZG9tIGdyYXBocyByZXN1bHRzIG9ubHkgaW4gYSBzbWFsbCBwZXJmb3JtYW5jZSBkcm9wLiBUaGlzIGlzIGVzcGVjaWFsbHkgc3RyaWtpbmcgaW4gdGhlIDIwTkVXUyBkYXRhIHNldC4gSXQgbWFrZXMgbWUgd29uZGVyIHdoYXQgdGhlIHBvaW50IG9mIHRoZSBhcHByb2FjaCBpcyBpZiB0aGUgZ3JhcGggc3RydWN0dXJlIGhhcyBzdWNoICBtaW5pbWFsIGltcGFjdCBvbiB0aGUgcmVzdWx0cy4gKENvbnRyYXJ5IHRvIHdoYXQgdGhlIGF1dGhvcnMgY2xhaW0uKSBJIHNjb3JlZCB0aGUgdXNlZnVsbmVzcyBkb3duIGJlY2F1c2Ugb2YgdGhpcy4gIDxiciAvPjxiciAvPkFyZSB0aGVyZSBhbnkgdGhlb3JldGljYWwgcmVzdWx0cyBpbiB0aGlzIGFyZWE/IEZvciBpbnN0YW5jZSwgY2FuIHlvdSBzYXkgc29tZXRoaW5nIGFib3V0IHRoZSBwZXJmb3JtYW5jZSBvZiB5b3VyIG1vZGVsIGNvbXBhcmVkIHRvIFsxM10uIFlvdXIgbWV0aG9kIGlzIGZhc3RlciwgYnV0IHdoYXQgYWJvdXQgdGhlIGVmZmVjdGl2ZW5lc3M/IElzIGl0IHRoZSBzYW1lIGp1c3QgZmFzdGVyPyBTb3JyeSBpZiBJIG1pc3NlZCB0aGlzLjxiciAvPjxiciAvPmQCCA9kFgRmDw8WAh8BBSpSZXZpZXdlciBjb25maWRlbmNlIHJlZ2FyZGluZyB0aGlzIHJldmlldy5kZAIBD2QWAmYPFQE+MS1MZXNzIGNvbmZpZGVudCAobWlnaHQgbm90IGhhdmUgdW5kZXJzdG9vZCBzaWduaWZpY2FudCBwYXJ0cylkAgkPDxYCHwBoZGQCCA8VAQBkAgUPZBYGAgMPZBYCZg8VARNBc3NpZ25lZF9SZXZpZXdlcl85ZAIHDzwrABEDAA8WBB8DZx8CAghkARAWABYAFgAMFCsAABYCZg9kFhICAQ9kFgRmDw8WAh8BBT5TdW1tYXJ5OiBQcm92aWRlIGEgYnJpZWYgc3VtbWFyeSBvZiB0aGUgY29udGVudHMgb2YgdGhlIHBhcGVyLmRkAgEPZBYCZg8VAVhUaGlzIHBhcGVyIHByZXNlbnRzIGEgbW9yZSBlZmZpY2llbnQgdmVyc2lvbiBvZiB0aGUgbW9kZWwgZnJvbSBIZW5hZmYtQnJ1bmEtTGVDdW4uPGJyIC8+ZAICD2QWBGYPDxYCHwEF/gFGYXRhbCBmbGF3czogRG9lcyB0aGUgcGFwZXIgaGF2ZSBhICZxdW90O2ZhdGFsIGZsYXcmcXVvdDsgbWFraW5nIGl0IHVuZml0IGZvciBwdWJsaWNhdGlvbiwgcmVnYXJkbGVzcyBvZiBvdGhlciBjcml0ZXJpYSAobWF5IGluY2x1ZGUgb3V0IG9mIHNjb3BlLCBkb3VibGUgcHVibGljYXRpb24sIHBsYWdpYXJpc20sIHdyb25nIHByb29mcywgZmxhd2VkIGV4cGVyaW1lbnRzKT8gVXNlIHRoZSB0ZXh0IGJveCB0byBqdXN0aWZ5IHlvdXIgYW5zd2VyLmRkAgEPZBYCZg8VARxObyAobm90IGFzIGZhciBhcyBJIGNhbiBzZWUpZAIDD2QWBGYPDxYCHwEFbVRlY2huaWNhbCBxdWFsaXR5OiB3aGV0aGVyIGV4cGVyaW1lbnRhbCBtZXRob2RzIGFyZSBhcHByb3ByaWF0ZSwgcHJvb2ZzIGFyZSBzb3VuZCwgcmVzdWx0cyBhcmUgd2VsbCBhbmFseXplZC5kZAIBD2QWAmYPFQEXMi1TdWItc3RhbmRhcmQgZm9yIE5JUFNkAgQPZBYEZg8PFgIfAQVeTm92ZWx0eS9vcmlnaW5hbGl0eTogaW4gYW55IGFzcGVjdCBvZiB0aGUgd29yaywgdGhlb3J5LCBhbGdvcml0aG0sIGFwcGxpY2F0aW9ucywgZXhwZXJpbWVudGFsLmRkAgEPZBYCZg8VARcyLVN1Yi1zdGFuZGFyZCBmb3IgTklQU2QCBQ9kFgRmDw8WAh8BBb8BUG90ZW50aWFsIGltcGFjdCBvciB1c2VmdWxuZXNzOiBjb3VsZCBiZSBzb2NpZXRhbCwgYWNhZGVtaWMsIG9yIHByYWN0aWNhbCBhbmQgc2hvdWxkIGJlIGxhc3RpbmcgaW4gdGltZSwgYWZmZWN0aW5nIGEgbGFyZ2UgbnVtYmVyIG9mIHBlb3BsZSBhbmQvb3IgYnJpZGdlIHRoZSBnYXAgYmV0d2VlbiBtdWx0aXBsZSBkaXNjaXBsaW5lcy5kZAIBD2QWAmYPFQEXMi1TdWItc3RhbmRhcmQgZm9yIE5JUFNkAgYPZBYEZg8PFgIfAQVpQ2xhcml0eSBhbmQgcHJlc2VudGF0aW9uOiBleHBsYW5hdGlvbnMsIGxhbmd1YWdlIGFuZCBncmFtbWFyLCBmaWd1cmVzLCBncmFwaHMsIHRhYmxlcywgcHJvcGVyIHJlZmVyZW5jZXMuZGQCAQ9kFgJmDxUBETEtTG93IG9yIHZlcnkgbG93ZAIHD2QWBGYPDxYCHwEFxgFRdWFsaXRhdGl2ZSBhc3Nlc3NtZW50OiBQcm92aWRlIGNvbnN0cnVjdGl2ZSBmZWVkYmFjayB0byB0aGUgYXV0aG9yczsganVzdGlmeSBhbmQgY29tcGxlbWVudCB5b3VyIHJhdGluZ3MgYWJvdmUuIFRoaXMgaXMgb3VyIE1PU1QgSU1QT1JUQU5UIFFVRVNUSU9OLCB3ZSBuZWVkIHRvIGdldCBnb29kIGFyZ3VtZW50cyBmb3Igb3VyIGRlY2lzaW9ucyFkZAIBD2QWAmYPFQHKBEkgZm91bmQgaXQgZXh0cmVtZWx5IGhhcmQgdG8gdW5kZXJzdGFuZCB0aGlzIHBhcGVyLCB0byB0aGUgcG9pbnQgd2hlcmUgSSBoYWQgdG8gcmVhZCB0aGUgY2l0ZWQgSGVuYWZmLUJydW5hLUxlQ3VuIHBhcGVyIGluIG9yZGVyIHRvIHVuZGVyc3RhbmQgd2hhdCB0aGlzIHBhcGVyIGlzIGV2ZW4gYWJvdXQuPGJyIC8+PGJyIC8+QXMgZmFyIGFzIEkgY2FuIHRlbGwgdGhpcyBwYXBlciBpcyBwcmVzZW50aW5nIGFuIGVmZmljaWVudCB3YXkgdG8gaW1wbGVtZW50IHRoZSBhbGdvcml0aG0gZnJvbSBIZW5hZmYtQnJ1bmEtTGVDdW4sIHdoaWNoIHNlZW1zIGxpa2UgYSB3b3J0aHdoaWxlIHRoaW5nIHRvIGRvIHNpbmNlIHRoZSBhbGdvcml0aG0gaW4gdGhhdCBwYXBlciBpcyB2ZXJ5IGNvbXB1dGF0aW9uYWxseSBleHBlbnNpdmUuPGJyIC8+PGJyIC8+SSdtIHN1cnByaXNlZCB0aGVyZSBhcmUgbm8gIm5hdHVyYWxseSIgZ3JhcGggc3RydWN0dXJlZCBkYXRhIHNldHMgaW4gdGhlIGV4cGVyaW1lbnRzLiAgVGhlIGFic3RyYWN0IGFsbHVkZXMgdG8gYSBmZXcgYW5kIGl0IHdvdWxkIGhhdmUgYmVlbiBuaWNlIHRvIHNlZSB0aGVzZS48YnIgLz5kAggPZBYEZg8PFgIfAQUqUmV2aWV3ZXIgY29uZmlkZW5jZSByZWdhcmRpbmcgdGhpcyByZXZpZXcuZGQCAQ9kFgJmDxUBPjEtTGVzcyBjb25maWRlbnQgKG1pZ2h0IG5vdCBoYXZlIHVuZGVyc3Rvb2Qgc2lnbmlmaWNhbnQgcGFydHMpZAIJDw8WAh8AaGRkAggPFQEAZBgGBR9jdGwwMCRjcGgkZ3ZSZXZpZXdzJGN0bDA1JGN0bDAwDzwrAAwBCAIBZAUfY3RsMDAkY3BoJGd2UmV2aWV3cyRjdGwwMiRjdGwwMA88KwAMAQgCAWQFH2N0bDAwJGNwaCRndlJldmlld3MkY3RsMDEkY3RsMDAPPCsADAEIAgFkBR9jdGwwMCRjcGgkZ3ZSZXZpZXdzJGN0bDA0JGN0bDAwDzwrAAwBCAIBZAUfY3RsMDAkY3BoJGd2UmV2aWV3cyRjdGwwMCRjdGwwMA88KwAMAQgCAWQFH2N0bDAwJGNwaCRndlJldmlld3MkY3RsMDMkY3RsMDAPPCsADAEIAgFkGfbbue5WGODjrbzsihZ2WPbv9RM=" type="hidden">
+</div>
+
+<div>
+
+	<input name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="93D783A2" type="hidden">
+</div>
+<table id="header">
+<tbody><tr>
+<td width="100%"><a href="https://nips.cc/" target="_blank">NIPS 2016</a><br><b>Neural Information Processing Systems 2016</b><br>December 05 - 10, 2016, Barcelona, Spain</td>
+</tr>
+<tr class="headerSeparator">
+    <td style="height:5px"></td>
+</tr>
+</tbody></table>
+<table id="content"><tbody><tr><td class="contentBorder">&nbsp;</td><td class="contentContainer">
+<span id="ctl00_cph_Label4" style="font-size:Small;font-weight:bold;">Reviews For Paper</span>
+<span id="ctl00_cph_lblErrorMessage" class="error" style="font-size:Small;"></span>
+<div id="ctl00_cph_pnlReviews">
+	
+    <span style="font-size:Small;"><table id="ctl00_cph_infoSubmission_tblInfo" class="nicetable2" style="text-align:left; width: 100%;">
+		<tbody><tr>
+			<td width="100px"><b>Paper ID</b></td>
+			<td><span id="ctl00_cph_infoSubmission_lblPaperId" style="font-size:Small;">1911</span></td>
+		</tr>
+		<tr>
+			<td><b>Title</b></td>
+			<td><span id="ctl00_cph_infoSubmission_lblPaperTitle" style="font-size:Small;">Convolutional Neural Networks on Graphs with Fast Localized Spectral Filtering</span></td>
+		</tr>
+	</tbody></table>
+	</span>
+    
+    
+            <hr>
+            <table>
+                <tbody><tr>
+                    <td>
+                        <span id="ctl00_cph_gvReviews_ctl00_Label2" style="font-size:Small;font-weight:bold;">Masked Reviewer ID:</span>
+                    </td>
+                    <td>
+                        <span id="ctl00_cph_gvReviews_ctl00_Label1" style="font-size:Small;">Assigned_Reviewer_1</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span id="ctl00_cph_gvReviews_ctl00_Label3" style="font-size:Small;font-weight:bold;">Review:</span>
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+            </tbody></table>
+            <div>
+		<table rules="all" style="color:#333333;border-width:1px;border-style:None;font-family:Verdana;font-size:Small;border-collapse:collapse;" border="1" cellpadding="4" cellspacing="0">
+			<tbody><tr style="color:White;background-color:#5D7B9D;font-weight:bold;">
+				<th scope="col">Question</th><th scope="col">&nbsp;</th>
+			</tr><tr style="color:#333333;background-color:#F7F6F3;">
+				<td style="width:20%;">Summary: Provide a brief summary of the contents of the paper.</td><td style="width:80%;">
+                            This paper presents an extension of 
+Convolutional Neural Networks to irregular grids in arbitrary dimension,
+ using the properties of the Graph Laplacian Spectrum. The proposed 
+architecture overcomes a computational burden of previous spectral 
+methods, leading to efficient training and evaluation, as demonstrated 
+on image classification and text categorization.
+                        </td>
+			</tr><tr style="color:#284775;background-color:White;">
+				<td style="width:20%;">Fatal flaws: Does the paper have a "fatal 
+flaw" making it unfit for publication, regardless of other criteria (may
+ include out of scope, double publication, plagiarism, wrong proofs, 
+flawed experiments)? Use the text box to justify your answer.</td><td style="width:80%;">
+                            No (not as far as I can see)
+                        </td>
+			</tr><tr style="color:#333333;background-color:#F7F6F3;">
+				<td style="width:20%;">Technical quality: whether experimental methods are appropriate, proofs are sound, results are well analyzed.</td><td style="width:80%;">
+                            3-Poster level (top 30% submissions)
+                        </td>
+			</tr><tr style="color:#284775;background-color:White;">
+				<td style="width:20%;">Novelty/originality: in any aspect of the work, theory, algorithm, applications, experimental.</td><td style="width:80%;">
+                            3-Poster level (some notable novel contributions)
+                        </td>
+			</tr><tr style="color:#333333;background-color:#F7F6F3;">
+				<td style="width:20%;">Potential impact or usefulness: could be 
+societal, academic, or practical and should be lasting in time, 
+affecting a large number of people and/or bridge the gap between 
+multiple disciplines.</td><td style="width:80%;">
+                            3-Poster level (looks promising)
+                        </td>
+			</tr><tr style="color:#284775;background-color:White;">
+				<td style="width:20%;">Clarity and presentation: explanations, language and grammar, figures, graphs, tables, proper references.</td><td style="width:80%;">
+                            3-Poster level (good enough)
+                        </td>
+			</tr><tr style="color:#333333;background-color:#F7F6F3;">
+				<td style="width:20%;">Qualitative assessment: Provide constructive 
+feedback to the authors; justify and complement your ratings above. This
+ is our MOST IMPORTANT QUESTION, we need to get good arguments for our 
+decisions!</td><td style="width:80%;">
+                            This paper builds upon previous work to 
+propose a computationally efficient model that extends convolutions to 
+irregular graphs. The major innovation is to express graph filtering 
+with a compactly supported kernels as linear combinations of order K 
+polynomials of the graph Laplacian, thus overcoming the burden of 
+computing the Laplacian eigendecomposition, which is needed in both 
+forward and backward passes in the previous spectral construction. <br>Moreover,
+ the Chebyshev recurrence implies that order K filters can be computed 
+with O(K E) operations, where E is the number of edges and controls the 
+cost of computing L x (L = Laplacian operator on the graph). This 
+appears to be a very clean, efficient parametrization that translates 
+into efficient learning and evaluation and overcomes an important 
+computational limitation.<br><br>I have a couple of comments that I would like the authors to develop during the rebuttal phase:<br> <br>-
+ A previous model that operates in general graphs is the so-called Graph
+ Neural Network (GNN) [Scarselli et al.,'09]. The basic model can be 
+seen as follows. Given a generic vector-valued function x on a graph G, 
+x: G--&gt; R^d, we compute its linear diffusion Wx(i) = \sum_{j neighbor
+ of i} w_{i,j} x(j) and its normalized scaling Dx(i) = (sum_{j neighbor 
+of i} w_{i,j}) x(i). Then a "GNN" layer transforms x into Phi(x): 
+G--&gt;R^{d'} via a generic point-wise operator combining x and Wx: 
+Phi(x)(i) = Psi( Dx(i), Wx(i)), with Psi being a generic pointwise 
+operator: Psi: R^d x R^d --&gt; R^{d'}. For example, if Psi(x,y) = x - y
+ we obtain the Graph Laplacian Phi(x) = L(x), and thus the order-K graph
+ filtering can be realized with a K-layer GNN using linear pointwise 
+operators Psi. The model which computes filters as linear combinations 
+of powers of graph laplacians can thus be seen as a special case of the 
+previous model, which interleaves linear layers Psi (responsible of 
+computing the powers of the laplacian) with nonlinear layers. It would 
+be interesting for the authors to comment on the pros/cons of their 
+model with respect to the general GNN. <br><br>- The numerical 
+experiments in MNIST show good performance of the graph CNN, but also a 
+gap with respect to the classic CNN architectures. One can thus ask 
+whether this gap is simply due to model tuning or due to some intrinsic 
+limitations of graph CNNs when used on regular, low-dimensional grids. 
+The filters learnt by the proposed graph CNN are polynomials of the 
+Graph Laplacian, and therefore are rotationally invariant, whereas in 
+the grid the Euclidean embedding allows for directional filters, which 
+bring a crucial advantage to capture geometric structures in images. Is 
+this analysis correct? In other words, there seems to be a fundamental 
+price to pay for giving up the knowledge of the grid, its translation 
+invariance and the notion of orientation. Obviously this only concerns 
+the examples where the grid is available. <br><br>Overall, and despite 
+my previous two comments, this paper brings an important improvement to 
+the table, that can extend the use of data driven, end-to-end learning 
+with excellent learning complexity to other datasets beyond images, 
+speech and text. I hope the rebuttal addresses my previous comments 
+though! <br><br><br>
+                        </td>
+			</tr><tr style="color:#284775;background-color:White;">
+				<td style="width:20%;">Reviewer confidence regarding this review.</td><td style="width:80%;">
+                            3-Expert (read the paper in detail, know the area, quite certain of my opinion)
+                        </td>
+			</tr>
+		</tbody></table>
+	</div>
+            
+        
+            <hr>
+            <table>
+                <tbody><tr>
+                    <td>
+                        <span id="ctl00_cph_gvReviews_ctl01_Label2" style="font-size:Small;font-weight:bold;">Masked Reviewer ID:</span>
+                    </td>
+                    <td>
+                        <span id="ctl00_cph_gvReviews_ctl01_Label1" style="font-size:Small;">Assigned_Reviewer_3</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span id="ctl00_cph_gvReviews_ctl01_Label3" style="font-size:Small;font-weight:bold;">Review:</span>
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+            </tbody></table>
+            <div>
+		<table rules="all" style="color:#333333;border-width:1px;border-style:None;font-family:Verdana;font-size:Small;border-collapse:collapse;" border="1" cellpadding="4" cellspacing="0">
+			<tbody><tr style="color:White;background-color:#5D7B9D;font-weight:bold;">
+				<th scope="col">Question</th><th scope="col">&nbsp;</th>
+			</tr><tr style="color:#333333;background-color:#F7F6F3;">
+				<td style="width:20%;">Summary: Provide a brief summary of the contents of the paper.</td><td style="width:80%;">
+                            This paper proposes a sophisticated approach
+ to implementing convolutional filters on non-Euclidean domains, like 
+graphs, based on exploiting deep properties of the Laplacian operator. 
+The work is based on exploiting the insights in a number of different 
+areas, including computational harmonic analysis, signal processing, 
+numerical analysis and machine learning. A very efficient procedure for 
+computing convolutional filters over graphs is proposed and some simple 
+experiments are given to illustrate the approach. 
+                        </td>
+			</tr><tr style="color:#284775;background-color:White;">
+				<td style="width:20%;">Fatal flaws: Does the paper have a "fatal 
+flaw" making it unfit for publication, regardless of other criteria (may
+ include out of scope, double publication, plagiarism, wrong proofs, 
+flawed experiments)? Use the text box to justify your answer.</td><td style="width:80%;">
+                            No (not as far as I can see)
+                        </td>
+			</tr><tr style="color:#333333;background-color:#F7F6F3;">
+				<td style="width:20%;">Technical quality: whether experimental methods are appropriate, proofs are sound, results are well analyzed.</td><td style="width:80%;">
+                            3-Poster level (top 30% submissions)
+                        </td>
+			</tr><tr style="color:#284775;background-color:White;">
+				<td style="width:20%;">Novelty/originality: in any aspect of the work, theory, algorithm, applications, experimental.</td><td style="width:80%;">
+                            4-Oral level (significantly novel and impressive)
+                        </td>
+			</tr><tr style="color:#333333;background-color:#F7F6F3;">
+				<td style="width:20%;">Potential impact or usefulness: could be 
+societal, academic, or practical and should be lasting in time, 
+affecting a large number of people and/or bridge the gap between 
+multiple disciplines.</td><td style="width:80%;">
+                            4-Oral level (many people will pick this up)
+                        </td>
+			</tr><tr style="color:#284775;background-color:White;">
+				<td style="width:20%;">Clarity and presentation: explanations, language and grammar, figures, graphs, tables, proper references.</td><td style="width:80%;">
+                            4-Oral level (excellent in every respect)
+                        </td>
+			</tr><tr style="color:#333333;background-color:#F7F6F3;">
+				<td style="width:20%;">Qualitative assessment: Provide constructive 
+feedback to the authors; justify and complement your ratings above. This
+ is our MOST IMPORTANT QUESTION, we need to get good arguments for our 
+decisions!</td><td style="width:80%;">
+                            This is a highly promising paper, as it 
+shows how to efficiently generalize the convolutional operator from 
+rectangular (2D) domains to those with irregular geometry (graphs, 
+social networks etc.). The approach is mathematically sophisticated, 
+building on recent insights in a number of different areas. The paper is
+ well written given the technical nature of the material, and the 
+potential for significant impact is high. The results are somewhat 
+limited, and the improvement in Table 4 etc. is not huge. But Figure 2 
+shows the high efficiency in computing convolutional filters using 
+sophisticated Chebyshev polynomial approximation. 
+                        </td>
+			</tr><tr style="color:#284775;background-color:White;">
+				<td style="width:20%;">Reviewer confidence regarding this review.</td><td style="width:80%;">
+                            3-Expert (read the paper in detail, know the area, quite certain of my opinion)
+                        </td>
+			</tr>
+		</tbody></table>
+	</div>
+            
+        
+            <hr>
+            <table>
+                <tbody><tr>
+                    <td>
+                        <span id="ctl00_cph_gvReviews_ctl02_Label2" style="font-size:Small;font-weight:bold;">Masked Reviewer ID:</span>
+                    </td>
+                    <td>
+                        <span id="ctl00_cph_gvReviews_ctl02_Label1" style="font-size:Small;">Assigned_Reviewer_6</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span id="ctl00_cph_gvReviews_ctl02_Label3" style="font-size:Small;font-weight:bold;">Review:</span>
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+            </tbody></table>
+            <div>
+		<table rules="all" style="color:#333333;border-width:1px;border-style:None;font-family:Verdana;font-size:Small;border-collapse:collapse;" border="1" cellpadding="4" cellspacing="0">
+			<tbody><tr style="color:White;background-color:#5D7B9D;font-weight:bold;">
+				<th scope="col">Question</th><th scope="col">&nbsp;</th>
+			</tr><tr style="color:#333333;background-color:#F7F6F3;">
+				<td style="width:20%;">Summary: Provide a brief summary of the contents of the paper.</td><td style="width:80%;">
+                            This paper introduces a graph signal 
+processing based convolutional neural network formulation on generalized
+ graphs. Experimental results are presented on MNIST and 20NEWS 
+datasets.
+                        </td>
+			</tr><tr style="color:#284775;background-color:White;">
+				<td style="width:20%;">Fatal flaws: Does the paper have a "fatal 
+flaw" making it unfit for publication, regardless of other criteria (may
+ include out of scope, double publication, plagiarism, wrong proofs, 
+flawed experiments)? Use the text box to justify your answer.</td><td style="width:80%;">
+                            No (not as far as I can see)
+                        </td>
+			</tr><tr style="color:#333333;background-color:#F7F6F3;">
+				<td style="width:20%;">Technical quality: whether experimental methods are appropriate, proofs are sound, results are well analyzed.</td><td style="width:80%;">
+                            3-Poster level (top 30% submissions)
+                        </td>
+			</tr><tr style="color:#284775;background-color:White;">
+				<td style="width:20%;">Novelty/originality: in any aspect of the work, theory, algorithm, applications, experimental.</td><td style="width:80%;">
+                            3-Poster level (some notable novel contributions)
+                        </td>
+			</tr><tr style="color:#333333;background-color:#F7F6F3;">
+				<td style="width:20%;">Potential impact or usefulness: could be 
+societal, academic, or practical and should be lasting in time, 
+affecting a large number of people and/or bridge the gap between 
+multiple disciplines.</td><td style="width:80%;">
+                            3-Poster level (looks promising)
+                        </td>
+			</tr><tr style="color:#284775;background-color:White;">
+				<td style="width:20%;">Clarity and presentation: explanations, language and grammar, figures, graphs, tables, proper references.</td><td style="width:80%;">
+                            4-Oral level (excellent in every respect)
+                        </td>
+			</tr><tr style="color:#333333;background-color:#F7F6F3;">
+				<td style="width:20%;">Qualitative assessment: Provide constructive 
+feedback to the authors; justify and complement your ratings above. This
+ is our MOST IMPORTANT QUESTION, we need to get good arguments for our 
+decisions!</td><td style="width:80%;">
+                            Generalized convolutional neurals nets, 
+applied to arbitrary graph structure are a new and upcoming area with 
+only a few recent works. Regardless of the immaturity of the field, the 
+practical applications that will benefit from such approaches are 
+significantly main stream such as social networks. This work is 
+providing a fresh look with a new formulation, and I believe it will 
+contribute to the field in terms of both advancing this area and 
+spawning new discussions.
+                        </td>
+			</tr><tr style="color:#284775;background-color:White;">
+				<td style="width:20%;">Reviewer confidence regarding this review.</td><td style="width:80%;">
+                            2-Confident (read it all; understood it all reasonably well)
+                        </td>
+			</tr>
+		</tbody></table>
+	</div>
+            
+        
+            <hr>
+            <table>
+                <tbody><tr>
+                    <td>
+                        <span id="ctl00_cph_gvReviews_ctl03_Label2" style="font-size:Small;font-weight:bold;">Masked Reviewer ID:</span>
+                    </td>
+                    <td>
+                        <span id="ctl00_cph_gvReviews_ctl03_Label1" style="font-size:Small;">Assigned_Reviewer_7</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span id="ctl00_cph_gvReviews_ctl03_Label3" style="font-size:Small;font-weight:bold;">Review:</span>
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+            </tbody></table>
+            <div>
+		<table rules="all" style="color:#333333;border-width:1px;border-style:None;font-family:Verdana;font-size:Small;border-collapse:collapse;" border="1" cellpadding="4" cellspacing="0">
+			<tbody><tr style="color:White;background-color:#5D7B9D;font-weight:bold;">
+				<th scope="col">Question</th><th scope="col">&nbsp;</th>
+			</tr><tr style="color:#333333;background-color:#F7F6F3;">
+				<td style="width:20%;">Summary: Provide a brief summary of the contents of the paper.</td><td style="width:80%;">
+                            The paper present an extension of the popular Convolutional Neural Networks to graphs.<br>What
+ makes the extension of classical CNN to graphs not trivial is the 
+convolution operation, which is well defined on regular grids.<br>The 
+authors proposed a way to extend the convolution operation of CNNs to 
+graphs by using tools from Signal Processing on Graphs and extending the
+ previous work of Henaff-Bruna-LeCun.<br><br>The authors tested their architecture on the classical MNIST and on 20NEWS.<br>On
+ MNIST the results showed that the graph-CNN approaches classical CNN 
+performance if the graph approximate the regular grid of an image. <br>On
+ 20NEWS the results showed that, in the case when the data does not 
+allow to apply classical CNNs, the convolution step of the graph-CNN 
+improves over a non-convolutional architecture.
+                        </td>
+			</tr><tr style="color:#284775;background-color:White;">
+				<td style="width:20%;">Fatal flaws: Does the paper have a "fatal 
+flaw" making it unfit for publication, regardless of other criteria (may
+ include out of scope, double publication, plagiarism, wrong proofs, 
+flawed experiments)? Use the text box to justify your answer.</td><td style="width:80%;">
+                            No (not as far as I can see)
+                        </td>
+			</tr><tr style="color:#333333;background-color:#F7F6F3;">
+				<td style="width:20%;">Technical quality: whether experimental methods are appropriate, proofs are sound, results are well analyzed.</td><td style="width:80%;">
+                            3-Poster level (top 30% submissions)
+                        </td>
+			</tr><tr style="color:#284775;background-color:White;">
+				<td style="width:20%;">Novelty/originality: in any aspect of the work, theory, algorithm, applications, experimental.</td><td style="width:80%;">
+                            3-Poster level (some notable novel contributions)
+                        </td>
+			</tr><tr style="color:#333333;background-color:#F7F6F3;">
+				<td style="width:20%;">Potential impact or usefulness: could be 
+societal, academic, or practical and should be lasting in time, 
+affecting a large number of people and/or bridge the gap between 
+multiple disciplines.</td><td style="width:80%;">
+                            4-Oral level (many people will pick this up)
+                        </td>
+			</tr><tr style="color:#284775;background-color:White;">
+				<td style="width:20%;">Clarity and presentation: explanations, language and grammar, figures, graphs, tables, proper references.</td><td style="width:80%;">
+                            3-Poster level (good enough)
+                        </td>
+			</tr><tr style="color:#333333;background-color:#F7F6F3;">
+				<td style="width:20%;">Qualitative assessment: Provide constructive 
+feedback to the authors; justify and complement your ratings above. This
+ is our MOST IMPORTANT QUESTION, we need to get good arguments for our 
+decisions!</td><td style="width:80%;">
+                            In my opinion this is a good work. It pushes
+ forward the previous work of Henaff-Bruna-LeCun on extending CNNs to 
+graphs and overcomes some of the limitations of the previous work. In 
+particular: <br>1) It does not require an eigendecomposition of the 
+graph Laplacian, contrary to the previous approach by 
+Henaff-Bruna-LeCun. Such eigendecomposition becomes a limitation when 
+the data size increases, since its complexity is cubic in the number of 
+nodes. <br>2) The complexity of learning the convolutional filters is 
+reduced from quadratic to linear in the number of nodes by replacing 
+spline interpolation in the frequency domain with Chebyshev polynomials 
+and exploiting the properties of the latter.<br>3) The memory required is also reduced from quadratic to linear.<br>The paper presents some novel contributions. <br><br>The
+ main limitation of the present work is the limitation to work with a 
+single graph. With the proposed approach in fact it is not possible to 
+compare different graphs or learn some parameters on one graph (e.g. 
+Facebook users) and then transfer them to another graph (e.g. Twitter 
+users). The second main limitation, in my opinion, resides in the 
+pooling strategy since it requires a processing step where to coarsen 
+the graph. <br><br>What is slightly less satisfying in my opinion are 
+the experiments. The authors tested their architecture on two datasets: 
+the classical MNIST and 20NEWS. <br>On MNIST they showed performances 
+close to a LeNet5-like architecture only in the case where the graph is a
+ regular grid (trivial graph structure), while the performances drops by
+ ~3% when the graph structure moves away from a regular grid. Although 
+the main intent of the authors here was probably to show that in case of
+ regular grids their performance approach the classical CNNs one, I want
+ to remark that both the performances are far from the state-of-the-art.
+ <br>On 20NEWS experiment it is not clear to me whether the authors 
+compared their performances with state-of-the-art methods on this 
+dataset or only with baselines. Moreover, the improvement given by the 
+convolution operation in the graph-CNN does not seem to be huge.<br><br>Overall, I recommend the acceptance of this work.
+                        </td>
+			</tr><tr style="color:#284775;background-color:White;">
+				<td style="width:20%;">Reviewer confidence regarding this review.</td><td style="width:80%;">
+                            2-Confident (read it all; understood it all reasonably well)
+                        </td>
+			</tr>
+		</tbody></table>
+	</div>
+            
+        
+            <hr>
+            <table>
+                <tbody><tr>
+                    <td>
+                        <span id="ctl00_cph_gvReviews_ctl04_Label2" style="font-size:Small;font-weight:bold;">Masked Reviewer ID:</span>
+                    </td>
+                    <td>
+                        <span id="ctl00_cph_gvReviews_ctl04_Label1" style="font-size:Small;">Assigned_Reviewer_8</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span id="ctl00_cph_gvReviews_ctl04_Label3" style="font-size:Small;font-weight:bold;">Review:</span>
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+            </tbody></table>
+            <div>
+		<table rules="all" style="color:#333333;border-width:1px;border-style:None;font-family:Verdana;font-size:Small;border-collapse:collapse;" border="1" cellpadding="4" cellspacing="0">
+			<tbody><tr style="color:White;background-color:#5D7B9D;font-weight:bold;">
+				<th scope="col">Question</th><th scope="col">&nbsp;</th>
+			</tr><tr style="color:#333333;background-color:#F7F6F3;">
+				<td style="width:20%;">Summary: Provide a brief summary of the contents of the paper.</td><td style="width:80%;">
+                            The authors propose an improvement over 
+existing approaches for using CNNs on data that cannot be represented as
+ a grid graph but as a graph nevertheless. The work is motivated with 
+applications in social network analysis, gene data, etc.<br><br>The 
+claimed advances are (a) a more efficient method for applying 
+convolutions in Fourier space (from O(n^2) to O(E)) and (b) a pooling 
+method that can be parallelized using GPUs.
+                        </td>
+			</tr><tr style="color:#284775;background-color:White;">
+				<td style="width:20%;">Fatal flaws: Does the paper have a "fatal 
+flaw" making it unfit for publication, regardless of other criteria (may
+ include out of scope, double publication, plagiarism, wrong proofs, 
+flawed experiments)? Use the text box to justify your answer.</td><td style="width:80%;">
+                            No (not as far as I can see)
+                        </td>
+			</tr><tr style="color:#333333;background-color:#F7F6F3;">
+				<td style="width:20%;">Technical quality: whether experimental methods are appropriate, proofs are sound, results are well analyzed.</td><td style="width:80%;">
+                            2-Sub-standard for NIPS
+                        </td>
+			</tr><tr style="color:#284775;background-color:White;">
+				<td style="width:20%;">Novelty/originality: in any aspect of the work, theory, algorithm, applications, experimental.</td><td style="width:80%;">
+                            2-Sub-standard for NIPS
+                        </td>
+			</tr><tr style="color:#333333;background-color:#F7F6F3;">
+				<td style="width:20%;">Potential impact or usefulness: could be 
+societal, academic, or practical and should be lasting in time, 
+affecting a large number of people and/or bridge the gap between 
+multiple disciplines.</td><td style="width:80%;">
+                            1-Low or very low
+                        </td>
+			</tr><tr style="color:#284775;background-color:White;">
+				<td style="width:20%;">Clarity and presentation: explanations, language and grammar, figures, graphs, tables, proper references.</td><td style="width:80%;">
+                            2-Sub-standard for NIPS
+                        </td>
+			</tr><tr style="color:#333333;background-color:#F7F6F3;">
+				<td style="width:20%;">Qualitative assessment: Provide constructive 
+feedback to the authors; justify and complement your ratings above. This
+ is our MOST IMPORTANT QUESTION, we need to get good arguments for our 
+decisions!</td><td style="width:80%;">
+                            I have two main criticisms of the paper.<br><br>First,
+ I find the presentation of the ideas and the theory rather poor. The 
+exposition is confusing and requires more precise definitions. What 
+exactly are the technical contributions of the authors remains difficult
+ to distinguish from existing results. That's especially true for 
+section 4 where the authors write densely and mix a lot of terminology. 
+My recommendation would be to clean the paper up and provide precise 
+definitions and a story line that's a bit easier to follow. The paper is
+ very inaccessible in its current form.<br><br>The second criticism 
+concerns the experiments. It is not obvious to me that the results are 
+definite. For instance, I find it strange that using random graphs 
+results only in a small performance drop. This is especially striking in
+ the 20NEWS data set. It makes me wonder what the point of the approach 
+is if the graph structure has such  minimal impact on the results. 
+(Contrary to what the authors claim.) I scored the usefulness down 
+because of this.  <br><br>Are there any theoretical results in this 
+area? For instance, can you say something about the performance of your 
+model compared to [13]. Your method is faster, but what about the 
+effectiveness? Is it the same just faster? Sorry if I missed this.<br><br>
+                        </td>
+			</tr><tr style="color:#284775;background-color:White;">
+				<td style="width:20%;">Reviewer confidence regarding this review.</td><td style="width:80%;">
+                            1-Less confident (might not have understood significant parts)
+                        </td>
+			</tr>
+		</tbody></table>
+	</div>
+            
+        
+            <hr>
+            <table>
+                <tbody><tr>
+                    <td>
+                        <span id="ctl00_cph_gvReviews_ctl05_Label2" style="font-size:Small;font-weight:bold;">Masked Reviewer ID:</span>
+                    </td>
+                    <td>
+                        <span id="ctl00_cph_gvReviews_ctl05_Label1" style="font-size:Small;">Assigned_Reviewer_9</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span id="ctl00_cph_gvReviews_ctl05_Label3" style="font-size:Small;font-weight:bold;">Review:</span>
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+            </tbody></table>
+            <div>
+		<table rules="all" style="color:#333333;border-width:1px;border-style:None;font-family:Verdana;font-size:Small;border-collapse:collapse;" border="1" cellpadding="4" cellspacing="0">
+			<tbody><tr style="color:White;background-color:#5D7B9D;font-weight:bold;">
+				<th scope="col">Question</th><th scope="col">&nbsp;</th>
+			</tr><tr style="color:#333333;background-color:#F7F6F3;">
+				<td style="width:20%;">Summary: Provide a brief summary of the contents of the paper.</td><td style="width:80%;">
+                            This paper presents a more efficient version of the model from Henaff-Bruna-LeCun.<br>
+                        </td>
+			</tr><tr style="color:#284775;background-color:White;">
+				<td style="width:20%;">Fatal flaws: Does the paper have a "fatal 
+flaw" making it unfit for publication, regardless of other criteria (may
+ include out of scope, double publication, plagiarism, wrong proofs, 
+flawed experiments)? Use the text box to justify your answer.</td><td style="width:80%;">
+                            No (not as far as I can see)
+                        </td>
+			</tr><tr style="color:#333333;background-color:#F7F6F3;">
+				<td style="width:20%;">Technical quality: whether experimental methods are appropriate, proofs are sound, results are well analyzed.</td><td style="width:80%;">
+                            2-Sub-standard for NIPS
+                        </td>
+			</tr><tr style="color:#284775;background-color:White;">
+				<td style="width:20%;">Novelty/originality: in any aspect of the work, theory, algorithm, applications, experimental.</td><td style="width:80%;">
+                            2-Sub-standard for NIPS
+                        </td>
+			</tr><tr style="color:#333333;background-color:#F7F6F3;">
+				<td style="width:20%;">Potential impact or usefulness: could be 
+societal, academic, or practical and should be lasting in time, 
+affecting a large number of people and/or bridge the gap between 
+multiple disciplines.</td><td style="width:80%;">
+                            2-Sub-standard for NIPS
+                        </td>
+			</tr><tr style="color:#284775;background-color:White;">
+				<td style="width:20%;">Clarity and presentation: explanations, language and grammar, figures, graphs, tables, proper references.</td><td style="width:80%;">
+                            1-Low or very low
+                        </td>
+			</tr><tr style="color:#333333;background-color:#F7F6F3;">
+				<td style="width:20%;">Qualitative assessment: Provide constructive 
+feedback to the authors; justify and complement your ratings above. This
+ is our MOST IMPORTANT QUESTION, we need to get good arguments for our 
+decisions!</td><td style="width:80%;">
+                            I found it extremely hard to understand this
+ paper, to the point where I had to read the cited Henaff-Bruna-LeCun 
+paper in order to understand what this paper is even about.<br><br>As 
+far as I can tell this paper is presenting an efficient way to implement
+ the algorithm from Henaff-Bruna-LeCun, which seems like a worthwhile 
+thing to do since the algorithm in that paper is very computationally 
+expensive.<br><br>I'm surprised there are no "naturally" graph 
+structured data sets in the experiments.  The abstract alludes to a few 
+and it would have been nice to see these.<br>
+                        </td>
+			</tr><tr style="color:#284775;background-color:White;">
+				<td style="width:20%;">Reviewer confidence regarding this review.</td><td style="width:80%;">
+                            1-Less confident (might not have understood significant parts)
+                        </td>
+			</tr>
+		</tbody></table>
+	</div>
+            
+        
+    <br>
+    <br>
+
+</div>
+</td><td class="contentBorder">&nbsp;</td></tr></tbody></table>
+</form>
+
+
+</body></html>
