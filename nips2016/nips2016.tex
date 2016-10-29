@@ -40,6 +40,9 @@
 %\usepackage{parskip} \setlength{\parskip}{5pt}
 %\setlength{\bibsep}{0.2pt} %comment for arxiv
 
+\setlength{\textfloatsep}{20.0pt plus 2.0pt minus 2.0pt}
+\setlength{\floatsep}{20.0pt plus 2.0pt minus 2.0pt}
+\setlength{\intextsep}{20.0pt plus 2.0pt minus 2.0pt}
 
 \title{Convolutional Neural Networks on Graphs\\
 with Fast Localized Spectral Filtering\\}
@@ -596,7 +599,6 @@ matched nodes do not have to be fetched.
 
 
 \begin{figure}[ht]
-\vspace{0.5cm}
 \centering
 \includegraphics[width=\textwidth]{images/coarsening_crop}
 \caption{\textbf{Example of Graph Coarsening and Pooling.} Let us carry out a max pooling of size 4 (or two poolings of size 2) on a signal $x \in
@@ -724,19 +726,18 @@ To demonstrate the versatility of our model to work with graphs generated from u
 
 
 \begin{table*}[h!] \centering
-\vspace{0.5cm}
-\begin{tabular}{lc} \toprule
-Model & Accuracy \\
+\begin{tabular}{lcc} \toprule
+Model & Accuracy & \todo{Parameters} \\
 \midrule
 Linear SVM & 65.90 \\
 Multinomial Naive Bayes & 68.51 \\
 %Multinomial logistic regression (softmax) & 66.28 \\
-Softmax & 66.28 \\
+Softmax & 66.28 & $200\times10^3$ \\
 \addlinespace
-FC2500 & 64.64 \\
-FC2500-FC500 & 65.76 \\
+FC2500 & 64.64 & $\sim25\times10^6$ \\
+FC2500-FC500 & 65.76 & $\sim26\times10^6$ \\
 \addlinespace
-GC32 & 68.26 \\
+GC32 & 68.26 5\\
 GC32-FC500 & \todo{?} \\
 \bottomrule \end{tabular}
 \caption{Classification accuracies for the proposed model and a other algorithms
@@ -750,8 +751,9 @@ the 10,000 most common words from the 93,953 unique words in this corpus. Each
 document is represented using the bag-of-words model, normalized across words.
 To test our model, we constructed a 16-NN graph of the word2vec
 \cite{pro:MikolovChenCorradoDean13word2vec} embedding of those words, which
-produced a graph of \todo{$n = |\V| = $ nodes (10k words and ? fake nodes) and
-$|\E| = ?$ edges}.  All CNN models were trained for 20 epochs by the Adam
+produced a graph of $n = |\V| = 10,000$ nodes (no fake nodes because we do not
+coarsen the graph) and
+$|\E| = 132,834$ edges. All CNN models were trained for 20 epochs by the Adam
 optimizer \cite{art:KingmaBa14AdamOpt} with a learning rate of 0.1, without regularization nor
 dropout. The filter support was set to $K = 5$.
 
@@ -773,7 +775,6 @@ In this section, we compare the proposed spectral filters to the non-parametric 
 
 
 \begin{table*}[h!] \centering
-\vspace{0.5cm}
 \begin{tabular}{llccc} \toprule
 & & \multicolumn{3}{c}{Accuracy} \\
 \cmidrule{3-5}
@@ -786,7 +787,8 @@ MNIST & GC32-P4-GC64-P4-FC512 & 96.28 & 97.15 & \textbf{98.65} \\
 20NEWS & GC32 & \todo{?} & \todo{?} & \todo{?} \\
 \bottomrule \end{tabular}
 \caption{Comparison of accuracy results for different types of spectral filters.
-Spline and Chebyshev filters use \todo{$K=20$}, \todo{$K=5$ for 20NEWS}.} 
+Spline and Chebyshev filters use \todo{$K=20$}, \todo{$K=5$ for 20NEWS}
+parameters.} 
 \label{tab:filters}
 \end{table*}
 
@@ -809,8 +811,7 @@ parallelization opportunity offered by our model. That is possible because our
 method relies solely on matrix multiplications which are efficiently implemented
 by cuBLAS, the linear algebra routines provided by NVIDIA.
 
-\begin{table*}[h!] \centering
-\vspace{0.5cm}
+\begin{table*}[ht] \centering
 \begin{tabular}{llccc} \toprule
 & & \multicolumn{2}{c}{Time (ms)} & \\
 Model & Architecture & CPU & GPU & Speedup \\
@@ -818,16 +819,16 @@ Model & Architecture & CPU & GPU & Speedup \\
 Classical CNN & C32-P4-C64-P4-FC512 & 210 & 31 & 6.77x \\
 Proposed graph CNN & GC32-P4-GC64-P4-FC512 & 200 & 25 & 8.00x \\
 \bottomrule \end{tabular}
-\caption{Time to process a mini-batch of 100 MNIST images. That is the total
+\caption{Time to process a mini-batch of $S=100$ MNIST images. That is the total
 training time divided by the number of gradient steps.} 
 \label{tab:speedup}
 \end{table*}
 
-\begin{figure}[h!]
-\vspace{0.5cm}
+\begin{figure}[ht]
 \centering
-\includegraphics[width=7cm]{images/speed.png}
-\caption{Training time over a mini-batch of 100 20NEWS documents w.r.t. $n$, the
+\vspace{-20pt}
+\includegraphics[width=\textwidth]{images/runtime_crop}
+\caption{Training time over a mini-batch of $S=100$ 20NEWS documents w.r.t. $n$, the
 number of selected words, for the three considered filters. The architecture is
 GC32 with $K=5$ for Spline and Chebyshev.}
 \label{fig:runtime}
@@ -866,7 +867,6 @@ graph. \tabref{mnist_quality} reports a large drop of accuracy when using a rand
 
 
 \begin{table*}[h!]
-\vspace{0.5cm}
 \centering
 \begin{tabular}{lcc} \toprule
 Architecture & 8-NN on 2D Euclidean grid & random \\
@@ -899,7 +899,6 @@ good low-dimensional embedding first and then construct an exact $k$-NN graph
 from this embedding.
 
 \begin{table*}[h!] \centering
-\vspace{0.5cm}
 \begin{tabular}{ccccc} \toprule
 & \multicolumn{2}{c}{word2vec} & & \\
 bag-of-words & pre-trained & learned & approximate & random \\

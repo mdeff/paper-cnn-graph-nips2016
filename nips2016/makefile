@@ -1,7 +1,13 @@
 PDF  = $(patsubst %.tex,%.pdf,$(wildcard *.tex))
 BIB  = $(wildcard *.bib)
 
-all: $(PDF)
+all: images $(PDF)
+
+images:
+	cd images && \
+	./runtime.py && \
+	pdfcrop runtime.pdf runtime_crop.pdf && \
+	rm runtime.pdf
 
 %.pdf: %.tex $(BIB)
 	latexmk -pdf $<
@@ -12,8 +18,9 @@ clean:
 	rm -f *.{toc,snm,nav}
 	rm -f *.gz*
 	rm -f **/*eps-converted-to.pdf
+	rm -f images/runtime_crop.pdf
 
 cleanall: clean
 	rm -f $(PDF)
 
-.PHONY: all clean cleanall
+.PHONY: all images clean cleanall
