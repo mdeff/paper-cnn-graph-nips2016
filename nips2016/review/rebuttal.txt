@@ -1,45 +1,43 @@
 
 
+############
+ALL
+############
+
+4950
+ 
+We warmly thank the referees for their time and valuable comments. 
+
+Referees 1,3,7
+Accuracy Gap for MNIST: The gap between standard CNN and graph CNN may be due to our isotopic filters. We also observed that with 20 epochs (instead of 10 in our submission) for LeNet5 architecture, standard CNN has 99.33% accuracy and graph CNN has 99.14%. This reveals a slower convergence of graph CNN, and the need to investigate better optimization strategies. 
+
+Referees 3,7,8
+Graph Usefulness and Experiments: The goal of Tables 3,5 is to show that the usefulness of the graph structure directly depends on the graph quality. When random graphs are used, then convolutional layers are useless, and graph CNN are not well suited for the problem. If the graph is well constructed, like the grid for MNIST, then graph CNN provide good performances. For 20NEWS, we did not try to optimize the graph structure. There may be better ways to construct higher-quality graphs, but it was not our objective. 
+The goal of Table 4 is to demonstrate that convolutional layers CN32 are also effective on graphs that are not regular image grids. This is showed by comparing CN32 to fully connected (FC) networks. We also compared against the effective Multinomial NB document classification technique, and SVM and linear classifier baseline techniques. Graph CNN did not overcome Multinomial NB. It may be due to the small size of the dataset (20NEWS has 19K documents). CNN usually perform less than other classification techniques for small datasets. We plan to apply our technique to the larger text dataset RCV1 (800K documents). 
+
+Referee 1
+Thanks for pointing out GNN (we will add this ref). On the high level, GNN is a spatial technique, and our model is spectral. GNN was designed to classify nodes/graphs by first embedding each node in an Euclidean space with RNN, and then using those as features for classification. Our technique is developed to classify graph signals by successively extracting higher level features, as done for classical CNN. Regarding the referee’s comment, we read carefully the two GNN papers, and were not able to express the graph CNN in terms of GNN, as suggested by the referee. We would be grateful if the referee could point out more connections between our model and the GNN papers.
+The spectral filters are indeed rotationally invariant. Although it first appears to be a limitation, we think the rotational invariance property might actually be an advantage. Our motivation is inspired by the following experiment (not reported in the paper). We learned the classic and graph CNN from a rotated MNIST dataset, i.e. each training image is randomly rotated (no data augmentation here, simply rotation of original images). Classic CNN obtained 70% of accuracy, and graph CNN 91%. Although such experiment is naive, it reveals that spatial invariance properties like rotation can be an asset in some applications where the training data are not enough to capture all meaningful features. We will investigate such idea in a future work, that is if such invariance property is an advantage for large-scale image datasets, where same objects may rotate, and thus requiring standard CNN to learn more filters than graph CNN. 
+We will also study the possibility to learn anisotropic Laplacians, and thus anisotropic filters. 
+
+Referee 7
+We indeed consider a single graph in this work, which is already meaningful for multiple applications s.a. brain connectivity analysis, and social network analysis. Transfer graph features/filters from one graph to another graph is obviously of great interest, and can also be explored with spectral techniques like the one proposed here (e.g. learn and transfer Chebyshev coefficients across graphs). We reserve this extension for another paper. 
+Pooling is a pillar operation in any CNN architecture as it allows to reduce spatial resolution and increase feature resolution. In the case of grids, it is mathematically well-defined, but in case of graphs it is equivalent to graph clustering or coarsening, i.e. grouping similar vertices together, which is NP-hard. We opted here for the Metis model, which has proved to be very efficient. Note also that the coarsening step is performed only once.
+
+Referee 8
+We have recently improved the presentation of the paper, and will release the new version in the final version of the paper.
+The performance analysis of standard CNN is a central and open mathematical question. It is thus challenging to state anything about the theoretical performances of our model. The only performance study is experimental and summarised in Table 6.  
+
+Referee 9
+Presentation: See our answer to R8.
+We indeed did not introduce any natural graph experiments in this work. Our first goal was to introduce an efficient graph CNN technique. However, a data analysis project on Wikipedia network using this technique is ongoing.
+
+
 
 
 ############
 Private to AC
 ############
 
-The general consensus of the referees lean towards acceptance. Referees 1,3,6,7 agree that the model is novel, effective and potentially impactful. The only concerns come from Referees 8,9 who acknowledge their low confidence in the understanding of the main contributions of the paper. 
+The general consensus of the referees lean towards acceptance. Referees 1,3,6,7 agree that the model is novel, effective and potentially impactful. The only concerns come from Referees 8,9 who acknowledge their low confidence in their understanding of the paper main contributions. 
 
-
-
-############
-ALL
-############
-
-5900
-
-We warmly thank the referees for their time and their valuable comments regarding our manuscript. 
-
-We first address common comments.
-
-Accuracy Gap on MNIST (Referees 1,3,7): There is indeed an accuracy gap between standard CNN and graph CNN. It may due to several reasons such as architecture tuning and isotopic filters. We also observed that the accuracy gap can be reduced with more epochs. With 20 epochs (instead of 10 in our submission) and a LeNet5 architecture, standard CNN has 99.33% accuracy and graph CNN has 99.14%. This reveals a slower convergence of graph CNN, and we will investigate better optimization strategies. 
-
-Graph Usefulness and Experiments (R3,7,8): The goal of Tables 3 and 5 is to show that the usefulness of the graph structure directly depends on the quality of the graph. When random graphs are used (graphs that hold random connexions between pixels/vertices), then the convolutional layers become meaningless, and graph CNN are not well suited for the problem at hand. On the contrary, if the graph is well constructed, like the regular grid for MNIST, then graph CNN provide good performances. For 20NEWS, we did not try to optimize the graph structure in our experiments. There may be better ways to construct higher-quality graphs. However, constructing graphs from data is an open and challenging question, and was not our objective here. 
-The goal of Table 4 was to demonstrate that convolutional layers, model CN32-softmax, are also effective on graphs that are not regular image grids, but a graph of 20NEWS words. This is justified by comparing CN32-softmax to fully connected networks, FC models. We also compared against the effective and popular text document classification technique, Multinomial NB, and the SVM and linear classifier baseline techniques. Graph CNN did not overcome Multinomial NB. It may due to the small size of the dataset, 20NEWS having only 19K documents. CNN usually perform less than other classification techniques for small datasets. As a consequence, we will apply our technique to the larger text dataset RCV1 which has 800K documents, as [13]. 
-
-We now address the specific comments of each referee.
-
-Referee 1.
-GNN: Thanks for pointing out the GNN model (we will add this ref). On the high level, GNN is a spatial/graph technique, unlike our model which is spectral. Technically, GNN was originally designed to classify nodes or graphs by first embedding each node in an Euclidean space with RNN, and then using those as features for classification or regression. Our technique is developed to classify graph signals by successively extracting higher level features, as done for classical CNN. Regarding the referee’s comment, we read very carefully the two 2009 GNN papers, and were not able to express the graph CNN in terms of GNN, as suggested by the referee. We would be grateful if the referee could point out more connections between our model and the GNN papers.
-Rotational invariance: The spectral filters are indeed rotationally invariant. Although it first appears to be a limitation of this system, we think the rational invariance property might actually be an advantage for large-scale image datasets. Our motivation is inspired by the following experiment (not reported in the paper). We learned the classic and graph CNN from a rotated MNIST dataset, that is each training MNIST image is randomly rotated from -90° to 90° (no data augmentation here, simply rotation of original images). Classic CNN obtained 70.65% of accuracy, and graph CNN got 91.47%. Although such experiment is naive, it reveals that spatial invariance properties like rotation can be an asset in some applications where the training data are not enough to capture all meaningful features. We will investigate such idea in a future work, that is if such invariance property is an advantage for large-scale image datasets, where same objects may rotate, and thus requiring standard CNN to learn more filters than graph CNN. 
-We will also study the possibility to learn anisotropic Laplacians, and thus anisotropic filters. 
-
-Referee 7.
-Single graph: We indeed consider a single graph in this work, which is already meaningful for multiple applications s.a. brain connectivity analysis, and social network analysis (one graph and many data signals on this graph). Transfer graph features/filters from one graph to another graph is obviously of great interest, and can also be explored with spectral techniques like the one proposed here (for example learn and transfer Chebyshev coefficients across graphs). We reserve this extension for another paper. 
-Graph pooling: Pooling is a pillar operation in any CNN architecture as it allows to reduce spatial resolution and increase feature resolution. In the case of grids, it is mathematically well-defined, but in case of graphs it is equivalent to graph clustering or coarsening, i.e. grouping similar vertices together, which is NP-hard. We opted here for the Metis/Graclus model [8,15], which has proved to be a very efficient graph clustering technique. Note also that the coarsening step is performed only once, before training.
-
-Referee 8.
-Presentation: We have recently improved the presentation and accessibility of the paper. We will be happy to release this new version in the final version of the paper.
-Theory: The analysis of the performances of standard CNN is currently a central and open mathematical question. It is thus challenging to state anything about the theoretical performances of our model vs [13]. The only performance comparison is experimental and are summarised in Table 6. Besides, a theoretical advantage of our model is that our filters are exactly localized in K hops on graphs. 
-
-Referee 9.
-Presentation: See our answer to R8.
-Natural graphs: Indeed, we did not present any natural graph experiments in this work. Our first goal was to introduce our efficient graph CNN technique. However, a data analysis project on Wikipedia network using this technique is ongoing.
