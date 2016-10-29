@@ -34,16 +34,17 @@
 
 % Use less space
 \usepackage{titlesec}		% space before / after headings
-\titlespacing\section{0pt}{6pt plus 1pt minus 2pt}{1pt plus 1pt minus 2pt}
-\titlespacing\subsection{0pt}{6pt plus 1pt minus 2pt}{1pt plus 1pt minus 2pt}
+\titlespacing\section{0pt}{5pt plus 1pt minus 2pt}{1.8pt plus 1pt minus 1pt}
+\titlespacing\subsection{0pt}{5pt plus 1pt minus 2pt}{2.7pt plus 1pt minus 2pt}
 %\titlespacing\subsubsection{0pt}{10pt plus 4pt minus 2pt}{0pt plus 2pt minus 2pt}
-\setlength{\bibsep}{1.5pt} %comment for arxiv
 
-\usepackage{parskip} \setlength{\parskip}{0pt} \setlength{\parindent}{1em}
+\setlength{\bibsep}{1.52pt} %comment for arxiv
 
-\setlength{\textfloatsep}{7.2pt plus 1.0pt minus 2.0pt}
-\setlength{\floatsep}{7.2pt plus 1.0pt minus 2.0pt}
-\setlength{\intextsep}{7.2pt plus 1.0pt minus 2.0pt}
+\usepackage{parskip} \setlength{\parskip}{2.1pt} \setlength{\parindent}{1em}
+
+\setlength{\textfloatsep}{8pt plus 1.0pt minus 2.0pt}
+%\setlength{\floatsep}{8.2pt plus 1.0pt minus 2.0pt}
+%\setlength{\intextsep}{8.2pt plus 1.0pt minus 2.0pt}
 
 \setcounter{topnumber}{3}
 %\setcounter{bottomnumber}{8}
@@ -52,23 +53,35 @@
 \title{Convolutional Neural Networks on Graphs\\
 with Fast Localized Spectral Filtering\\}
 
+\newcommand{\affe}{\textsuperscript{\dag}}
+\newcommand{\affs}{\textsuperscript{\ddag}}
+
 \author{
-  Michaël Defferrard \\ %\thanks{further info} \\
-  %Department of Electrical Engineering \\
-  %École Polytechnique Fédérale de Lausanne (EPFL) \\
-  EPFL, Lausanne, Switzerland \\
-  \texttt{michael.defferrard@epfl.ch} \\
-  \And % \AND
-  Xavier Bresson \\
-  %School of Computer Science and Engineering \\
-  Nanyang Technological University, Singapore \\
-  \texttt{xavier.bresson@ntu.edu.sg} \\
-  \And % \AND
-  Pierre Vandergheynst \\
-  %Department of Electrical Engineering \\
-  EPFL, Lausanne, Switzerland \\
-  \texttt{pierre.vandergheynst@epfl.ch} \\
+	Michaël Defferrard\affe \hspace{1cm} Xavier Bresson\affs \hspace{1cm} Pierre Vandergheynst\affe %\thanks{further info} \\
+	%Department of Electrical Engineering \\
+	%École Polytechnique Fédérale de Lausanne (EPFL) \\
+	\vspace{0.2cm} \\
+	\affe EPFL, Lausanne, Switzerland \hspace{1cm} \affs Nanyang Technological University, Singapore \\
+	\texttt{\{michael.defferrard,pierre.vandergheynst\}@epfl.ch \hfill xavier.bresson@ntu.edu.sg} \\
 }
+
+%\author{
+%  Michaël Defferrard \\ %\thanks{further info} \\
+%  %Department of Electrical Engineering \\
+%  %École Polytechnique Fédérale de Lausanne (EPFL) \\
+%  EPFL, Lausanne, Switzerland \\
+%  \texttt{michael.defferrard@epfl.ch} \\
+%  \And % \AND
+%  Xavier Bresson \\
+%  %School of Computer Science and Engineering \\
+%  Nanyang Technological University, Singapore \\
+%  \texttt{xavier.bresson@ntu.edu.sg} \\
+%  \And % \AND
+%  Pierre Vandergheynst \\
+%  %Department of Electrical Engineering \\
+%  EPFL, Lausanne, Switzerland \\
+%  \texttt{pierre.vandergheynst@epfl.ch} \\
+%}
 
 %%Arxiv
 %\author{
@@ -156,19 +169,6 @@ spatial locations. Localized kernels or compactly supported filters refer to
 filters that extract local features independently of the input data size, with
 a support size that can be much smaller than the input size.
 
-\begin{figure}[t]
-\centering
-\includegraphics[width=0.8\textwidth]{images/illustrationCNNgraphs}
-\caption{Architecture of the proposed CNN on graphs.
-	%Notation: $l$ is the coarsening level, $x^l$ are the downsampled signals at
-	%layer $l$, $\G^l$ is the coarser graph, $g_{\theta^{K_l}}$ are the spectral
-	%filters at layer $l$, $x_g^l$ are the filtered signals, $p_l$ is the
-	%coarsening exponent, $n_c$ is the number of classes, $y$ is the output
-	%signal, and $\theta^l$ is the number of parameters to learn at $l$.
-}
-\label{fig_illustration}
-\end{figure}
-
 % Eventually, generic and efficient implementations of CNNs on graphs, as
 % proposed here and related works
 % \cite{pro:GregorLeCun10LRF,pro:CoatesNg11LRF,masci2015geodesic,art:BrunaZarembaSzlamLeCun13DLgraphs,art:HenaffBrunaLeCun15DLgraphs},
@@ -251,6 +251,19 @@ Precisely, the main contributions of this work are summarized below.
 	apply the model to other data is available as an open-source
 	software.\footnote{\url{https://github.com/mdeff/cnn_graph}}
 \end{enumerate}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.87\textwidth]{images/illustrationCNNgraphs}
+\caption{Architecture of the proposed CNN on graphs.
+	%Notation: $l$ is the coarsening level, $x^l$ are the downsampled signals at
+	%layer $l$, $\G^l$ is the coarser graph, $g_{\theta^{K_l}}$ are the spectral
+	%filters at layer $l$, $x_g^l$ are the filtered signals, $p_l$ is the
+	%coarsening exponent, $n_c$ is the number of classes, $y$ is the output
+	%signal, and $\theta^l$ is the number of parameters to learn at $l$.
+}
+\label{fig_illustration}
+\end{figure}
 
 \section{Proposed Technique}
 
@@ -370,7 +383,6 @@ where the parameter $\theta \in \R^K$ is a vector of Chebyshev coefficients and
 $T_k(\tilde{\Lambda}) \in \R^{n \times n}$ is the Chebyshev polynomial of order
 $k$ evaluated at $\tilde{\Lambda} = 2 \Lambda / \lambda_{max} - I_n$, a diagonal
 matrix of scaled eigenvalues that lie in $[-1,1]$.
-
 The filtering operation can then be written as $y = g_\theta(L) x
 = \sum_{k=0}^{K-1} \theta_k T_k(\tilde{L}) x$, where $T_k(\tilde{L}) \in \R^{n
 \times n}$ is the Chebyshev polynomial of order $k$ evaluated at the scaled
@@ -381,9 +393,7 @@ Denoting $\bar{x}_k =
 T_k(\tilde{L})x \in \R^n$, we can use the recurrence relation to compute
 $\bar{x}_k = 2\tilde{L} \bar{x}_{k-1} - \bar{x}_{k-2}$ with $\bar{x}_0 = x$ and
 $\bar{x}_1 = \tilde{L}x$. The entire filtering operation
-\begin{equation}
-	y = g_\theta(L) x = [\bar{x}_0, \ldots, \bar{x}_{K-1}] \theta
-\end{equation}
+	$y = g_\theta(L) x = [\bar{x}_0, \ldots, \bar{x}_{K-1}] \theta$
 then costs $\bO(K|\E|)$ operations.
 
 \paragraph{Learning filters.} The $j^\text{th}$ output feature map of the sample
@@ -789,7 +799,7 @@ Proposed graph CNN & GC32-P4-GC64-P4-FC512 & 1600 & 200 & 8.00x \\
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.8\textwidth]{images/training}
+\includegraphics[width=\textwidth]{images/training}
 \caption{Plots of validation accuracy and training loss for the first 2000
 iterations on MNIST.}
 \label{fig:convergence}
