@@ -1,0 +1,368 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"><title>
+	Meta-Reviews For Paper
+</title>
+<style>
+body
+{
+	font-family:verdana,arial,helvetica;
+}
+#header
+{
+    width: 100%;
+    font-size: small;
+    background-color:#F7F7F7;
+}
+.headerSeparator
+{
+    background-color: #105586;
+}
+.printThemeText
+{
+    font-size:small;
+}
+.printThemeTable td
+{
+    vertical-align:top;
+}
+.printThemeGrid th
+{
+    color:white;
+    background:#5D7B9D;
+    font-weight:bold;
+}
+.printThemeGrid
+{
+    border-collapse:collapse;
+}
+.printThemeGrid td, .printThemeGrid th
+{
+    border:solid 1px #D6D3CE;
+    padding:4px 4px 4px 4px;
+}
+.printThemeGrid .row
+{ 
+    background-color:#F7F6F3;
+    color:#333333;
+    vertical-align:top;
+}
+.printThemeGrid .altrow
+{ 
+    background-color:White;
+    color:#284775;
+    vertical-align:top;
+}
+.cellprompt
+{
+	font-weight:bold;
+	white-space:nowrap;
+    width:100px;	
+}
+.paperHeader
+{
+    background-color:#dee3e7;
+    margin:5px 5px 15px 0px;
+    width:99%;
+    font-family:Verdana;
+    font-size:medium;
+    font-weight:bold;
+}
+.sectionHeader
+{
+    background-color:#dee3e7;
+    padding:5px 5px 5px 0px;
+    width:99%;
+    text-decoration:underline;
+    font-family:Verdana;
+    font-size:small;
+    font-weight:bold;
+}
+.underlineheader
+{
+    text-decoration:underline;
+    font-weight:bold;
+    padding:5px 0px;
+}
+.response
+{
+    padding:5px 0px;
+}
+.reviewerlabel
+{
+    padding-right:20px;
+}
+.pageTitle
+{
+    background-color:#dee3e7;
+    padding:5px 5px 5px 5px;
+    margin-top:10px;
+    width:99%;
+    font-family:Verdana;
+    font-size:medium;
+    font-weight:bold;
+}
+.submissionDetailsView
+{
+}
+.submissionDetailsView tr
+{
+    vertical-align:top;
+}
+.submissionDetailsView td.prompt
+{
+    font-weight:bold;
+}
+.submissionDetailsView tr.sectionSeparator
+{
+
+}
+.submissionDetailsView tr.sectionSeparator td
+{
+    background-color:#dee3e7;
+    padding:5px 5px 5px 5px;
+    font-family:Verdana;
+    font-size:small;
+    font-weight:bold;
+    color:Navy;
+}
+/*CSS Grid View General Definitions*/
+.CssGridView
+{
+    font-size:small; 
+}
+
+.CssGridView td, .CssGridView th
+{
+    padding:4px 4px 4px 4px;
+}
+
+/*CSS Compact Grid View General Definitions*/
+.CssGridViewCompact img
+{
+    border-style:none;
+    border-width:0px;
+}
+
+.CssGridViewCompact
+{
+    font-size:1em;
+    border-style:solid;
+    border-color:#D6D3CE;
+    border-width:1px;
+}
+
+.CssGridViewCompact .hrow a
+{
+    font-size:1em;
+}
+
+.CssGridViewCompact .row a, .CssGridViewCompact .altrow a
+{
+    font-size:0.8em;
+}
+
+.CssGridViewCompact .row .normal a, .CssGridViewCompact .row .normal, .CssGridViewCompact .altrow .normal a, .CssGridViewCompact .altrow .normal
+{
+    font-size:1em;
+}
+
+/*CSS Grid View Header Styles*/
+.CssGridView .hrow, .CssGridViewCompact .hrow
+{ 
+    background-color:#5D7B9D;
+    font-weight:bold;
+    color:White;
+}
+
+
+.CssGridViewCompact .hrow td
+{ 
+    border-bottom-width:0px;
+}
+
+.CssGridViewCompact .hrow th
+{ 
+    border-top-width:0px;
+    font-size:0.8em;
+    vertical-align:top;
+    border-left-width:0px;
+    border-right-width:0px;
+}
+
+.CssGridViewCompact .smaller
+{
+    font-size:0.8em;
+}
+
+/*CSS Grid View Row Styles*/
+.CssGridViewCompact .row, .CssGridViewCompact .altrow
+{
+    border-top-style:solid;
+    border-top-color:#D6D3CE;
+    border-top-width:1px;
+    border-bottom-style:solid;
+    border-bottom-color:#D6D3CE;
+    border-bottom-width:1px;
+}
+
+/*CSS Grid View Header Styles*/
+.CssGridViewCompact .hrow .leftborder, .CssGridViewCompact .row .leftborder, .CssGridViewCompact .altrow .leftborder
+{
+    border-left-width:1px;
+    border-left-color:#D6D3CE;
+    border-left-style:solid;
+}
+
+.CssGridViewCompact .hrow .rightborder, .CssGridViewCompact .row .rightborder, .CssGridViewCompact .altrow .rightborder
+{
+    border-right-width:1px;
+    border-right-color:#D6D3CE;
+    border-right-style:solid;
+}
+
+.CssGridView .hrow a, .CssGridViewCompact .hrow a
+{ 
+    color:White;
+}
+ 
+.CssGridView .row, .CssGridViewCompact .row
+{ 
+    background-color:#F7F6F3;
+    color:#333333;
+    vertical-align:top;
+}
+
+.CssGridView .altrow, .CssGridViewCompact .altrow
+{ 
+    vertical-align:top;
+}
+
+.CssGridViewCompact .row td
+{ 
+    border-left-width:0px;
+    border-right-width:0px;
+}
+ 
+.CssGridViewCompact .altrow
+{ 
+    background-color:White;
+    color:#284775;
+    vertical-align:top;
+}
+
+.CssGridView .altrow tr, .CssGridViewCompact .altrow tr, .CssGridView .row tr, .CssGridViewCompact .row tr
+{ 
+    vertical-align:top;
+}
+</style>
+<style type="text/css">
+:root #lca-cookie-notification,
+:root .euCookie.mscom-alertitem,
+:root #content > #center > .dose > .dosesingle,
+:root #content > #right > .dose > .dosesingle,
+:root #header + #content > #left > #rlblock_left
+{ display: none !important; }</style></head>
+<body>
+<form name="aspnetForm" method="post" action="./ViewMetaReviewsForPaper.aspx?paperId=1911" id="aspnetForm">
+<div>
+<input name="__VIEWSTATE" id="__VIEWSTATE" value="/wEPDwUKMTAxNDM4ODU3Ng9kFgJmD2QWAgIDD2QWAmYPZBYCAgUPDxYCHgdWaXNpYmxlZ2QWBgIBD2QWAmYPZBYCZg9kFgQCAQ9kFgICAQ9kFgJmDw8WAh4EVGV4dAUEMTkxMWRkAgIPZBYCAgEPZBYCZg8PFgIfAQVOQ29udm9sdXRpb25hbCBOZXVyYWwgTmV0d29ya3Mgb24gR3JhcGhzIHdpdGggRmFzdCBMb2NhbGl6ZWQgU3BlY3RyYWwgRmlsdGVyaW5nZGQCAw8PFgIfAGhkZAIFDxYCHgtfIUl0ZW1Db3VudAIBFgJmD2QWBgIDD2QWAmYPFQEPTWV0YV9SZXZpZXdlcl8xZAIHDzwrABEDAA8WBB4LXyFEYXRhQm91bmRnHwICAWQBEBYAFgAWAAwUKwAAFgJmD2QWBAIBD2QWBGYPDxYCHwEFXEFyZWEgY2hhaXIgc3VtbWFyeTogUGxlYXNlIHN1bW1hcml6ZSB0aGUgcmVhc29ucyBmb3IgeW91ciBkZWNpc2lvbiBpbiBhIGNvdXBsZSBvZiBzZW50ZW5jZXMuZGQCAQ9kFgJmDxUByQ9UaGUgcGFwZXIgcHJvcG9zZXMgYSBnZW5lcmFsaXplZCBDTk4gb24gZ3JhcGhzIGJ5IGV4dGVuZGluZyBIZW5hZmYtQnJ1bmEtTGVDdW4uIFRoaXMgcGFwZXIgcHJlc2VudHMgYSBwcm9taXNpbmcgbWV0aG9kIHdpdGggdGhlb3JldGljYWwgYW5hbHlzaXMsIHdpdGggc29tZSBleHBlcmltZW50YWwgZGVtb25zdHJhdGlvbiBvbiBzb21lIGJlbmNobWFya3MgKE1OSVNUIGFuZCAyMCBOZXdzKS4gVGhlIHJldmlld3MgYXJlIG92ZXJhbGwgcG9zaXRpdmUsIGJ1dCB0aGVyZSBhcmUgc29tZSB3ZWFrbmVzc2VzOiB0aGUgcHJlc2VudGF0aW9uIHNob3VsZCBiZSBpbXByb3ZlZCBhbmQgc2VsZi1jb250YWluZWQsIGFuZCBtb3JlIHBvc2l0aXZlIGV4cGVyaW1lbnRhbCByZXN1bHRzIHNob3VsZCBiZSBwcm92aWRlZCBmb3Igb3RoZXIgKHJlYWwgYW5kIGxhcmdlLXNjYWxlKSBkYXRhc2V0cy4gU3RpbGwsIGdpdmVuIHRoYXQgdGhpcyByZXNlYXJjaCBhcmVhIGlzIHJlbGF0aXZlbHkgdW5kZXJleHBsb3JlZCwgbW9zdCByZXZpZXdlcnMgYW5kIHRoaXMgQUMgYWdyZWUgdGhhdCB0aGUgcGFwZXIgaXMgd29ydGh5IG9mIHB1YmxpY2F0aW9uIGF0IE5JUFMuIDxiciAvPjxiciAvPi0tLS0tPGJyIC8+PGJyIC8+QWRkaXRpb25hbCBjb21tZW50IGJ5IFIxIGFmdGVyIHJlYnV0dGFsOjxiciAvPjxiciAvPiJBZnRlciByZWFkaW5nIHRoZSBhdXRob3IgZmVlZGJhY2sgSSBhbSBzb21ld2hhdCBsZXNzIG9wdGltaXN0aWMgYWJvdXQgdGhlIHBhcGVyLjxiciAvPjxiciAvPlRoZSBwcm9wb3NlZCBhbGdvcml0aG0gaXMgYW4gZXh0ZW5zaW9uIG9mIG91ciB3b3JrIChIZW5hZmYtQnJ1bmEtTGVDdW4pIHdoaWNoIGluZGVlZCBvdmVyY29tZXMgYW4gaW1wb3J0YW50IGNvbXB1dGF0aW9uYWwgYnVyZGVuICggTyhOXjIpIG9wZXJhdGlvbnMgYm90aCBhdCB0cmFpbiBhbmQgdGVzdCB0aW1lKS4gVGhlIHByaWNlIHRvIHBheSBmb3IgYSBtb3JlIGVmZmljaWVudCBhbGdvcml0aG0gaXMgYSByZXN0cmljdGlvbiBvbiB0aGUgY2xhc3Mgb2YgZmlsdGVycywgc2luY2UgdGhleSBhcmUgYWxsIHJvdGF0aW9uYWxseSBpbnZhcmlhbnQuIFRoaXMgd2FzIG5vdCBldmVuIGRlc2NyaWJlZCBpbiB0aGUgb3JpZ2luYWwgc3VibWlzc2lvbiBhcyBmYXIgYXMgSSByZW1lbWJlci4gV2hpbGUgSSBiZWxpZXZlIHRoYXQgdGhpcyByZXN0cmljdGlvbiBpcyB3b3J0aCBoYXZpbmcgb24gaGlnaC1kaW1lbnNpb25hbCwgaGlnaGx5IGlycmVndWxhciBncmFwaHMsIHRoZSBjdXJyZW50IGV4cGVyaW1lbnRzIGRvIG5vdCByZWFsbHkgdGVzdCB0aGUgYWxnb3JpdGhtIGluIHRoYXQgcmVnaW1lLjxiciAvPjxiciAvPkFsc28sIHRoZSBjb25uZWN0aW9uIHdpdGggdGhlIHByZXZpb3VzIEdOTiBtb2RlbCBvZiBTY2Fyc2VsaSBldCBhbC4gaXMgYW4gaW1wb3J0YW50IGFzcGVjdCB0aGF0IGhhcyBhbHNvIGJlZW4gb3Zlcmxvb2tlZC4gVGhlIHByb3Bvc2VkIGFsZ29yaXRobSBpcyBhbiBpbXBvcnRhbnQgc3BlY2lmaWMgaW5zdGFuY2Ugb2YgYSBHTk4gKGFuZCB0aGUgY29ubmVjdGlvbiB0byBHTk4gaXMgbm90IG1hZGUgaW4gYW55IHByaW9yIGxpdGVyYXR1cmUgSSBiZWxpZXZlKSwgYnV0IHRoZSBpbXByZXNzaW9uIGlzIHRoYXQgdGhpcyBzcGVjaWZpYyBpbnN0YW5jZSBzaG91bGQgYmUgY29tcGFyZWQgdG8gdGhlIG1vcmUgZ2VuZXJhbCBHTk4gYmFzZWxpbmUsIHdoaWNoIGdlbmVyYWxpemVzIHBvbHlub21pYWxzIG9mIHRoZSBMYXBsYWNpYW4gdG8gb3RoZXIgbm9ubGluZWFyIGNvbWJpbmF0aW9ucyBvZiB0aGUgTGFwbGFjaWFuLjxiciAvPjxiciAvPk92ZXJhbGwsIG15IGltcHJlc3Npb24gaXMgdGhhdCB0aGlzIHBhcGVyIGNvdWxkIGJlIG11Y2ggaW1wcm92ZWQuIEluIGl0cyBjdXJyZW50IGZvcm0gaXQgaXMgYm9yZGVybGluZSwgYnV0IEkgd2lsbCBub3Qgb3Bwb3NlIGFjY2VwdGFuY2UgaWYgdGhlIHJlc3Qgb2YgdGhlIHJldmlld2VycyBhZ3JlZS4iPGJyIC8+ZAICDw8WAh8AaGRkAggPFQEAZBgBBR9jdGwwMCRjcGgkZ3ZSZXZpZXdzJGN0bDAwJGN0bDAwDzwrAAwBCAIBZID0WTFoJ6iAjTTHHCHy7YEQhpNk" type="hidden">
+</div>
+
+<div>
+
+	<input name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="33F678B5" type="hidden">
+</div>
+<table id="header">
+<tbody><tr>
+<td width="100%"><a href="https://nips.cc/" target="_blank">NIPS 2016</a><br><b>Neural Information Processing Systems 2016</b><br>December 05 - 10, 2016, Barcelona, Spain</td>
+</tr>
+<tr class="headerSeparator">
+    <td style="height:5px"></td>
+</tr>
+</tbody></table>
+<table id="content"><tbody><tr><td class="contentBorder">&nbsp;</td><td class="contentContainer">
+<span id="ctl00_cph_Label4" style="font-size:Small;font-weight:bold;">Meta-Reviews For Paper</span>
+<span id="ctl00_cph_lblErrorMessage" class="error" style="font-size:Small;"></span>
+<div id="ctl00_cph_pnlReviews">
+	
+    <span style="font-size:Small;"><table id="ctl00_cph_infoSubmission_tblInfo" class="nicetable2" style="text-align:left; width: 100%;">
+		<tbody><tr>
+			<td width="100px"><b>Paper ID</b></td>
+			<td><span id="ctl00_cph_infoSubmission_lblPaperId" style="font-size:Small;">1911</span></td>
+		</tr>
+		<tr>
+			<td><b>Title</b></td>
+			<td><span id="ctl00_cph_infoSubmission_lblPaperTitle" style="font-size:Small;">Convolutional Neural Networks on Graphs with Fast Localized Spectral Filtering</span></td>
+		</tr>
+	</tbody></table>
+	</span>
+    
+    
+            <hr>
+            <table>
+                <tbody><tr>
+                    <td>
+                        <span id="ctl00_cph_gvReviews_ctl00_Label2" style="font-size:Small;font-weight:bold;">Masked Meta-Reviewer ID:</span>
+                    </td>
+                    <td>
+                        <span id="ctl00_cph_gvReviews_ctl00_Label1" style="font-size:Small;">Meta_Reviewer_1</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span id="ctl00_cph_gvReviews_ctl00_Label3" style="font-size:Small;font-weight:bold;">Meta-Reviews:</span>
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+            </tbody></table>
+            <div>
+		<table rules="all" style="color:#333333;border-width:1px;border-style:None;font-family:Verdana;font-size:Small;border-collapse:collapse;" border="1" cellpadding="4" cellspacing="0">
+			<tbody><tr style="color:White;background-color:#5D7B9D;font-weight:bold;">
+				<th scope="col">Question</th><th scope="col">&nbsp;</th>
+			</tr><tr style="color:#333333;background-color:#F7F6F3;">
+				<td style="width:20%;">Area chair summary: Please summarize the reasons for your decision in a couple of sentences.</td><td style="width:80%;">
+                            The paper proposes a generalized CNN on 
+graphs by extending Henaff-Bruna-LeCun. This paper presents a promising 
+method with theoretical analysis, with some experimental demonstration 
+on some benchmarks (MNIST and 20 News). The reviews are overall 
+positive, but there are some weaknesses: the presentation should be 
+improved and self-contained, and more positive experimental results 
+should be provided for other (real and large-scale) datasets. Still, 
+given that this research area is relatively underexplored, most 
+reviewers and this AC agree that the paper is worthy of publication at 
+NIPS. <br><br>-----<br><br>Additional comment by R1 after rebuttal:<br><br>"After reading the author feedback I am somewhat less optimistic about the paper.<br><br>The
+ proposed algorithm is an extension of our work (Henaff-Bruna-LeCun) 
+which indeed overcomes an important computational burden ( O(N^2) 
+operations both at train and test time). The price to pay for a more 
+efficient algorithm is a restriction on the class of filters, since they
+ are all rotationally invariant. This was not even described in the 
+original submission as far as I remember. While I believe that this 
+restriction is worth having on high-dimensional, highly irregular 
+graphs, the current experiments do not really test the algorithm in that
+ regime.<br><br>Also, the connection with the previous GNN model of 
+Scarseli et al. is an important aspect that has also been overlooked. 
+The proposed algorithm is an important specific instance of a GNN (and 
+the connection to GNN is not made in any prior literature I believe), 
+but the impression is that this specific instance should be compared to 
+the more general GNN baseline, which generalizes polynomials of the 
+Laplacian to other nonlinear combinations of the Laplacian.<br><br>Overall,
+ my impression is that this paper could be much improved. In its current
+ form it is borderline, but I will not oppose acceptance if the rest of 
+the reviewers agree."<br>
+                        </td>
+			</tr>
+		</tbody></table>
+	</div>
+            
+        
+    <br>
+    <br>
+
+</div>
+</td><td class="contentBorder">&nbsp;</td></tr></tbody></table>
+</form>
+
+
+</body></html>
