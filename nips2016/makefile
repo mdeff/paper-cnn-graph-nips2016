@@ -1,5 +1,6 @@
-PDF  = $(patsubst %.tex,%.pdf,$(wildcard *.tex))
-BIB  = $(wildcard *.bib)
+TEX = $(wildcard *.tex)
+PDF = $(TEX:.tex=.pdf)
+BIB = $(wildcard *.bib)
 
 all: $(PDF)
 
@@ -15,9 +16,12 @@ clean:
 	rm -f *.{bcf,run.xml}
 	rm -f *.{toc,snm,nav}
 	rm -f *.gz*
-	rm -f **/*eps-converted-to.pdf
+	rm -f arxiv.zip
 
 cleanall: clean
 	rm -f $(PDF)
 
-.PHONY: all images clean cleanall
+arxiv: all
+	apack arxiv.zip images/*.pdf $(TEX:.tex=).{tex,sty,bbl}
+
+.PHONY: all images clean cleanall arxiv

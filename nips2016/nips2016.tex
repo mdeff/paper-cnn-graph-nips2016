@@ -1,7 +1,9 @@
 \documentclass{article}
+\pdfoutput=1  % for arXiv to use pdflatex
 
 % if you need to pass options to natbib, use, e.g.:
 % \PassOptionsToPackage{numbers, compress}{natbib}
+\PassOptionsToPackage{numbers}{natbib}
 % before loading nips_2016
 %
 % to avoid loading the natbib package, add option nonatbib:
@@ -121,7 +123,7 @@ with Fast Localized Spectral Filtering\\}
 In this work, we are interested in generalizing convolutional neural networks
 (CNNs) from low-dimensional regular grids, where image, video and speech are
 represented, to high-dimensional irregular domains, such as social networks,
-brain connectomes or words’ embedding, represented by graphs.
+brain connectomes or words' embedding, represented by graphs.
 We present a formulation of CNNs in the context of spectral graph theory, which
 provides the necessary mathematical background and efficient numerical schemes
 to design fast localized convolutional filters on graphs. Importantly, the
