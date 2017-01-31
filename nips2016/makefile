@@ -4,14 +4,14 @@ BIB = $(wildcard *.bib)
 
 all: $(PDF)
 
-images:
-	$(MAKE) -C images
+figures:
+	$(MAKE) -C figures
 
-%.pdf: %.tex $(BIB) images
+%.pdf: %.tex $(BIB) figures
 	latexmk -pdf $<
 
 clean:
-	$(MAKE) clean -C images
+	$(MAKE) clean -C figures
 	rm -f *.{aux,bbl,blg,fdb_latexmk,fls,log,out,lof,dvi}
 	rm -f *.{bcf,run.xml}
 	rm -f *.{toc,snm,nav}
@@ -22,6 +22,6 @@ cleanall: clean
 	rm -f $(PDF)
 
 arxiv: all
-	apack arxiv.zip images/*.pdf $(TEX:.tex=).{tex,sty,bbl}
+	apack arxiv.zip figures/*.pdf $(TEX:.tex=).{tex,sty,bbl}
 
-.PHONY: all images clean cleanall arxiv
+.PHONY: all figures clean cleanall arxiv

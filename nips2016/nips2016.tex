@@ -26,6 +26,7 @@
 %\usepackage{microtype}      % microtypography
 \usepackage{subfigure}
 \usepackage{graphicx}
+\graphicspath{{figures/}}
 %\usepackage{tabularx}
 \usepackage{booktabs}
 %\usepackage{multirow}
@@ -256,7 +257,7 @@ Precisely, the main contributions of this work are summarized below.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.87\textwidth]{images/illustrationCNNgraphs}
+\includegraphics[width=0.87\textwidth]{illustrationCNNgraphs}
 \caption{Architecture of the proposed CNN on graphs.
 	%Notation: $l$ is the coarsening level, $x^l$ are the downsampled signals at
 	%layer $l$, $\G^l$ is the coarser graph, $g_{\theta^{K_l}}$ are the spectral
@@ -473,7 +474,7 @@ one level to the next coarser level.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\textwidth]{images/coarsening}
+\includegraphics[width=\textwidth]{coarsening}
 \caption{\textbf{Example of Graph Coarsening and Pooling.} Let us carry out a max pooling of size 4 (or two poolings of size 2) on a signal $x \in
 \R^8$ living on $\G_0$, the finest graph given as input. Note that it originally
 possesses $n_0 = |\V_0| = 8$ vertices, arbitrarily ordered. For a pooling of
@@ -741,7 +742,7 @@ support of $K = 5^2 = 25$. All models were trained for 20 epochs.
 \hfill
 \begin{minipage}[b]{0.55\linewidth}
 	\centering
-	\includegraphics[width=\textwidth]{images/runtime}
+	\includegraphics[width=\textwidth]{runtime}
 	\captionof{figure}{Time to process a mini-batch of $S=100$ 20NEWS documents
 	w.r.t. the number of words $n$.}
 	\label{fig:runtime}
@@ -801,7 +802,7 @@ Proposed graph CNN & GC32-P4-GC64-P4-FC512 & 1600 & 200 & 8.00x \\
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\textwidth]{images/training}
+\includegraphics[width=\textwidth]{training}
 \caption{Plots of validation accuracy and training loss for the first 2000
 iterations on MNIST.}
 \label{fig:convergence}
