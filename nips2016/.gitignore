@@ -1,7 +1,8 @@
 *~
 .DS_Store
 
-nips2016.pdf
+*.pdf
+!figures/*.pdf
 
 *.aux
 *.fls
