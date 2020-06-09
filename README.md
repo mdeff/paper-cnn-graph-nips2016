@@ -9,3 +9,10 @@ Conference on Neural Information Processing Systems (NIPS), 2016.
 > We present a formulation of CNNs in the context of spectral graph theory, which provides the necessary mathematical background and efficient numerical schemes to design fast localized convolutional filters on graphs.
 > Importantly, the proposed technique offers the same linear computational complexity and constant learning complexity as classical CNNs, while being universal to any graph structure.
 > Experiments on MNIST and 20NEWS demonstrate the ability of this novel deep learning system to learn local, stationary, and compositional features on graphs.
+
+## Resources
+
+* PDF: [arXiv](https://arxiv.org/abs/1606.09375), [NIPS](https://papers.nips.cc/paper/6081-convolutional-neural-networks-on-graphs-with-fast-localized-spectral-filtering), [EPFL](https://infoscience.epfl.ch/record/218985).
+* Code: <https://github.com/mdeff/cnn_graph>.
+* Presentation: [slides](https://doi.org/10.5281/zenodo.1318411) and [poster](https://doi.org/10.5281/zenodo.1318419).
+* Spotlight video: <https://youtu.be/cIA_m7vwOVQ>
