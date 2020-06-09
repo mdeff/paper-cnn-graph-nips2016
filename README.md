@@ -17,3 +17,13 @@ Conference on Neural Information Processing Systems (NIPS), 2016.
 * Code: <https://github.com/mdeff/cnn_graph>.
 * Presentation: [slides](https://doi.org/10.5281/zenodo.1318411) and [poster](https://doi.org/10.5281/zenodo.1318419).
 * Spotlight video: <https://youtu.be/cIA_m7vwOVQ>
+
+## Compilation
+
+Compile the latex source into a PDF with `make`.
+Run `make clean` to remove temporary files and `make arxiv.zip` to prepare an archive to be uploaded on arXiv.
+
+## Figures
+
+All the figures are in the [`figures`](figures/) folder.
+PDFs can be generated with `make figures`.
