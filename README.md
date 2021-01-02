@@ -45,3 +45,8 @@ Run `make clean` to remove temporary files and `make arxiv.zip` to prepare an ar
 
 All the figures are in the [`figures`](figures/) folder.
 PDFs can be generated with `make figures`.
+
+## Peer-review
+
+The paper got a [metareview](review/meta_review.htm) based on [six reviews](review/reviews.htm), on which our [rebuttal](review/rebuttal.txt) is based.
+The reviews are also at [NIPS].
