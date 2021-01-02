@@ -10,6 +10,18 @@ Conference on Neural Information Processing Systems (NIPS), 2016.
 > Importantly, the proposed technique offers the same linear computational complexity and constant learning complexity as classical CNNs, while being universal to any graph structure.
 > Experiments on MNIST and 20NEWS demonstrate the ability of this novel deep learning system to learn local, stationary, and compositional features on graphs.
 
+```
+@inproceedings{cnn_graph,
+  title = {Convolutional Neural Networks on Graphs with Fast Localized Spectral Filtering},
+  author = {Defferrard, Micha\"el and Bresson, Xavier and Vandergheynst, Pierre},
+  booktitle = {Advances in Neural Information Processing Systems (NIPS)},
+  year = {2016},
+  archiveprefix = {arXiv},
+  eprint = {1606.09375},
+  url = {https://arxiv.org/abs/1606.09375},
+}
+```
+
 ## Resources
 
 * PDF: [arXiv](https://arxiv.org/abs/1606.09375), [NIPS](https://papers.nips.cc/paper/6081-convolutional-neural-networks-on-graphs-with-fast-localized-spectral-filtering), [EPFL](https://infoscience.epfl.ch/record/218985).
