@@ -24,11 +24,17 @@ Conference on Neural Information Processing Systems (NIPS), 2016.
 
 ## Resources
 
-* PDF: [arXiv](https://arxiv.org/abs/1606.09375), [NIPS](https://papers.nips.cc/paper/6081-convolutional-neural-networks-on-graphs-with-fast-localized-spectral-filtering), [EPFL](https://infoscience.epfl.ch/record/218985).
-* Reviews: <https://media.nips.cc/nipsbooks/nipspapers/paper_files/nips29/reviews/1911.html>
-* Code: <https://github.com/mdeff/cnn_graph>.
-* Presentation: [slides](https://doi.org/10.5281/zenodo.1318411) and [poster](https://doi.org/10.5281/zenodo.1318419).
-* Spotlight video: <https://youtu.be/cIA_m7vwOVQ>
+PDF available at [arXiv], [NIPS], [EPFL].
+
+Related: [poster], [slides], [video], [code].
+
+[arXiv]: https://arxiv.org/abs/1606.09375
+[NIPS]: https://papers.nips.cc/paper/6081-convolutional-neural-networks-on-graphs-with-fast-localized-spectral-filtering
+[EPFL]: https://infoscience.epfl.ch/record/218985
+[poster]: https://doi.org/10.5281/zenodo.1318419
+[slides]: https://doi.org/10.5281/zenodo.1318411
+[video]: https://youtu.be/cIA_m7vwOVQ
+[code]: https://github.com/mdeff/cnn_graph
 
 ## Compilation
 
